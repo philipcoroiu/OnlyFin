@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OnlyFinBackendApplication {
 
     public static void main(String[] args) {
-        //hej hej hej 2
+        //hej hej hej 2 hikejnfdnf
         SpringApplication.run(OnlyFinBackendApplication.class, args);
     }
 
