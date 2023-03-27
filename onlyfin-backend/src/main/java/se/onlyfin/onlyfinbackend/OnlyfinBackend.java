@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OnlyfinBackendApplication {
+public class OnlyfinBackend {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OnlyfinBackendApplication.class, args);
+		SpringApplication.run(OnlyfinBackend.class, args);
 	}
 
 }
