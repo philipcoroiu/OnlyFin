@@ -45,7 +45,7 @@ public class HTMLPageTests {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        Resource resource = resourceLoader.getResource("classpath:templates/register.html");
+        Resource resource = resourceLoader.getResource("classpath:templates/register.html.old");
         String expected = resource.getContentAsString(StandardCharsets.UTF_8);
         assertEquals(expected, response.getBody());
     }
