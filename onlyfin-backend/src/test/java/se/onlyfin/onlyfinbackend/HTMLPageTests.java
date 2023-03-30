@@ -27,6 +27,8 @@ public class HTMLPageTests {
     private ResourceLoader resourceLoader;
 
     @Test
+    // Test that the index page can be loaded
+    // Test that the response body contains the expected HTML code
     public void testLoadIndexPage() throws IOException {
         ResponseEntity<String> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/", String.class);
@@ -39,6 +41,8 @@ public class HTMLPageTests {
     }
 
     @Test
+    // Test that the register page can be loaded
+    // Test that the response body contains the expected HTML code
     public void testLoadRegisterPage() throws IOException {
         ResponseEntity<String> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/register", String.class);
