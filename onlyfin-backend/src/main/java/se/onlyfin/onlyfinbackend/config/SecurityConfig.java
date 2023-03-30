@@ -35,6 +35,9 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
+        //DISABLE AUTH GLOBALLY
+        //return (web) -> web.ignoring().requestMatchers("/**");
+        
         return (web) -> web.ignoring().requestMatchers("/assets/**");
     }
 
