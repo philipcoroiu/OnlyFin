@@ -1,18 +1,26 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
+import Home from "./components/home/Home"
+import Login from "./components/login/Login"
+import Dashboard from "./components/dashboard/Dashboard"
+import LoginTest from "./components/login/LoginTest"
+import Studio from "./components/Studio/Studio"
 
 function App() {
   return (
     <Routes className="App">
       <Route path="/" element={<Home />}></Route>
+        <Route path="Dashboard">
+            <Route path="" element={<Dashboard/>}></Route>
+            <Route path="Studio" element={<Studio/>}></Route>
+        </Route>
       <Route path="Login">
         <Route path="" element={<Login/>}></Route>
-        <Route path="Dashboard">
-          <Route path="" element={<Dashboard />}/>
+        <Route path="LoginTest">
+          <Route path="" element={<LoginTest />}/>
         </Route>
       </Route>
-
     </Routes>
   );
 }
