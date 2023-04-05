@@ -26,8 +26,8 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/register").permitAll()
-                        .requestMatchers("/user").hasRole("USER")
+                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/user", "/search-all", "/search-analyst").hasRole("USER")
                 )
                 .formLogin();
         return http.build();
@@ -37,7 +37,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
         //return (web) -> web.ignoring().requestMatchers("/**");
-        
+
         return (web) -> web.ignoring().requestMatchers("/assets/**");
     }
 
