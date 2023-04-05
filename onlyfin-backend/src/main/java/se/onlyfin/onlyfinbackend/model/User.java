@@ -2,6 +2,8 @@ package se.onlyfin.onlyfinbackend.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity(name = "users")
 public class User {
     @Id
@@ -25,6 +27,12 @@ public class User {
 
     @Column(name = "is_analyst")
     private boolean isAnalyst;
+
+    @OneToMany(mappedBy = "subscriber")
+    private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "subscribedTo")
+    private List<Subscription> subscribers;
 
     public String getUsername() {
         return username;
@@ -80,6 +88,22 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public List<Subscription> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<Subscription> subscribers) {
+        this.subscribers = subscribers;
     }
 
     @Override
