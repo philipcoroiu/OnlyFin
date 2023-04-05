@@ -167,6 +167,7 @@ a {
   text-decoration: none;
   font-weight: bold;
   transition: all 0.2s ease-in-out;
+  margin: 0 20px;
 }
 
 a:hover {

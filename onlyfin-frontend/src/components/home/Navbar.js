@@ -16,7 +16,10 @@ export default function Navbar() {
                     <NavLink to="Dashboard">
                         <li>Dashboard</li>
                     </NavLink>
+
+                    <NavLink to = "Login">
                     <li>Login</li>
+                    </NavLink>
                 </ul>
             </div>
         </nav>
