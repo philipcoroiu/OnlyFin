@@ -9,7 +9,7 @@ export default function StudioSidebar(prep) {
     }
     function deleteInput() {
         setInputs(prevInputs => {
-            var newInputs = []
+            let newInputs = [];
             for (let i = 0; i < prevInputs.length-1; i++) {
                 newInputs[i] = prevInputs[i]
             }
@@ -19,11 +19,12 @@ export default function StudioSidebar(prep) {
 
     return (
         <div className="studio--sidebar">
-            <select className="studio--sidebar--select">
-                <option value="Line">Line</option>
-                <option value="Bar">Bar</option>
-                <option value="Column">Column</option>
+            <select className="studio--sidebar--select" name="typeOfDiagram" onChange={prep.function} >
+                <option value="line">Line</option>
+                <option value="bar">Bar</option>
+                <option value="column">Column</option>
             </select>
+
             <div className="studio--sidebar--buttons">
                 <button onClick={addInput}>Add</button>
                 <button onClick={deleteInput}>Remove</button>

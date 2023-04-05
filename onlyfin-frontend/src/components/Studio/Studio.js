@@ -7,7 +7,8 @@ export default function Studio() {
 
     const [sendData, setSendData] = React.useState({
         nameOfDiagram: "",
-        valueTitle: ""
+        valueTitle: "",
+        typeOfDiagram: ""
     })
     console.log(sendData)
     function changeStats(event){
@@ -31,6 +32,7 @@ export default function Studio() {
             <Sidebar
                 name={sendData.nameOfDiagram}
                 valueName={sendData.valueTitle}
+                typeOfDiagram={sendData.typeOfDiagram}
                 function={changeStats}
 
             />
@@ -38,6 +40,7 @@ export default function Studio() {
                 <Chart
                     diagramName={sendData.nameOfDiagram}
                     valueTitile={sendData.valueTitle}
+                    typeOfDiagram={sendData.typeOfDiagram}
                 />
             </div>
         </div>

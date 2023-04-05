@@ -6,7 +6,7 @@ export default function Chart(props) {
 
     const testChart = {
         chart: {
-            type: 'column'
+            type: `${props.typeOfDiagram}`
         },
         title: {
             text: `${props.diagramName}`
@@ -25,6 +25,9 @@ export default function Chart(props) {
         }, {
             name: 'John',
             data: [5, 7, 3]
+        },{
+            name: 'Mike',
+            data: [5, 19, 3]
         }]
     };
 
