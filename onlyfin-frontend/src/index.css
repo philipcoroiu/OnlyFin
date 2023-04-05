@@ -261,6 +261,7 @@ a:hover {
   height: 19px;
   border: none;
   background-color: #b4b4b4;
+  transition: all 0.2s ease-in-out;
   background-clip: text;
   color: transparent;
   cursor: pointer;
