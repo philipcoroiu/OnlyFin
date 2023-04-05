@@ -9,14 +9,14 @@ export default function Chart(props) {
             type: 'column'
         },
         title: {
-            text: 'My Chart'
+            text: `${props.diagramName}`
         },
         xAxis: {
             categories: ['Apples', 'Oranges', 'Bananas']
         },
         yAxis: {
             title: {
-                text: 'Fruit eaten'
+                text: `${props.valueTitile}`
             }
         },
         series: [{

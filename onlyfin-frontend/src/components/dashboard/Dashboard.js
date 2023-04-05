@@ -1,6 +1,6 @@
 import React from "react"
 import Sidebar from "./Sidebar";
-import Chart from "./Chart"
+import Chart from "../Studio/Chart"
 
 export default function Dashboard() {
     return (
