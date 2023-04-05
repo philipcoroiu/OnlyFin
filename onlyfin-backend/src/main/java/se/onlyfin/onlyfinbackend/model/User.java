@@ -1,11 +1,12 @@
 package se.onlyfin.onlyfinbackend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "username")
     private String username;
@@ -13,7 +14,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Id
     @Column(name = "email")
     private String email;
 
@@ -22,6 +22,9 @@ public class User {
 
     @Column(name = "roles")
     private String roles;
+
+    @Column(name = "is_analyst")
+    private boolean isAnalyst;
 
     public String getUsername() {
         return username;
@@ -61,6 +64,22 @@ public class User {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public boolean isAnalyst() {
+        return isAnalyst;
+    }
+
+    public void setAnalyst(boolean analyst) {
+        isAnalyst = analyst;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
