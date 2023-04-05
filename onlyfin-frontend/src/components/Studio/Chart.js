@@ -3,7 +3,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 export default function Chart(props) {
-
+    //change categories and series with new props as they added
     const testChart = {
         chart: {
             type: `${props.typeOfDiagram}`

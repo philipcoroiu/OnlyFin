@@ -4,7 +4,9 @@ import Chart from "./Chart"
 import {NavLink} from "react-router-dom";
 
 export default function Studio() {
-
+    /**
+     * TODO: needs to be updated simultaneously with StudioSidebar and Chart
+     */
     const [sendData, setSendData] = React.useState({
         nameOfDiagram: "",
         valueTitle: "",

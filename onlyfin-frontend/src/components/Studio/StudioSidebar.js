@@ -4,6 +4,9 @@ export default function StudioSidebar(prep) {
 
     const [inputs, setInputs] = React.useState([])
 
+    /**
+     * TODO: adapt this method for creation of new categories. Can be also used for new "series"
+     */
     function addInput() {
         setInputs(prevInputs => [...prevInputs, <input type="text" placeholder="Input 1" />])
     }
