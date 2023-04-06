@@ -1,16 +1,20 @@
 import React from "react"
-import Sidebar from "./StudioSidebar";
+import Sidebar from "./StudioToolbar";
 import Chart from "./Chart"
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 export default function Studio() {
     /**
-     * TODO: needs to be updated simultaneously with StudioSidebar and Chart
+     * TODO: needs to be updated simultaneously with StudioToolbar and Chart
      */
     const [sendData, setSendData] = React.useState({
         nameOfDiagram: "",
         valueTitle: "",
-        typeOfDiagram: ""
+        typeOfDiagram: "",
+        categories: [{},{
+            name: "Revenue",
+            data: [10,3,7]
+        }]
     })
     console.log(sendData)
     function changeStats(event){
@@ -27,9 +31,9 @@ export default function Studio() {
         <div>
             <div className="studio--navbar">
                 <h1>Studio</h1>
-                <NavLink to="Dashboard">
+                <Link to="Dashboard">
                     <button className="studio--navbar--button">Dashboard</button>
-                </NavLink>
+                </Link>
             </div>
             <Sidebar
                 name={sendData.nameOfDiagram}

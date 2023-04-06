@@ -12,7 +12,7 @@ export default function Chart(props) {
             text: `${props.diagramName}`
         },
         xAxis: {
-            categories: ['Apples', 'Oranges', 'Bananas']
+            categories: ['2016']
         },
         yAxis: {
             title: {
@@ -20,15 +20,18 @@ export default function Chart(props) {
             }
         },
         series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
+            name: "Revenue",
+            data: [15,3,7]
         },{
-            name: 'Mike',
-            data: [5, 19, 3]
-        }]
+            name: "sigma",
+            data: [12,4,25]
+        },{
+            name: "Fima",
+            data: [10,8,9]
+        },{
+            name: "ligma",
+            data: [20,30,7]
+        }, ]
     };
 
 

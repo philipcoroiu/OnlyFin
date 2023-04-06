@@ -9,7 +9,7 @@ export default function Dashboard() {
             <Sidebar />
 
             <div className="chart">
-                <Chart />
+                {/* <Chart/> */}
             </div>
         </div>
     )

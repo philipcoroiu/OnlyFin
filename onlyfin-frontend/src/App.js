@@ -10,7 +10,7 @@ function App() {
   return (
     <Routes className="App">
       <Route path="/" element={<Home />}></Route>
-        <Route path="Dashboard">
+        <Route path="Dashboard"> {/* moved "Dashboard" to next line */}
             <Route path="" element={<Dashboard/>}></Route>
             <Route path="Studio" element={<Studio/>}></Route>
         </Route>
