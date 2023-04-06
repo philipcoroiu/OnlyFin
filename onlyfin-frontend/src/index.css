@@ -19,10 +19,7 @@ code {
   margin: 20px;
   width: 55%;
   height: 660px;
-  background-color: #ffffff;
   border: none;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px #c2c2c2;
 }
 
 .studio--sidebar--header{
@@ -31,31 +28,56 @@ code {
   align-items: center;
   justify-content: space-around;
   border: none;
-  box-shadow: 0px 0px 5px #e5e5e5;
+  box-shadow: 0px 0px 5px #bbbbbb;
   border-radius: 5px;
+  margin: 5px;
 }
 
 .studio--sidebar--header > input {
   width: 200px;
 }
 
+.toolbar--categories{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border: none;
+  box-shadow: 0px 0px 5px #bbbbbb;
+  border-radius: 5px;
+  margin: 10px 5px 5px 5px;
+  width: 780px;
+  height: 7%;
+}
+
+.studio--sidebar--buttons{
+  display: flex;
+  width: 130px;
+  justify-content: space-between;
+}
+
 .toolbar--columns{
   display: flex;
   justify-content: space-between;
-  height: 600px;
+  height: 85%;
 }
+
 .toolbar--xaxis{
+  margin: 5px;
   display: flex;
   justify-content: center;
-  border-right: 1px solid black ;
-  width: 400px;
-
+  box-shadow: 0px 0px 5px #bbbbbb;
+  border-radius: 5px;
+  width: 50%;
 }
 
-.toolbar--categories{
+.toolbar--value{
+  margin: 5px;
   display: flex;
   justify-content: center;
-  width: 400px;
+  box-shadow: 0px 0px 5px #bbbbbb;
+  border-radius: 5px;
+  width: 50%;
 }
 
 .studio--sidebar--select{
@@ -63,20 +85,6 @@ code {
   margin-bottom: 15px;
   width: 150px;
   font: inherit;
-}
-.studio--sidebar--buttons{
-  display: flex;
-  width: 130px;
-  justify-content: space-between;
-}
-
-.studio--sidebar--buttons > button{
-  width: 50px;
-  height: 50px;
-  background-color: #ffffff;
-  border: none;
-  border-radius: 100px;
-  box-shadow: 0px 0px 5px #a6a6a6;
 }
 
 .studio--navbar{
@@ -87,9 +95,9 @@ code {
   border: none;
   box-shadow: 0px 0px 10px #cbcbcb;
 }
+
 .studio--navbar > h1:hover{
   cursor: default;
-
 }
 
 .studio--navbar--button{

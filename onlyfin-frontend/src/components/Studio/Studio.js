@@ -40,6 +40,7 @@ export default function Studio() {
                 valueName={sendData.valueTitle}
                 typeOfDiagram={sendData.typeOfDiagram}
                 function={changeStats}
+                categories={sendData.categories}
 
             />
             <div className="chart">

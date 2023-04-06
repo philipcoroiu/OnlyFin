@@ -29,10 +29,6 @@ export default function StudioToolbar(props) {
                     <option value="column">Column</option>
                 </select>
 
-                {/* <div className="studio--sidebar--buttons">
-                    <button onClick={addInput}>Add</button>
-                    <button onClick={deleteInput}>Remove</button>
-                </div> */}
 
                 <input
                     type="text"
@@ -50,12 +46,21 @@ export default function StudioToolbar(props) {
                     value={props.valueName}
                 />
             </div>
+
+            <div className="toolbar--categories">
+                <button className="toolbar--category--button">Category</button>
+                <div className="studio--sidebar--buttons">
+                    <button onClick={addInput}>Add</button>
+                    <button onClick={deleteInput}>Remove</button>
+                </div>
+            </div>
+
             <div className="toolbar--columns">
                 <div className="toolbar--xaxis">
                     <h2>xAxis</h2>
                 </div>
-                <div className="toolbar--categories">
-                    <h2>Categories</h2>
+                <div className="toolbar--value">
+                    <h2>Value</h2>
                 </div>
             </div>
             {inputs}
