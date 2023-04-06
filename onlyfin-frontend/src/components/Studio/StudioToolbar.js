@@ -4,6 +4,8 @@ export default function StudioToolbar(props) {
 
     const [inputs, setInputs] = React.useState([])
 
+    const [objects, setObjects] = React.useState(props.categories)
+
     /**
      * TODO: adapt this method for creation of new categories. Can be also used for new "series"
      */
@@ -48,7 +50,7 @@ export default function StudioToolbar(props) {
             </div>
 
             <div className="toolbar--categories">
-                <button className="toolbar--category--button">Category</button>
+                <button className="toolbar--category--button">{objects[1].name}</button>
                 <div className="studio--sidebar--buttons">
                     <button onClick={addInput}>Add</button>
                     <button onClick={deleteInput}>Remove</button>
@@ -58,12 +60,13 @@ export default function StudioToolbar(props) {
             <div className="toolbar--columns">
                 <div className="toolbar--xaxis">
                     <h2>xAxis</h2>
+                    {inputs}
                 </div>
                 <div className="toolbar--value">
                     <h2>Value</h2>
+                    {inputs}
                 </div>
             </div>
-            {inputs}
         </div>
     );
 }

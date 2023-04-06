@@ -48,6 +48,7 @@ export default function Studio() {
                     diagramName={sendData.nameOfDiagram}
                     valueTitile={sendData.valueTitle}
                     typeOfDiagram={sendData.typeOfDiagram}
+                    categories={sendData.categories}
                 />
             </div>
         </div>
