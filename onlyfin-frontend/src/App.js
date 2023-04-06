@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
 import Home from "./components/home/Home"
@@ -11,7 +10,7 @@ function App() {
   return (
     <Routes className="App">
       <Route path="/" element={<Home />}></Route>
-        <Route path="Dashboard">
+        <Route path="Dashboard"> {/* moved "Dashboard" to next line */}
             <Route path="" element={<Dashboard/>}></Route>
             <Route path="Studio" element={<Studio/>}></Route>
         </Route>
