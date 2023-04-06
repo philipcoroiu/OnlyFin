@@ -3,6 +3,7 @@ package se.onlyfin.onlyfinbackend.repository;
 import org.springframework.data.repository.CrudRepository;
 import se.onlyfin.onlyfinbackend.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
@@ -60,4 +61,11 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      * @return the analyst if found
      */
     Optional<User> findByisAnalystIsTrueAndUsernameEquals(String username);
+
+    /**
+     * Find all analysts that start with the given search term
+     * @param search the search term
+     * @return all analysts that start with the given search term
+     */
+    List<User> findByisAnalystIsTrueAndUsernameStartsWith(String search);
 }

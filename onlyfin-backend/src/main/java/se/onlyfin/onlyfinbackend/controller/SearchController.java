@@ -30,7 +30,7 @@ public class SearchController {
         return ResponseEntity.ok(usersToReturnToClient);
     }
 
-    @GetMapping("/search-analyst")
+    @GetMapping("/get-analyst-by-name")
     public ResponseEntity<ProfileDTO> findAnalystByName(@RequestParam String username) {
         ProfileDTO profileDTOToSendToClient;
         Optional<User> userOptional = userRepository.findByisAnalystIsTrueAndUsernameEquals(username);
@@ -41,6 +41,22 @@ public class SearchController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/search-analyst")
+    public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search) {
+        //fetch all users
+        List<User> userList = new ArrayList<>(userRepository.findByisAnalystIsTrueAndUsernameStartsWith(search));
+
+        if (userList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<ProfileDTO> profileDTOListToSend = new ArrayList<>();
+        //convert each user object to profile object
+        userList.forEach((currentUser) -> profileDTOListToSend.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+
+        return ResponseEntity.ok().body(profileDTOListToSend);
     }
 
 }

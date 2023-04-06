@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/register").permitAll()
-                        .requestMatchers("/user", "/search-all", "/search-analyst", "/subscribe", "/unsubscribe").hasRole("USER")
+                        .requestMatchers("/user", "/search-all", "/get-analyst-by-name", "/search-analyst", "/subscribe", "/unsubscribe").hasRole("USER")
                 )
                 .formLogin();
         return http.build();
