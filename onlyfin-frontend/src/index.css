@@ -56,6 +56,20 @@ code {
   justify-content: space-between;
 }
 
+.toolbar--axis--name{
+  display: flex;
+  justify-content: space-around;
+}
+
+.toolbar--axis--name > input{
+  width: 48%;
+  height: 20px;
+  border: none;
+  box-shadow: 0px 0px 5px #bbbbbb;
+  border-radius: 5px;
+  margin: 5px;
+}
+
 .toolbar--columns{
   display: flex;
   justify-content: space-between;

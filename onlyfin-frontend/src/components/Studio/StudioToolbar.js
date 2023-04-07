@@ -1,26 +1,65 @@
 import React from 'react';
+import CategoryLayout from "./CategoryLayout";
 
 export default function StudioToolbar(props) {
 
-    const [inputs, setInputs] = React.useState([])
+    const [chartInfo, setChartInfo] = React.useState(props.categories)
 
-    const [objects, setObjects] = React.useState(props.categories)
+    const [chartCategoryLayout, setChartCategoryLayout] = React.useState([<CategoryLayout
+        key={0}
+        id={0}
+    />])
 
-    /**
-     * TODO: adapt this method for creation of new categories. Can be also used for new "series"
-     */
-    function addInput() {
-        setInputs(prevInputs => [...prevInputs, <input type="text" placeholder="Input 1" />])
+    const [categoryButton, setCategoryButton] = React.useState([])
+
+    const [layoutInfo, setLayoutInfo] = React.useState([])
+
+    function changeName(event){
+        let {id, value} = event.target
+        setLayoutInfo(prevState => prevState[id] = value)
     }
-    function deleteInput() {
-        setInputs(prevInputs => {
+
+    function addCategoryLayout() {
+        setChartCategoryLayout(prevInputs =>
+            [...prevInputs,
+                <CategoryLayout
+                    key={prevInputs.length+1}
+                    id={prevInputs.length+1}
+                    function={changeName}
+                />]
+        )
+        setCategoryButton(prevState =>
+            [...prevState,
+                <button
+                    key={prevState.length+1}
+                    id={prevState.length+1}
+                    onClick={handleLayout(prevState.length+1)}
+                >{layoutInfo[layoutInfo.length]}</button>])
+    }
+
+    var number = 0
+    function handleLayout(id){
+        number = id;
+    }
+
+    function deleteInput(id) {
+        setChartCategoryLayout(prevInputs => {
             let newInputs = [];
             for (let i = 0; i < prevInputs.length-1; i++) {
                 newInputs[i] = prevInputs[i]
             }
             return newInputs
         })
+        setCategoryButton(prevState => {
+            let newInputs = [];
+            for (let i = 0; i < prevState.length-1; i++) {
+                newInputs[i] = prevState[i]
+            }
+            return newInputs
+        })
     }
+
+
 
     return (
         <div className="studio--sidebar">
@@ -40,33 +79,20 @@ export default function StudioToolbar(props) {
                     value={props.name}
                 />
 
-                <input
-                    type="text"
-                    placeholder="yAxis"
-                    name="valueTitle"
-                    onChange={props.function}
-                    value={props.valueName}
-                />
+
             </div>
 
             <div className="toolbar--categories">
-                <button className="toolbar--category--button">{objects[1].name}</button>
+                <button className="toolbar--category--button">{chartInfo[1].name}</button>
+                {categoryButton}
                 <div className="studio--sidebar--buttons">
-                    <button onClick={addInput}>Add</button>
+                    <button onClick={addCategoryLayout}>Add</button>
                     <button onClick={deleteInput}>Remove</button>
                 </div>
             </div>
 
-            <div className="toolbar--columns">
-                <div className="toolbar--xaxis">
-                    <h2>xAxis</h2>
-                    {inputs}
-                </div>
-                <div className="toolbar--value">
-                    <h2>Value</h2>
-                    {inputs}
-                </div>
-            </div>
+            {chartCategoryLayout[number]}
+
         </div>
     );
 }
