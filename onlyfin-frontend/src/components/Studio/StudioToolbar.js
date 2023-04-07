@@ -24,7 +24,7 @@ export default function StudioToolbar(props) {
      * When you click "add" a new category button is created
      * and stored here
      */
-    const [categoryButton, setCategoryButton] = React.useState([<CategoryButton key="0" id="0" value="0" onClick={() => handleLayout("0")}></CategoryButton>])
+    const [categoryButton, setCategoryButton] = React.useState([<CategoryButton key="0" id="0" value="0" onClick={() => setLayoutID("0")}></CategoryButton>])
 
     /**
      * Stores all the values of the category layout
@@ -48,9 +48,18 @@ export default function StudioToolbar(props) {
      * Changes the name of the chosen category button
      * @param input
      */
-    function changeName(input){
-        setTest(input.value)
+    function changeName(input, id) {
+        setCategoryButton(prevButtons => {
+            const updatedButtons = prevButtons.map(button => {
+                if (button.props.id === id) {
+                    return React.cloneElement(button, { value: input });
+                }
+                return button;
+            });
+            return updatedButtons;
+        });
     }
+
 
     /**
      * Adds a category layout when "add" has been pressed

@@ -3,9 +3,10 @@ import React from "react"
 export default function CategoryLayout(props) {
 
     const handleInput = (event) => {
-        const input = {value:event.target.value, id:props.id};
+        const input = event.target.value;
+        const id = props.id;
 
-        props.changeName(input);
+        props.changeName(input, id);
     }
 
     return (
