@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import se.onlyfin.onlyfinbackend.controller.UserController;
@@ -13,6 +14,7 @@ import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 public class UserControllerTests {
     @Mock
     private UserRepository userRepository;
