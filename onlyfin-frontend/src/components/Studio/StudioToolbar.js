@@ -1,12 +1,15 @@
 import React from 'react';
 import CategoryLayout from "./CategoryLayout";
+import CategoryButton from "./CategoryButton"
 
 export default function StudioToolbar(props) {
 
     /**
      * Stores all the info related to the chart.
      */
-    const [chartInfo, setChartInfo] = React.useState(props.categories)
+    //const [chartInfo, setChartInfo] = React.useState(props.categories)
+    const [chartInfo, setChartInfo] = React.useState({key:0, id:0, name:"Untitled"})
+
 
     /**
      * Stores all the category layouts
@@ -14,13 +17,14 @@ export default function StudioToolbar(props) {
     const [chartCategoryLayout, setChartCategoryLayout] = React.useState([<CategoryLayout
         key={0}
         id={0}
+        changeName={changeName}
     />])
 
     /**
      * When you click "add" a new category button is created
      * and stored here
      */
-    const [categoryButton, setCategoryButton] = React.useState([<button key="0" id="0" onClick={() => handleLayout("0")}>ButtonID: 0</button>])
+    const [categoryButton, setCategoryButton] = React.useState([<CategoryButton key="0" id="0" value="0" onClick={() => handleLayout("0")}></CategoryButton>])
 
     /**
      * Stores all the values of the category layout
@@ -38,9 +42,14 @@ export default function StudioToolbar(props) {
      * @param event
      */
 
-    function changeName(){
+    const [test, setTest] = React.useState("test")
 
-        setLayoutInfo(prevState => prevState)
+    /**
+     * Changes the name of the chosen category button
+     * @param input
+     */
+    function changeName(input){
+        setTest(input.value)
     }
 
     /**
@@ -52,10 +61,9 @@ export default function StudioToolbar(props) {
                 <CategoryLayout
                     key={prevInputs.length}
                     id={prevInputs.length}
-                    function={changeName}
+                    changeName={changeName}
                 />]
         )
-
         createCategoryButton();
     }
 
@@ -65,11 +73,12 @@ export default function StudioToolbar(props) {
     function createCategoryButton() {
         setCategoryButton(prevState =>
             [...prevState,
-                <button
+                <CategoryButton
                     key={prevState.length}
                     id={prevState.length}
-                    onClick={() => handleLayout(prevState.length)}
-                >ButtonID: {prevState.length}</button>])
+                    value={prevState.length}
+                    onClick={() => setLayoutID(prevState.length)}
+                ></CategoryButton>])
     }
 
     /**
@@ -131,6 +140,8 @@ export default function StudioToolbar(props) {
             {chartCategoryLayout[layoutID]}
             <div>LayoutID(state): {layoutID}</div>
             <div>CategoryButton.length: {categoryButton.length}</div>
+            <div>categoryButton[0] name: {categoryButton[0].value}</div>
+            <div>{test}</div>
 
         </div>
     );

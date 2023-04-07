@@ -2,11 +2,10 @@ import React from "react"
 
 export default function CategoryLayout(props) {
 
-    const [layoutInfo, setLayoutInfo] = React.useState(/*{id:props.id, name:props.valueName}*/)
-
     const handleInput = (event) => {
-        const input = event.taget.value;
+        const input = {value:event.target.value, id:props.id};
 
+        props.changeName(input);
     }
 
     return (
@@ -16,7 +15,7 @@ export default function CategoryLayout(props) {
                     type="text"
                     placeholder="yAxis"
                     name="valueTitle"
-                    onChange={props.function}
+                    onChange={handleInput}
                     value={props.valueName}
                 />
                 <input type="text"
@@ -36,7 +35,6 @@ export default function CategoryLayout(props) {
                 </div>
             </div>
             <div>LayoutID(layout): {props.id}</div>
-            <div>LayoutInfo: {layoutInfo}</div>
         </>
     )
 }
