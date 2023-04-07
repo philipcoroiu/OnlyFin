@@ -26,39 +26,42 @@ public class SubscriptionController {
     }
 
     @PostMapping("/subscribe")
-    public ResponseEntity<?> addSubscription(Principal principal, @RequestParam("subscriberId") Integer subscriberId, @RequestParam("subscribedToId") Integer subscribedToId) {
+    public ResponseEntity<String> addSubscription(Principal principal, @RequestParam("id") Integer subscribeToId) {
+        User userWantingToSubscribe = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Logged in user not present in db"));
 
-        User subscriber = userRepository.findById(subscriberId).orElseThrow(() -> new UsernameNotFoundException("Subscriber not found with ID " + subscriberId));
         //check that authenticated user is not changing other users' subscriptions
-        if (!Objects.equals(subscriber.getUsername(), principal.getName())) {
+        if (!Objects.equals(userWantingToSubscribe.getUsername(), principal.getName())) {
             return ResponseEntity.badRequest().build();
         }
-        User subscribedTo = userRepository.findById(subscribedToId).orElseThrow(() -> new UsernameNotFoundException("Subscribed-to user not found with ID " + subscribedToId));
 
-        if (subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo)) {
+        User userToSubscribeTo = userRepository.findById(subscribeToId).orElseThrow(() -> new UsernameNotFoundException("Subscribe-to user not found with ID " + subscribeToId));
+
+        if (subscriptionRepository.existsBySubscriberAndSubscribedTo(userWantingToSubscribe, userToSubscribeTo)) {
             return ResponseEntity.badRequest().body("Already subscribed");
         }
 
         Subscription subscription = new Subscription();
-        subscription.setSubscriber(subscriber);
-        subscription.setSubscribedTo(subscribedTo);
+        subscription.setSubscriber(userWantingToSubscribe);
+        subscription.setSubscribedTo(userToSubscribeTo);
 
         subscriptionRepository.save(subscription);
 
-        return ResponseEntity.ok().body("Now subscribed to: " + subscribedTo.getUsername());
+        return ResponseEntity.ok().body(userToSubscribeTo.getUsername());
     }
 
     @DeleteMapping("/unsubscribe")
-    public ResponseEntity<String> removeSubscription(Principal principal, @RequestParam("subscriberId") Integer subscriberId, @RequestParam("subscribedToId") Integer subscribedToId) {
+    public ResponseEntity<String> removeSubscription(Principal principal, @RequestParam("id") Integer subscribedToId) {
 
-        User subscriber = userRepository.findById(subscriberId).orElseThrow(() -> new UsernameNotFoundException("Subscriber not found with ID " + subscriberId));
+        User userWantingToUnsubscribe = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Logged in user not present in db"));
+
         //check that authenticated user is not changing other users' subscriptions
-        if (!Objects.equals(subscriber.getUsername(), principal.getName())) {
+        if (!Objects.equals(userWantingToUnsubscribe.getUsername(), principal.getName())) {
             return ResponseEntity.badRequest().build();
         }
-        User subscribedTo = userRepository.findById(subscribedToId).orElseThrow(() -> new UsernameNotFoundException("Subscribed-to user not found with ID " + subscribedToId));
 
-        Optional<Subscription> subscriptionOptional = subscriptionRepository.findBySubscriberAndSubscribedTo(subscriber, subscribedTo);
+        User userToUnsubscribeFrom = userRepository.findById(subscribedToId).orElseThrow(() -> new UsernameNotFoundException("Subscribed-to user not found with ID " + subscribedToId));
+
+        Optional<Subscription> subscriptionOptional = subscriptionRepository.findBySubscriberAndSubscribedTo(userWantingToUnsubscribe, userToUnsubscribeFrom);
 
         if (subscriptionOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -66,7 +69,7 @@ public class SubscriptionController {
 
         subscriptionRepository.delete(subscriptionOptional.get());
 
-        return ResponseEntity.ok().body("Now unsubscribed from: " + subscribedTo.getUsername());
+        return ResponseEntity.ok().body(userToUnsubscribeFrom.getUsername());
     }
 
 }
