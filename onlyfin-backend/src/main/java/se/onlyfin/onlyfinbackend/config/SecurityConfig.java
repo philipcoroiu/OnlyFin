@@ -26,20 +26,20 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/register").permitAll()
                         .requestMatchers("/user", "/search-all", "/get-analyst-by-name", "/search-analyst", "/subscribe", "/unsubscribe").hasRole("USER")
+                        .requestMatchers("/", "/register", "/assets/**").permitAll()
                 )
                 .formLogin();
         return http.build();
     }
 
-    @Bean
+    /*@Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
         //return (web) -> web.ignoring().requestMatchers("/**");
 
-        return (web) -> web.ignoring().requestMatchers("/assets/**");
     }
+     */
 
     @Bean
     PasswordEncoder passwordEncoder() {
