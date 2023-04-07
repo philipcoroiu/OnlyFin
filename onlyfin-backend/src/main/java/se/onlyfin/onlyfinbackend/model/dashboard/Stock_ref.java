@@ -9,6 +9,13 @@ import java.util.List;
 @Table (name = "stock_ref")
 public class Stock_ref {
 
+    public Stock_ref() {
+
+    }
+    public Stock_ref(int id){
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
@@ -18,6 +25,8 @@ public class Stock_ref {
 
     @Column (name = "name")
     private String name;
+
+
 
     public int getId() {
         return id;
