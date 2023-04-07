@@ -3,43 +3,81 @@ import CategoryLayout from "./CategoryLayout";
 
 export default function StudioToolbar(props) {
 
+    /**
+     * Stores all the info related to the chart.
+     */
     const [chartInfo, setChartInfo] = React.useState(props.categories)
 
+    /**
+     * Stores all the category layouts
+     */
     const [chartCategoryLayout, setChartCategoryLayout] = React.useState([<CategoryLayout
         key={0}
         id={0}
     />])
 
-    const [categoryButton, setCategoryButton] = React.useState([])
+    /**
+     * When you click "add" a new category button is created
+     * and stored here
+     */
+    const [categoryButton, setCategoryButton] = React.useState([<button key="0" id="0" onClick={() => handleLayout("0")}>ButtonID: 0</button>])
 
-    const [layoutInfo, setLayoutInfo] = React.useState([])
+    /**
+     * Stores all the values of the category layout
+     */
+    const [layoutInfo, setLayoutInfo] = React.useState({})
 
-    function changeName(event){
-        let {id, value} = event.target
-        setLayoutInfo(prevState => prevState[id] = value)
+    /**
+     * Stores the ID of the current category layout
+     */
+    const [layoutID, setLayoutID] = React.useState(0)
+
+
+    /**
+     * Changes the name of the chart
+     * @param event
+     */
+
+    function changeName(){
+
+        setLayoutInfo(prevState => prevState)
     }
 
+    /**
+     * Adds a category layout when "add" has been pressed
+     */
     function addCategoryLayout() {
         setChartCategoryLayout(prevInputs =>
             [...prevInputs,
                 <CategoryLayout
-                    key={prevInputs.length+1}
-                    id={prevInputs.length+1}
+                    key={prevInputs.length}
+                    id={prevInputs.length}
                     function={changeName}
                 />]
         )
+
+        createCategoryButton();
+    }
+
+    /**
+     * Create new category button
+     */
+    function createCategoryButton() {
         setCategoryButton(prevState =>
             [...prevState,
                 <button
-                    key={prevState.length+1}
-                    id={prevState.length+1}
-                    onClick={handleLayout(prevState.length+1)}
-                >{layoutInfo[layoutInfo.length]}</button>])
+                    key={prevState.length}
+                    id={prevState.length}
+                    onClick={() => handleLayout(prevState.length)}
+                >ButtonID: {prevState.length}</button>])
     }
 
-    var number = 0
+    /**
+     * Sets the current layoutID when category button is pressed
+     * @param id
+     */
     function handleLayout(id){
-        number = id;
+        setLayoutID(id)
     }
 
     function deleteInput(id) {
@@ -83,7 +121,6 @@ export default function StudioToolbar(props) {
             </div>
 
             <div className="toolbar--categories">
-                <button className="toolbar--category--button">{chartInfo[1].name}</button>
                 {categoryButton}
                 <div className="studio--sidebar--buttons">
                     <button onClick={addCategoryLayout}>Add</button>
@@ -91,7 +128,9 @@ export default function StudioToolbar(props) {
                 </div>
             </div>
 
-            {chartCategoryLayout[number]}
+            {chartCategoryLayout[layoutID]}
+            <div>LayoutID(state): {layoutID}</div>
+            <div>CategoryButton.length: {categoryButton.length}</div>
 
         </div>
     );
