@@ -46,7 +46,7 @@ public class SearchController {
     @GetMapping("/search-analyst")
     public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search) {
         //fetch all users
-        List<User> userList = new ArrayList<>(userRepository.findByisAnalystIsTrueAndUsernameStartsWith(search));
+        List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
 
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
