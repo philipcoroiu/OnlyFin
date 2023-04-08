@@ -26,8 +26,21 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/user", "/search-all", "/get-analyst-by-name", "/search-analyst", "/subscribe", "/unsubscribe").hasRole("USER")
-                        .requestMatchers("/", "/register", "/assets/**").permitAll()
+                        .requestMatchers(
+                                "/user",
+                                "/search-all",
+                                "/get-analyst-by-name",
+                                "/search-analyst",
+                                "/subscribe",
+                                "/unsubscribe",
+                                "/enable-analyst",
+                                "/disable-analyst")
+                        .hasRole("USER")
+                        .requestMatchers(
+                                "/",
+                                "/register",
+                                "/assets/**")
+                        .permitAll()
                 )
                 .formLogin();
         return http.build();
