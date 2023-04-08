@@ -1,5 +1,5 @@
 import React from "react"
-import Sidebar from "./StudioToolbar";
+import StudioToolbar from "./StudioToolbar";
 import Chart from "./Chart"
 import {Link, NavLink} from "react-router-dom";
 
@@ -35,12 +35,13 @@ export default function Studio() {
                     <button className="studio--navbar--button">Dashboard</button>
                 </Link>
             </div>
-            <Sidebar
+            <StudioToolbar
                 name={sendData.nameOfDiagram}
                 valueName={sendData.valueTitle}
                 typeOfDiagram={sendData.typeOfDiagram}
                 function={changeStats}
                 categories={sendData.categories}
+                onyAxisChange={changeStats}
 
             />
             <div className="chart">

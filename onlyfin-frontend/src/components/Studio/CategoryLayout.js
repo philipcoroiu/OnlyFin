@@ -11,7 +11,30 @@ export default function CategoryLayout(props) {
 
     return (
         <>
-            <div className="toolbar--axis--name">
+
+            <div className="toolbar--columns">
+                <div className="toolbar--xaxis">
+                    <h2>xAxis</h2>
+                    <input placeholder="Value"/>
+                </div>
+                <div className="toolbar--value">
+                    <h2>Value</h2>
+                    <input placeholder="Value"/>
+                </div>
+            </div>
+            <div>LayoutID(layout): {props.id}</div>
+        </>
+    )
+}
+/*
+<input type="text"
+       placeholder="Category"
+       name={`category${props.id}`}
+       id={props.id}
+       onChange={handleInput}
+/>
+
+<div className="toolbar--axis--name">
                 <input
                     type="text"
                     placeholder="yAxis"
@@ -19,23 +42,7 @@ export default function CategoryLayout(props) {
                     onChange={handleInput}
                     value={props.valueName}
                 />
-                <input type="text"
-                       placeholder="Category"
-                       name={`category${props.id}`}
-                       id={props.id}
-                       onChange={handleInput}
-                />
+
             </div>
 
-            <div className="toolbar--columns">
-                <div className="toolbar--xaxis">
-                    <h2>xAxis</h2>
-                </div>
-                <div className="toolbar--value">
-                    <h2>Value</h2>
-                </div>
-            </div>
-            <div>LayoutID(layout): {props.id}</div>
-        </>
-    )
-}
+ */
