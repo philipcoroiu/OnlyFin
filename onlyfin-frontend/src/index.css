@@ -56,6 +56,20 @@ code {
   justify-content: space-between;
 }
 
+.toolbar--axis--name{
+  display: flex;
+  justify-content: space-around;
+}
+
+.toolbar--axis--name > input{
+  width: 48%;
+  height: 20px;
+  border: none;
+  box-shadow: 0px 0px 5px #bbbbbb;
+  border-radius: 5px;
+  margin: 5px;
+}
+
 .toolbar--columns{
   display: flex;
   justify-content: space-between;
@@ -134,4 +148,18 @@ code {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-button-container {
+  position: relative; /* Set relative position for container */
+}
+
+.dropdown-menu {
+  position: absolute; /* Set absolute position for dropdown menu */
+  top: 100%; /* Position dropdown menu below button */
+  left: 0; /* Position dropdown menu at left edge of container */
+  padding: 8px; /* Add padding for spacing */
+  background-color: #fff; /* Add background color */
+  border: 1px solid #ccc; /* Add border */
+  width: 200px; /* Set width for dropdown menu */
 }
