@@ -2,8 +2,22 @@ import React from "react"
 import StudioToolbar from "./StudioToolbar";
 import Chart from "./Chart"
 import {Link, NavLink} from "react-router-dom";
+import axios from "axios"
 
 export default function Studio() {
+
+    /*
+    const [testData, setTestData] = React.useState();
+
+    axios.get('https://localhost:8080/dashboard/8')
+        .then(function (response) {
+            console.log(response)
+            setTestData(response)
+        })
+
+     */
+
+
     /**
      * TODO: needs to be updated simultaneously with StudioToolbar and Chart
      */
@@ -50,6 +64,7 @@ export default function Studio() {
                     valueTitile={sendData.valueTitle}
                     typeOfDiagram={sendData.typeOfDiagram}
                     categories={sendData.categories}
+
                 />
             </div>
         </div>

@@ -46,13 +46,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /*@Bean
+    @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
-        //return (web) -> web.ignoring().requestMatchers("/**");
+        return (web) -> web.ignoring().requestMatchers("/**");
 
     }
-     */
+
 
     @Bean
     PasswordEncoder passwordEncoder() {
