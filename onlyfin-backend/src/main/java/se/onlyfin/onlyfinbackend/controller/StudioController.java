@@ -1,10 +1,7 @@
 package se.onlyfin.onlyfinbackend.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.onlyfin.onlyfinbackend.model.ContentChangeRequest;
 import se.onlyfin.onlyfinbackend.model.NameChangeRequest;
 import se.onlyfin.onlyfinbackend.model.dashboard.Category;
 import se.onlyfin.onlyfinbackend.model.dashboard.ModuleEntity;
@@ -15,12 +12,15 @@ import se.onlyfin.onlyfinbackend.repository.*;
 @RequestMapping("/studio")
 public class StudioController {
 
-    @Autowired
-    private StockRepository stockRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ModuleRepository moduleRepository;
+    private final StockRepository stockRepository;
+    private final CategoryRepository categoryRepository;
+    private final ModuleRepository moduleRepository;
+
+    public StudioController(StockRepository stockRepository, CategoryRepository categoryRepository, ModuleRepository moduleRepository) {
+        this.stockRepository = stockRepository;
+        this.categoryRepository = categoryRepository;
+        this.moduleRepository = moduleRepository;
+    }
 
     @PostMapping("/createStock")
     public String createStock(@RequestBody Stock stock){
