@@ -1,16 +1,19 @@
 import React from "react"
-import Sidebar from "./Sidebar";
-import Chart from "../Studio/Chart"
+import DashboardSidebar from "./DashboardSidebar";
+import DashboardChart from "./DashboardChart"
 
 export default function Dashboard() {
     return (
         <div className="dashboard">
             <h1>Dashboard</h1>
-            <Sidebar />
-
-            <div className="chart">
-                {/* <Chart/> */}
+            <DashboardSidebar />
+            <div className="dashboard--chart--container">
+                <DashboardChart />
+                <DashboardChart />
+                <DashboardChart />
+                <DashboardChart />
             </div>
+
         </div>
     )
 }
