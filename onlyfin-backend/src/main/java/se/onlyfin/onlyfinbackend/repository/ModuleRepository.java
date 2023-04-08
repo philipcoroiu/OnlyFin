@@ -5,4 +5,6 @@ import se.onlyfin.onlyfinbackend.model.dashboard.ModuleEntity;
 
 public interface ModuleRepository extends JpaRepository <ModuleEntity, Integer> {
 
+
+
 }

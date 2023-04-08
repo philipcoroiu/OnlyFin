@@ -1,19 +1,15 @@
 package se.onlyfin.onlyfinbackend.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.onlyfin.onlyfinbackend.model.ContentChangeRequest;
 import se.onlyfin.onlyfinbackend.model.NameChangeRequest;
 import se.onlyfin.onlyfinbackend.model.dashboard.Category;
 import se.onlyfin.onlyfinbackend.model.dashboard.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard.Stock;
-import se.onlyfin.onlyfinbackend.repository.CategoryRepository;
-import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
-import se.onlyfin.onlyfinbackend.repository.StockRepository;
+import se.onlyfin.onlyfinbackend.repository.*;
 
 @RestController
 @RequestMapping("/studio")
@@ -97,63 +93,45 @@ public class StudioController {
     }
 
     @PostMapping("/createModule")
-    public ResponseEntity<?> createModule(@RequestBody JsonNode jsonModule){
-
-        ModuleEntity module = new ModuleEntity();
+    public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave){
 
         try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            String contentAsString = objectMapper.writeValueAsString(jsonModule.get("content"));
-            module.setContent(objectMapper.readTree(contentAsString));
-        }  catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+            if(!categoryRepository.existsById(moduleToSave.getCategory_id())) return ResponseEntity.badRequest().body("there is no category for that id");
 
-        module.setModule_type(jsonModule.get("module_type"));
-        System.out.println("test4");
-        module.setCategory_id(jsonModule.get("category_id"));
-
-        System.out.println(module.getContent().asText());
-
-        try{
-            if(!categoryRepository.existsById(module.getCategory_id())) return ResponseEntity.badRequest().body("there is no category for that id");
-            System.out.println("hej");
-            moduleRepository.save(module);
-            return ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
+            moduleRepository.save(moduleToSave);
+            return ResponseEntity.ok(moduleRepository.getReferenceById(moduleToSave.getId()));
         } catch (Exception e){ System.out.println(e.getMessage());}
 
         return ResponseEntity.badRequest().body("could not add module");
     }
 
-    /*@DeleteMapping("/deleteModule/{id}")
+    @DeleteMapping("/deleteModule/{id}")
     public String deleteModule(@PathVariable String id) {
 
         try {
             int intId = Integer.parseInt(id);
-            if (!categoryRepository.existsById(intId)) {
-                return "There is no category with that id";
+            if (!moduleRepository.existsById(intId)) {
+                return "There is no module with that id";
             }
-            categoryRepository.deleteById(intId);
-            return "Removed category successfully";
+            moduleRepository.deleteById(intId);
+            return "Removed module successfully";
         } catch (Exception e) {
             System.out.println(e);
         }
-        return "Could not remove category";
+        return "Could not module category";
     }
 
-    @PutMapping("/updateCategoryName")
-    public ResponseEntity<?> updateModule(@RequestBody NameChangeRequest nameChangeRequest){
+    /*@PutMapping("/updateModuleContent")
+    public ResponseEntity<?> updateModuleContent(@RequestBody ContentChangeRequest ccr){
 
-        System.out.println(nameChangeRequest.getId());
-        System.out.println(nameChangeRequest.getName());
-        Category category;
+        ModuleEntity module;
 
-        if(categoryRepository.existsById(nameChangeRequest.getId())){
-            category = categoryRepository.getReferenceById(nameChangeRequest.getId());
-            category.setName(nameChangeRequest.getName());
-            categoryRepository.save(category);
-            return ResponseEntity.ok(category);
+        if(moduleRepository.existsById(ccr.getId())){
+            module = moduleRepository.getReferenceById(ccr.getId());
+            module.setContent(ccr.getContent());
+            moduleRepository.save(module);
+            return ResponseEntity.ok(module);
         }
-        return ResponseEntity.badRequest().body("category id does not exist");
+        return ResponseEntity.badRequest().body("module id does not exist");
     }*/
 }
