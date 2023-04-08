@@ -1,5 +1,6 @@
 import React from "react"
 import XaxisInput from "./XaxisInput";
+import YaxisInput from "./YaxisInput"
 
 export default function CategoryLayout(props) {
 
@@ -13,6 +14,12 @@ export default function CategoryLayout(props) {
         const input = event.target.value;
 
         setxAxisInputButtons(prevState => [...prevState, <XaxisInput placeholder="value"/>]);
+        setyAxisInputButtons(prevState => [...prevState, <YaxisInput placeholder="value"/>]);
+    }
+
+    const handleRemoveXaxisInput = () => {
+        setxAxisInputButtons(prevState => prevState.slice(1));
+        setyAxisInputButtons(prevState => prevState.slice(1));
     }
 
     const handleInput = (event) => {
@@ -28,19 +35,17 @@ export default function CategoryLayout(props) {
             <div className="toolbar--columns">
                 <div className="toolbar--xaxis">
                     <div className="toolbar--xaxis--title">
-                        <button>-</button>
+                        <button onClick={handleRemoveXaxisInput}>-</button>
                         <h2>xAxis</h2>
                         <button onClick={handleAddXaxisInput} >+</button>
                     </div>
-
                     {xAxisInputButtons}
                 </div>
                 <div className="toolbar--value">
-                    <div className="toolbar--xaxis--title">
-                        <button>-</button>
+                    <div className="toolbar--yaxis--title">
                         <h2>Value</h2>
-                        <button>+</button>
                     </div>
+                    {yAxisInputButtons}
                 </div>
             </div>
             <div>LayoutID(layout): {props.id}</div>
