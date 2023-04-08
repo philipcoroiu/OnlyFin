@@ -1,21 +1,18 @@
 package se.onlyfin.onlyfinbackend.model.dashboard.content;
 
 
-public abstract class Content {
+import com.fasterxml.jackson.databind.JsonNode;
 
+public class Content {
 
-    private String type;
+    private JsonNode jsonNode;
 
-    public Content(String type) {
-            this.type = type;
+    public Content(JsonNode jsonNode) {
+        this.jsonNode = jsonNode;
     }
 
-    public String getType() {
-            return type;
-    }
-
-    public void setType(String type) {
-            this.type = type;
+    public JsonNode getJsonNode() {
+        return this.jsonNode;
     }
 
 

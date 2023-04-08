@@ -11,8 +11,15 @@ import java.util.List;
 @Table(name = "stock")
 public class Stock {
 
+    public Stock(){
+
+    }
+    public Stock(int id){
+        this.id = id;
+    }
+
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -27,7 +34,7 @@ public class Stock {
     @OneToMany (mappedBy = "stock_id", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> categories = new ArrayList<>();
 
-    public String getDashboard_id() {
+    public int getDashboard_id() {
         return dashboard_id.getId();
     }
 

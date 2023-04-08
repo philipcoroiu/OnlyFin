@@ -9,12 +9,20 @@ import java.util.List;
 @Table(name = "category")
 public class Category {
 
+    public Category(){
+
+    }
+
+    public Category(int id){
+        this.id = id;
+    }
+
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id")
     private Stock stock_id;
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column (name = "name")
@@ -25,6 +33,10 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
@@ -38,4 +50,6 @@ public class Category {
     public int getStock_id() {
         return stock_id.getId();
     }
+
+
 }
