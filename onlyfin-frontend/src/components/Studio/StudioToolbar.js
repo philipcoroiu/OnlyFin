@@ -12,23 +12,16 @@ export default function StudioToolbar(props) {
      */
     //const [chartInfo, setChartInfo] = React.useState(props.series)
     const [categories, setCategories] = React.useState(props.categories)
-    const [categoryInput, setCategoryInput] = React.useState(
-        <input
-            key={0}
-            id={0}
-            value={props.categories}
-            onChange={addCategory}
-        />
-    )
+    const [categoryInput, setCategoryInput] = React.useState([])
 
     const [chartInfo, setChartInfo] = React.useState({key:0, id:0, name:"Untitled"})
 
     function addCategory(event) {
         const {id, value} = event.target;
-        setCategories(prevState =>{
-            return [...prevState, prevState[id] = value]
-        })
-        props.function("categories", categories)
+        var newCategory = categories
+        newCategory[id] = value
+        setCategories(newCategory)
+        props.function("categories", newCategory)
     }
 
     function addCategoryInput() {
@@ -36,11 +29,22 @@ export default function StudioToolbar(props) {
             return [...prevState,
                 <input
                     key={prevState.length}
-                    id={prevState.length}
+                    id={categories.length}
                     onChange={addCategory}
                 />
             ]
         })
+        let newCategories = [categories]
+        setCategories(prevState => {
+            newCategories[categories.length+1] = `${categories.length+1}`
+        })
+    }
+
+    function removeCategoryInput() {
+        setCategoryInput(prevState => prevState.length-1)
+        let newCategories = [categories]
+        setCategories(prevState => newCategories.length-1)
+        props.function("categories", categories)
     }
 
     /**
@@ -221,11 +225,11 @@ export default function StudioToolbar(props) {
 
                 <div className="toolbar--xaxis">
                     <div className="toolbar--xaxis--title">
-                        <button>-</button>
+                        <button onClick={removeCategoryInput}>-</button>
                         <h2>xAxis</h2>
                         <button onClick={addCategoryInput}>+</button>
                     </div>
-                    {categories}
+                    {categoryInput}
                 </div>
                 {chartCategoryLayout[layoutID]}
             </div>

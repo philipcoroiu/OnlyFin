@@ -12,7 +12,7 @@ export default function Chart(props) {
             text: `${props.diagramName}`
         },
         xAxis: {
-            categories: `${props.categories}`
+            categories: props.categories
         },
         yAxis: {
             title: {
