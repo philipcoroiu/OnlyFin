@@ -3,8 +3,8 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.UserDTO;
@@ -56,7 +56,7 @@ public class UserController {
      * @param principal Logged-in user that wants to become an analyst.
      * @return ResponseEntity with status code 200 if the user was successfully made an analyst.
      */
-    @GetMapping("/enable-analyst")
+    @PutMapping("/enable-analyst")
     public ResponseEntity<String> enableAnalyst(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
@@ -80,7 +80,7 @@ public class UserController {
      * @param principal Logged-in analyst that wants to become a regular user.
      * @return ResponseEntity with status code 200 if the analyst was successfully made a regular user.
      */
-    @GetMapping("/disable-analyst")
+    @PutMapping("/disable-analyst")
     public ResponseEntity<String> disableAnalyst(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
