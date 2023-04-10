@@ -16,6 +16,7 @@ export default function StudioToolbar(props) {
 
     const [valueInput, setValueInput] = React.useState([])
 
+    const [test, setTest] = React.useState("test")
 
     function addCategory(event) {
         const {id, value} = event.target;
@@ -40,7 +41,8 @@ export default function StudioToolbar(props) {
             return [...prevState, ""]
         })
 
-
+        setTest("Klickade på plus")
+        handleAddYInput();
 
         //addYaxisInput(layoutID);
     }
@@ -95,21 +97,46 @@ export default function StudioToolbar(props) {
     /**
      * Stores all the relevant information for the different layouts
      */
-    const [yAxisInputs, setyAxisInputs] = React.useState([])
+    const [yAxisInputs, setyAxisInputs] = React.useState([[]])
 
     /**
      * Add and remove methods for the layout
      */
 
     const handleAddYInput = () => {
-        setyAxisInputs(prevInputs => [...prevInputs, <CategoryLayout layoutID={layoutID} inputID={yAxisInputs[layoutID].length} placeholder="Value"/>]);
+
+        setyAxisInputs(prevState => {
+            // Create a new array with the updated state
+            const updatedState = [...prevState];
+
+            // Add a new element to the nested array
+            updatedState[layoutID] = [...updatedState[layoutID], <CategoryLayout layoutID={layoutID} inputID="0" placeholder="Value"/>];
+
+            // Return the updated state
+            //setTest(updatedState)
+            console.log(yAxisInputs)
+            return updatedState;
+        });
+
+
+
     };
 
     const handleRemoveYInput = () => {
         setyAxisInputs(prevState => prevState.slice(1))
     }
 
+    function generateCategoryLayout() {
+        let inputFields = [];
 
+        for (let i = 0; i < yAxisInputs.length; i++) {
+            if (yAxisInputs.layoutID === layoutID) {
+                inputFields.push(yAxisInputs[i])
+            }
+        }
+
+        return inputFields;
+    }
 
     /*
     function addyAxisInput(layoutID, value) {
@@ -130,8 +157,6 @@ export default function StudioToolbar(props) {
      * Changes the name of the chart
      * @param event
      */
-
-    const [test, setTest] = React.useState("test")
 
 
     /**
@@ -192,7 +217,7 @@ export default function StudioToolbar(props) {
                     key={prevState.length}
                     id={prevState.length}
                     value={prevState.length}
-                    onClick={() => setLayoutID(prevState.length)}
+                    onClick={() => handleLayout(prevState.length)}
                 ></CategoryButton>])
     }
 
@@ -290,9 +315,8 @@ export default function StudioToolbar(props) {
                             <h2>Value</h2>
 
                         </div>
-
                     </div>
-                {chartCategoryLayout[layoutID]}
+                {yAxisInputs}
             </div>
 
             <div>
