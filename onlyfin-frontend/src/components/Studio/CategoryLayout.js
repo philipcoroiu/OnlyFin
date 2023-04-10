@@ -31,23 +31,12 @@ export default function CategoryLayout(props) {
 
     return (
         <>
-
-            <div className="toolbar--columns">
-                <div className="toolbar--xaxis">
-                    <div className="toolbar--xaxis--title">
-                        <button onClick={handleRemoveXaxisInput}>-</button>
-                        <h2>xAxis</h2>
-                        <button onClick={handleAddXaxisInput} >+</button>
-                    </div>
-                    {xAxisInputButtons}
-                </div>
                 <div className="toolbar--value">
                     <div className="toolbar--yaxis--title">
                         <h2>Value</h2>
                     </div>
                     {yAxisInputButtons}
                 </div>
-            </div>
             <div>LayoutID(layout): {props.id}</div>
             <div>x-axis input: {}</div>
         </>

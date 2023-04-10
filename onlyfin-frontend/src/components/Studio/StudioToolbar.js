@@ -2,15 +2,46 @@ import React from 'react';
 import CategoryLayout from "./CategoryLayout";
 import CategoryButton from "./CategoryButton"
 import DropdownButton from "./DropdownButton"
+import XaxisInput from "./XaxisInput";
+import YaxisInput from "./YaxisInput";
 
 export default function StudioToolbar(props) {
 
     /**
      * Stores all the info related to the chart.
      */
-    //const [chartInfo, setChartInfo] = React.useState(props.categories)
+    //const [chartInfo, setChartInfo] = React.useState(props.series)
+    const [categories, setCategories] = React.useState(props.categories)
+    const [categoryInput, setCategoryInput] = React.useState(
+        <input
+            key={0}
+            id={0}
+            value={props.categories}
+            onChange={addCategory}
+        />
+    )
+
     const [chartInfo, setChartInfo] = React.useState({key:0, id:0, name:"Untitled"})
 
+    function addCategory(event) {
+        const {id, value} = event.target;
+        setCategories(prevState =>{
+            return [...prevState, prevState[id] = value]
+        })
+        props.function("categories", categories)
+    }
+
+    function addCategoryInput() {
+        setCategoryInput(prevState => {
+            return [...prevState,
+                <input
+                    key={prevState.length}
+                    id={prevState.length}
+                    onChange={addCategory}
+                />
+            ]
+        })
+    }
 
     /**
      * Stores all the category layouts
@@ -44,6 +75,7 @@ export default function StudioToolbar(props) {
      */
 
     const [test, setTest] = React.useState("test")
+
 
     /**
      * Changes the name of the chosen category button
@@ -185,12 +217,26 @@ export default function StudioToolbar(props) {
             </div>
 
 
+            <div className="toolbar--columns">
 
-            {chartCategoryLayout[layoutID]}
-            <div>LayoutID(state): {layoutID}</div>
-            <div>CategoryButton.length: {categoryButton.length}</div>
-            <div>categoryButton[0] name: {categoryButton[0].value}</div>
-            <div>{test}</div>
+                <div className="toolbar--xaxis">
+                    <div className="toolbar--xaxis--title">
+                        <button>-</button>
+                        <h2>xAxis</h2>
+                        <button onClick={addCategoryInput}>+</button>
+                    </div>
+                    {categories}
+                </div>
+                {chartCategoryLayout[layoutID]}
+            </div>
+
+            <div>
+                <div>LayoutID(state): {layoutID}</div>
+                <div>CategoryButton.length: {categoryButton.length}</div>
+                <div>categoryButton[0] name: {categoryButton[0].value}</div>
+                <div>{test}</div>
+            </div>
+
 
 
         </div>

@@ -25,14 +25,25 @@ export default function Studio() {
         nameOfDiagram: "",
         valueTitle: "",
         typeOfDiagram: "",
-        categories: [{},{
+        series: [{},{
             name: "Revenue",
             data: [10,3,7]
-        }]
+        }],
+        categories: []
     })
     console.log(sendData)
+
     function changeStats(event){
         const {name, value} = event.target;
+        setSendData(prevState => {
+            return{
+                ...prevState,
+                [name]: value
+            }
+        })
+    }
+
+    function changeStats(name, value){
         setSendData(prevState => {
             return{
                 ...prevState,
@@ -54,6 +65,7 @@ export default function Studio() {
                 valueName={sendData.valueTitle}
                 typeOfDiagram={sendData.typeOfDiagram}
                 function={changeStats}
+                series={sendData.series}
                 categories={sendData.categories}
                 onyAxisChange={changeStats}
 
@@ -63,8 +75,8 @@ export default function Studio() {
                     diagramName={sendData.nameOfDiagram}
                     valueTitile={sendData.valueTitle}
                     typeOfDiagram={sendData.typeOfDiagram}
+                    series={sendData.series}
                     categories={sendData.categories}
-
                 />
             </div>
         </div>
