@@ -2,7 +2,7 @@ package se.onlyfin.onlyfinbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class NameChangeRequest {
+public class NameChangeDTO {
     @JsonProperty("id")
     private int id;
 

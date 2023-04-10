@@ -3,7 +3,7 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.onlyfin.onlyfinbackend.model.dashboard.Dashboard;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
 
 
@@ -11,12 +11,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/dashboard")
+@CrossOrigin(origins = "*")
 public class DashboardController {
 
     @Autowired
     private DashboardRepository dashboardRepository;
 
     @GetMapping("/{id}")
+
     public ResponseEntity<Dashboard> getDashboard(@PathVariable String id) {
 
         try{

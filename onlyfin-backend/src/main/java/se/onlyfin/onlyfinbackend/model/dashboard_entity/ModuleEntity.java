@@ -1,16 +1,10 @@
-package se.onlyfin.onlyfinbackend.model.dashboard;
+package se.onlyfin.onlyfinbackend.model.dashboard_entity;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import se.onlyfin.onlyfinbackend.converter.JsonNodeConverter;
-import se.onlyfin.onlyfinbackend.model.dashboard.content.Content;
-
-import java.util.Arrays;
 
 
 @Entity
@@ -30,7 +24,6 @@ public class ModuleEntity {
     @JoinColumn(name = "category_id")
     private Category category_id;
 
-    @Convert(converter = JsonNodeConverter.class)
     @Column(name = "content")
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode content;

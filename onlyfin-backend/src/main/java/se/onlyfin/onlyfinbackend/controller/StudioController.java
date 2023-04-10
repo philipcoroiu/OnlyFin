@@ -2,14 +2,15 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.onlyfin.onlyfinbackend.model.NameChangeRequest;
-import se.onlyfin.onlyfinbackend.model.dashboard.Category;
-import se.onlyfin.onlyfinbackend.model.dashboard.ModuleEntity;
-import se.onlyfin.onlyfinbackend.model.dashboard.Stock;
+import se.onlyfin.onlyfinbackend.model.NameChangeDTO;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
 import se.onlyfin.onlyfinbackend.repository.*;
 
 @RestController
 @RequestMapping("/studio")
+@CrossOrigin(origins = "*")
 public class StudioController {
 
     private final StockRepository stockRepository;
@@ -79,7 +80,7 @@ public class StudioController {
     }
 
     @PutMapping("/updateCategoryName")
-    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeRequest nameChangeRequest){
+    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDTO nameChangeRequest){
 
         Category category;
 

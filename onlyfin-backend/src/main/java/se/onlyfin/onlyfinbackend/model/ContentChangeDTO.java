@@ -3,7 +3,7 @@ package se.onlyfin.onlyfinbackend.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class ContentChangeRequest {
+public class ContentChangeDTO {
     @JsonProperty("id")
     private int id;
 
