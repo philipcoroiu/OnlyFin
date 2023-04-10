@@ -85,6 +85,15 @@ code {
   border-radius: 5px;
   width: 50%;
 }
+
+.toolbar--xaxis--title{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 5px;
+  align-items: center;
+}
+
 .toolbar--xaxis > input{margin: 10px}
 
 .toolbar--value{

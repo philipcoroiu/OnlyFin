@@ -14,14 +14,15 @@ export default function StudioToolbar(props) {
     const [categories, setCategories] = React.useState(props.categories)
     const [categoryInput, setCategoryInput] = React.useState([])
 
-    const [chartInfo, setChartInfo] = React.useState({key:0, id:0, name:"Untitled"})
+    const [valueInput, setValueInput] = React.useState([])
+
 
     function addCategory(event) {
         const {id, value} = event.target;
-        var newCategory = categories
+        let newCategory = categories
         newCategory[id] = value
         setCategories(newCategory)
-        props.function("categories", newCategory)
+        props.changeCategories("categories", newCategory)
     }
 
     function addCategoryInput() {
@@ -29,21 +30,40 @@ export default function StudioToolbar(props) {
             return [...prevState,
                 <input
                     key={prevState.length}
-                    id={categories.length}
+                    id={prevState.length}
+                    value={categories[prevState.length]}
                     onChange={addCategory}
                 />
             ]
         })
-        let newCategories = [categories]
         setCategories(prevState => {
-            newCategories[categories.length+1] = `${categories.length+1}`
+            return [...prevState, ""]
         })
+
+
+
+        //addYaxisInput(layoutID);
     }
 
+
+
     function removeCategoryInput() {
-        setCategoryInput(prevState => prevState.length-1)
+        setCategoryInput(prevState => {
+            let newInput = []
+            for (let i = 0; i < prevState.length-1; i++) {
+                newInput[i] = prevState[i]
+            }
+            return newInput
+        })
+
         let newCategories = [categories]
-        setCategories(prevState => newCategories.length-1)
+        setCategories(prevState => {
+            let newCategories = []
+            for (let i = 0; i < prevState.length-1; i++) {
+                newCategories[i] = prevState[i]
+            }
+            return newCategories
+        })
         props.function("categories", categories)
     }
 
@@ -71,6 +91,39 @@ export default function StudioToolbar(props) {
      * Stores the ID of the current category layout
      */
     const [layoutID, setLayoutID] = React.useState(0)
+
+    /**
+     * Stores all the relevant information for the different layouts
+     */
+    const [yAxisInputs, setyAxisInputs] = React.useState([])
+
+    /**
+     * Add and remove methods for the layout
+     */
+
+    const handleAddYInput = () => {
+        setyAxisInputs(prevInputs => [...prevInputs, <CategoryLayout layoutID={layoutID} inputID={yAxisInputs[layoutID].length} placeholder="Value"/>]);
+    };
+
+    const handleRemoveYInput = () => {
+        setyAxisInputs(prevState => prevState.slice(1))
+    }
+
+
+
+    /*
+    function addyAxisInput(layoutID, value) {
+        setyAxisInputs(prevState => {
+            // Create a copy of the previous state
+            const newState = [...prevState];
+            // Add a new input array to the end
+            newState.push([]);
+            // Return the updated state
+            return newState;
+        });
+    }
+
+     */
 
 
     /**
@@ -122,7 +175,8 @@ export default function StudioToolbar(props) {
                 <CategoryLayout
                     key={prevInputs.length}
                     id={prevInputs.length}
-                    changeName={changeName}
+                    yAxisInputs={yAxisInputs}
+
                 />]
         )
         createCategoryButton();
@@ -231,6 +285,13 @@ export default function StudioToolbar(props) {
                     </div>
                     {categoryInput}
                 </div>
+                    <div className="toolbar--value">
+                        <div className="toolbar--yaxis--title">
+                            <h2>Value</h2>
+
+                        </div>
+
+                    </div>
                 {chartCategoryLayout[layoutID]}
             </div>
 

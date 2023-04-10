@@ -43,7 +43,7 @@ export default function Studio() {
         })
     }
 
-    function changeStats(name, value){
+    function changeCategories(name, value){
         setSendData(prevState => {
             return{
                 ...prevState,
@@ -65,6 +65,7 @@ export default function Studio() {
                 valueName={sendData.valueTitle}
                 typeOfDiagram={sendData.typeOfDiagram}
                 function={changeStats}
+                changeCategories={changeCategories}
                 series={sendData.series}
                 categories={sendData.categories}
                 onyAxisChange={changeStats}
