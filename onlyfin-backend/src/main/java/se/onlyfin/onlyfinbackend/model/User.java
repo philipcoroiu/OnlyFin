@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+/**
+ * This class is responsible for modeling the user table in the database.
+ */
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "username")

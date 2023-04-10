@@ -15,6 +15,9 @@ import java.security.Principal;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * This class is responsible for handling requests related to subscriptions.
+ */
 @RestController
 public class SubscriptionController {
     private final UserRepository userRepository;
@@ -25,6 +28,13 @@ public class SubscriptionController {
         this.subscriptionRepository = subscriptionRepository;
     }
 
+    /**
+     * Adds a subscription from the logged-in user to the user with the given ID.
+     *
+     * @param principal     the logged-in user
+     * @param subscribeToId the ID of the user to subscribe to
+     * @return response entity with the username of the subscribed-to user if successful
+     */
     @PostMapping("/subscribe")
     public ResponseEntity<String> addSubscription(Principal principal, @RequestParam("id") Integer subscribeToId) {
         User userWantingToSubscribe = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Logged in user not present in db"));
@@ -49,6 +59,13 @@ public class SubscriptionController {
         return ResponseEntity.ok().body(userToSubscribeTo.getUsername());
     }
 
+    /**
+     * Removes specified subscription from the logged-in user.
+     *
+     * @param principal      the logged-in user
+     * @param subscribedToId the ID of the user to unsubscribe from
+     * @return response entity with the username of the unsubscribed-from user if successful
+     */
     @DeleteMapping("/unsubscribe")
     public ResponseEntity<String> removeSubscription(Principal principal, @RequestParam("id") Integer subscribedToId) {
 

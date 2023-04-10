@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * This class test is responsible for testing that the HTML pages in provided by the backend can be loaded correctly.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HTMLPageTests {
     @LocalServerPort

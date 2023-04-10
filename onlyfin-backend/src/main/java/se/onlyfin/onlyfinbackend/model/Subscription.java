@@ -2,6 +2,9 @@ package se.onlyfin.onlyfinbackend.model;
 
 import jakarta.persistence.*;
 
+/**
+ * This class is responsible for modeling the subscription table in the database.
+ */
 @Entity
 @Table(name = "subscription")
 public class Subscription {

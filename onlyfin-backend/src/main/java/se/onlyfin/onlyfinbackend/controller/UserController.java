@@ -13,6 +13,9 @@ import se.onlyfin.onlyfinbackend.repository.UserRepository;
 import java.security.Principal;
 import java.util.Optional;
 
+/**
+ * This class is responsible for handling requests related to user management.
+ */
 @Controller
 public class UserController {
     private final UserRepository userRepository;
@@ -21,6 +24,12 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Registers a new user. If the username or email is already registered, a bad request is returned.
+     *
+     * @param user UserDTO containing username, password and email.
+     * @return ResponseEntity with status code 200 and username if registration was successful.
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody UserDTO user) {
         if (userRepository.existsByEmail(user.email())) {
@@ -41,6 +50,12 @@ public class UserController {
         return ResponseEntity.ok(user.username());
     }
 
+    /**
+     * Makes a user an analyst. If the user is already an analyst, a bad request is returned.
+     *
+     * @param principal Logged-in user that wants to become an analyst.
+     * @return ResponseEntity with status code 200 if the user was successfully made an analyst.
+     */
     @GetMapping("/enable-analyst")
     public ResponseEntity<String> enableAnalyst(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
@@ -59,6 +74,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Makes an analyst a regular user. If the user is not an analyst, a bad request is returned.
+     *
+     * @param principal Logged-in analyst that wants to become a regular user.
+     * @return ResponseEntity with status code 200 if the analyst was successfully made a regular user.
+     */
     @GetMapping("/disable-analyst")
     public ResponseEntity<String> disableAnalyst(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());

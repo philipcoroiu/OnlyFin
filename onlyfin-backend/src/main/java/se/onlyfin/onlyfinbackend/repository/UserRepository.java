@@ -6,6 +6,9 @@ import se.onlyfin.onlyfinbackend.model.User;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository mapping for the user table.
+ */
 public interface UserRepository extends CrudRepository<User, Integer> {
     /**
      * Find any user by email
@@ -64,6 +67,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     /**
      * Find all analysts that start with the given search term
+     *
      * @param search the search term
      * @return all analysts that start with the given search term
      */
@@ -71,6 +75,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     /**
      * Find the most recent 7 analysts whose username starts with the given search term
+     *
      * @param search the search term
      * @return up to 7 analysts that start with the given search term
      */

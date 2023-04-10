@@ -19,6 +19,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * This class test is responsible for testing the SubscriptionController class.
+ */
 @SpringBootTest
 public class SubscriptionControllerTests {
 

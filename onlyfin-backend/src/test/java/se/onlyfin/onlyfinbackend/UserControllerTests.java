@@ -14,6 +14,9 @@ import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * This class test is responsible for testing the UserController class.
+ */
 @SpringBootTest
 public class UserControllerTests {
     @Mock
@@ -22,16 +25,16 @@ public class UserControllerTests {
     private UserController userController;
 
     @BeforeEach
-    // Create a new UserController instance before each test
-    // Create a mock UserRepository instance
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
         userController = new UserController(userRepository);
     }
 
+    /**
+     * Test that a new user can be registered if username and email are not already registered in the database.
+     * Test that the response body contains the username of the new user
+     */
     @Test
-    // Test that a new user can be registered if username and email are not already registered in the database
-    // and test that the response body contains the username of the new user
     public void testRegisterNewUser() {
         UserDTO userDTO = new UserDTO("testuser", "testpassword", "testemail@test.com");
 
@@ -45,9 +48,11 @@ public class UserControllerTests {
         assertEquals(userDTO.username(), response.getBody());
     }
 
+    /**
+     * Test that a new user cannot be registered if email is already registered in the database
+     * Test that the response body contains a bad request message saying that the email is already registered
+     */
     @Test
-    // Test that a new user cannot be registered if email is already registered in the database
-    // Test that the response body contains a bad request message saying that the email is already registered
     public void testRegisterNewUserWithEmailAlreadyRegistered() {
         UserDTO userDTO = new UserDTO("testuser", "testpassword", "testemail@test.com");
 
@@ -60,9 +65,11 @@ public class UserControllerTests {
         assertEquals("Email is already registered!", response.getBody());
     }
 
+    /**
+     * Test that a new user cannot be registered if username is already taken in the database
+     * Test that the response body contains a bad request message saying that the username is already taken
+     */
     @Test
-    // Test that a new user cannot be registered if username is already taken in the database
-    // Test that the response body contains a bad request message saying that the username is already taken
     public void testRegisterNewUserWithUsernameAlreadyTaken() {
         UserDTO userDTO = new UserDTO("testuser", "testpassword", "testemail@test.com");
 

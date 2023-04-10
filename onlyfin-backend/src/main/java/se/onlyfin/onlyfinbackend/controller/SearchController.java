@@ -14,6 +14,9 @@ import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+/**
+ * This class is responsible for handling all requests related to searching for analysts.
+ */
 @RestController
 public class SearchController {
     private final UserRepository userRepository;
@@ -22,6 +25,11 @@ public class SearchController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * This method is responsible for returning a list of all analysts in the database.
+     *
+     * @return a list of all analysts in the database.
+     */
     @GetMapping("/search-all-analysts")
     public ResponseEntity<Iterable<ProfileDTO>> findAllAnalysts() {
         Iterable<User> foundUsers = userRepository.findByisAnalystIsTrue();
@@ -30,6 +38,12 @@ public class SearchController {
         return ResponseEntity.ok(usersToReturnToClient);
     }
 
+    /**
+     * This method is responsible for returning a single analyst with the given username.
+     *
+     * @param username the username of the analyst to be fetched.
+     * @return the analyst with the given username.
+     */
     @GetMapping("/get-analyst-by-name")
     public ResponseEntity<ProfileDTO> findAnalystByName(@RequestParam String username) {
         ProfileDTO profileDTOToSendToClient;
@@ -43,6 +57,12 @@ public class SearchController {
         }
     }
 
+    /**
+     * This method is responsible for returning a list of analysts that match the given search string.
+     *
+     * @param search the search string to be used to find analysts.
+     * @return a list of analysts that match the search string.
+     */
     @GetMapping("/search-analyst")
     public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search) {
         //fetch all users

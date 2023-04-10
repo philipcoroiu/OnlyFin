@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import se.onlyfin.onlyfinbackend.service.OnlyfinUserDetailsService;
 
+/**
+ * This class is used to configure the security settings in Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -21,8 +24,13 @@ public class SecurityConfig {
         this.onlyfinUserDetailsService = onlyfinUserDetailsService;
     }
 
+    /**
+     * This method is used to configure which endpoints are protected by roles and which are not.
+     * It is here that you can see which endpoints need authentication and which do not.
+     * This method also sets up the login form.
+     */
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
@@ -46,6 +54,10 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * This method can be used to disable authentication globally for testing purposes.
+     * It should not be used in production.
+     */
     @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
@@ -53,9 +65,12 @@ public class SecurityConfig {
 
     }
 
-
+    /**
+     * This method is used to configure which password encoder to use.
+     */
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
