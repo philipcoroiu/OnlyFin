@@ -1,4 +1,4 @@
-package se.onlyfin.onlyfinbackend.model.dashboard;
+package se.onlyfin.onlyfinbackend.model.dashboard_entity;
 
 import jakarta.persistence.*;
 

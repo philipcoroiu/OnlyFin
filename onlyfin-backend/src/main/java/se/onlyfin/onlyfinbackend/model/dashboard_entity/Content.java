@@ -1,4 +1,4 @@
-package se.onlyfin.onlyfinbackend.model.dashboard.content;
+package se.onlyfin.onlyfinbackend.model.dashboard_entity;
 
 
 import com.fasterxml.jackson.databind.JsonNode;

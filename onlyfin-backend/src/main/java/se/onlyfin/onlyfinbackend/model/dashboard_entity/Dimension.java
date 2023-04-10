@@ -1,4 +1,4 @@
-package se.onlyfin.onlyfinbackend.model.dashboard;
+package se.onlyfin.onlyfinbackend.model.dashboard_entity;
 
 public class Dimension {
     private int x;
