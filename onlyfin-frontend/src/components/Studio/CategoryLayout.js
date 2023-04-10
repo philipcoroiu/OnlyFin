@@ -5,7 +5,10 @@ import {defaultKeyMap} from "@testing-library/user-event/dist/keyboard/keyMap";
 
 export default function CategoryLayout(props) {
 
-    let numberOfInputFields = props.length;
+    const layoutID = props.layoutID;
+    let numberOfInputFields = () => {
+
+    }
 
 
 
