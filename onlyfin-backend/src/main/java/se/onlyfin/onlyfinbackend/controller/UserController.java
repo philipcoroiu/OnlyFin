@@ -3,6 +3,7 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,6 +97,18 @@ public class UserController {
         userRepository.save(analystToBecomeRegularUser);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/fetch-current-user-id")
+    public ResponseEntity<Integer> fetchCurrentUserId(Principal principal) {
+        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User userToFetchUserIdFrom = userOptional.get();
+        return ResponseEntity.ok(userToFetchUserIdFrom.getId());
+
     }
 
 }
