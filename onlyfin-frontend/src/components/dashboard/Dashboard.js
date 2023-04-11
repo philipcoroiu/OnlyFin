@@ -11,10 +11,12 @@ export default function Dashboard() {
     const [activeStockTab, setActiveStockTab] = useState(0);
     const [activeCategoryTab, setActiveCategoryTab] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const userId = 8;
+    let userId = 8;
     const userName = null;
 
     useEffect(() => {
+        //userId = axios.get("http://localhost:8080/fetch-current-user-id");
+
         axios.get("http://localhost:8080/dashboard/" + userId).then((response) => {
             setDashboard(response.data);
             setIsLoading(false);
@@ -31,7 +33,7 @@ export default function Dashboard() {
     };
 
     if (isLoading) {
-        return <div>Loading dashboard...</div>;
+        return <div className="isLoading">Loading dashboard...</div>;
     }
 
     const { stocks } = dashboard;
@@ -81,7 +83,7 @@ export default function Dashboard() {
                                             {category.moduleEntities.map((moduleEntity) => (
                                                 <div key={moduleEntity.id} className="module-entity-container">
                                                     <pre>
-                                                        {JSON.stringify(moduleEntity.content, null, 2)}
+                                                        <DashboardChart moduleItem={moduleEntity.content}/>
                                                     </pre>
                                                 </div>
                                             ))}

@@ -3,10 +3,7 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.UserDTO;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
@@ -17,6 +14,7 @@ import java.util.Optional;
 /**
  * This class is responsible for handling requests related to user management.
  */
+@CrossOrigin(origins = "*")
 @Controller
 public class UserController {
     private final UserRepository userRepository;

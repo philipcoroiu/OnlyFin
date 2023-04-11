@@ -33,6 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
                                 "/user",
@@ -47,8 +48,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/register",
-                                "/assets/**")
-                        .permitAll()
+                                "/assets/**",
+                                "/dashboard/**",
+                                "/studio/**")
+                        .permitAll(
+
+                        )
                 )
                 .formLogin();
         return http.build();
@@ -58,12 +63,12 @@ public class SecurityConfig {
      * This method can be used to disable authentication globally for testing purposes.
      * It should not be used in production.
      */
-    @Bean
+    /*@Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
         return (web) -> web.ignoring().requestMatchers("/**");
 
-    }
+    }*/
 
     /**
      * This method is used to configure which password encoder to use.

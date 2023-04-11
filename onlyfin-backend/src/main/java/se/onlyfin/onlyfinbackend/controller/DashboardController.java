@@ -10,8 +10,8 @@ import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/dashboard")
 @CrossOrigin(origins = "*")
+@RequestMapping("/dashboard")
 public class DashboardController {
 
     @Autowired

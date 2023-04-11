@@ -10,7 +10,6 @@ export default function Login() {
                     <h1>Log in</h1>
                     <h3>Welcome to OnlyFin, please put your credentials below to start using the app</h3>
                     <input type="text" placeholder="Email"></input>
-                    <input type="text" placeholder="Username"></input>
                     <input type="text" placeholder="Password"></input>
                     <Link to="LoginTest">
                         <button>Submit</button>
