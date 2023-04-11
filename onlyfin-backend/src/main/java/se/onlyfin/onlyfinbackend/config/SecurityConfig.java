@@ -2,6 +2,7 @@ package se.onlyfin.onlyfinbackend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,15 +35,17 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .requestMatchers(
                                 "/user",
-                                "/search-all",
+                                "/search-all-analysts",
                                 "/get-analyst-by-name",
                                 "/search-analyst",
                                 "/subscribe",
                                 "/unsubscribe",
                                 "/enable-analyst",
-                                "/disable-analyst")
+                                "/disable-analyst",
+                                "/fetch-current-user-id")
                         .hasRole("USER")
                         .requestMatchers(
                                 "/",
@@ -58,12 +61,15 @@ public class SecurityConfig {
      * This method can be used to disable authentication globally for testing purposes.
      * It should not be used in production.
      */
+    /*
     @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
         return (web) -> web.ignoring().requestMatchers("/**");
 
     }
+
+     */
 
     /**
      * This method is used to configure which password encoder to use.
