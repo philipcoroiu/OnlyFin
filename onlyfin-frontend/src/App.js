@@ -5,6 +5,7 @@ import Login from "./components/login/Login"
 import Dashboard from "./components/dashboard/Dashboard"
 import LoginTest from "./components/login/LoginTest"
 import Studio from "./components/Studio/Studio"
+import Studio2 from "./components/Studio2/Studio"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="Dashboard"> {/* moved "Dashboard" to next line */}
             <Route path="" element={<Dashboard/>}></Route>
             <Route path="Studio" element={<Studio/>}></Route>
+            <Route path="Studio2" element={<Studio2/>}></Route>
         </Route>
       <Route path="Login">
         <Route path="" element={<Login/>}></Route>

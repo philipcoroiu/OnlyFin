@@ -14,13 +14,13 @@ export default function DashboardSidebar() {
                     <Link to="/" style={{ flex: 1, textAlign: 'center' }}>
                         <img src={homeIcon} alt="Home" title="Home" />
                     </Link>
-                    <Link to="/Studio" style={{ flex: 1, textAlign: 'center' }}>
+                    <Link to="Studio" style={{ flex: 1, textAlign: 'center' }}>
                         <img src={studioIcon} alt="Studio"title="Studio" />
                     </Link>
                     <Link to="/studio" style={{ flex: 1, textAlign: 'center' }}>
                         <img src={homeIcon} alt="Studio" />
                     </Link>
-                    <Link to="/studio" style={{ flex: 1, textAlign: 'center' }}>
+                    <Link to="Studio2" style={{ flex: 1, textAlign: 'center' }}>
                         <img src={homeIcon} alt="Studio" />
                     </Link>
 
