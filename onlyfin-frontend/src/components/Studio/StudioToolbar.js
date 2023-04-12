@@ -34,7 +34,7 @@ export default function StudioToolbar(props) {
 
     function handleYaxisChange(event) {
 
-        const value = event.value;
+        const value = event.target.value;
 
         setyAxisInputValues({inputLayoutID: layoutID, inputValue: value, inputID: categoryInput.length})
     }
@@ -67,13 +67,27 @@ export default function StudioToolbar(props) {
     function addyAxisInputButton() {
         setyAxisInputButtons(prevState => {
             return [...prevState,
-                <CategoryLayout id={categoryInput.length} onChange={(event) => handleOnyAxisChange(categoryInput.length, event)} />
+                <CategoryLayout id={categoryInput.length} onChange={(event) => handleOnyAxisChange(event, categoryInput.length)}/>
             ]
         })
+        //setTest("input created with the id: " + categoryInput.length)
     }
 
-    function handleOnyAxisChange(id, event) {
-        setTest("handleOnyAxisChange, buttonID: "+ event.target.value)
+    function handleOnyAxisChange(event, id) {
+        const value = event.target.value;
+        let newObject = {inputLayoutID: layoutID, inputValue: value, inputID: id};
+
+        setTest("LayoutID: " + layoutID + " Input ID: " + id + " value: " + value)
+
+        if(yAxisInputValues.length === 0) {
+            setyAxisInputValues(prevState => {
+                return [...prevState, newObject]
+            })
+        }
+
+
+
+
     }
 
     const renderYaxisInputs = () => {
