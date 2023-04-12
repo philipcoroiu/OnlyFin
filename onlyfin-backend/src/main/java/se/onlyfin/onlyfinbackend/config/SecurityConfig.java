@@ -46,13 +46,17 @@ public class SecurityConfig {
                                 "/unsubscribe",
                                 "/enable-analyst",
                                 "/disable-analyst",
-                                "/fetch-current-user-id")
+                                "/fetch-current-user-id",
+                                "/fetch-about-me",
+                                "/update-about-me")
                         .hasRole("USER")
                         .requestMatchers(
                                 "/",
                                 "/register",
                                 "/assets/**")
                         .permitAll()
+                        //uncomment the row below to enable user debug:
+                        //.requestMatchers("/user-debug").permitAll()
                 )
                 .formLogin();
         return http.build();

@@ -38,6 +38,9 @@ public class User {
     @OneToMany(mappedBy = "subscribedTo")
     private List<Subscription> subscribers;
 
+    @Column(name = "about_me", columnDefinition="TEXT")
+    private String aboutMe;
+
     public String getUsername() {
         return username;
     }
@@ -110,14 +113,12 @@ public class User {
         this.subscribers = subscribers;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", enabled=" + enabled +
-                ", roles='" + roles + '\'' +
-                '}';
+    public String getAboutMe() {
+        return aboutMe;
     }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+    
 }
