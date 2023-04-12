@@ -16,6 +16,10 @@ export default function StudioToolbar(props) {
 
     const [valueInput, setValueInput] = React.useState([])
 
+    const [yAxisInputValues, setyAxisInputValues] = React.useState([]);
+
+    const [yAxisInputButtons, setyAxisInputButtons] = React.useState([]);
+
     const [test, setTest] = React.useState("test")
 
     function addCategory(event) {
@@ -24,6 +28,15 @@ export default function StudioToolbar(props) {
         newCategory[id] = value
         setCategories(newCategory)
         props.changeCategories("categories", newCategory)
+
+
+    }
+
+    function handleYaxisChange(event) {
+
+        const value = event.value;
+
+        setyAxisInputValues({inputLayoutID: layoutID, inputValue: value, inputID: categoryInput.length})
     }
 
     function addCategoryInput() {
@@ -41,10 +54,38 @@ export default function StudioToolbar(props) {
             return [...prevState, ""]
         })
 
-        setTest("Klickade på plus")
-        handleAddYInput();
+        //setTest("Klickade på plus")
+
+        addyAxisInputButton();
+
+
+        //handleAddYInput();
 
         //addYaxisInput(layoutID);
+    }
+
+    function addyAxisInputButton() {
+        setyAxisInputButtons(prevState => {
+            return [...prevState,
+                <CategoryLayout id={categoryInput.length} onChange={(event) => handleOnyAxisChange(categoryInput.length, event)} />
+            ]
+        })
+    }
+
+    function handleOnyAxisChange(id, event) {
+        setTest("handleOnyAxisChange, buttonID: "+ event.target.value)
+    }
+
+    const renderYaxisInputs = () => {
+
+        let yInputsArray = []
+
+        categoryInput.map((input, index) => {
+            return yInputsArray.push(<input id={categoryInput.length} onChange={handleYaxisChange}/>)})
+
+        return yInputsArray;
+
+
     }
 
 
@@ -72,6 +113,7 @@ export default function StudioToolbar(props) {
     /**
      * Stores all the category layouts
      */
+
     const [chartCategoryLayout, setChartCategoryLayout] = React.useState([<CategoryLayout
         key={0}
         id={0}
@@ -97,7 +139,7 @@ export default function StudioToolbar(props) {
     /**
      * Stores all the relevant information for the different layouts
      */
-    const [yAxisInputs, setyAxisInputs] = React.useState([[]])
+    const [yAxisInputs, setyAxisInputs] = React.useState([])
 
     /**
      * Add and remove methods for the layout
@@ -106,21 +148,32 @@ export default function StudioToolbar(props) {
     const handleAddYInput = () => {
 
         setyAxisInputs(prevState => {
-            // Create a new array with the updated state
-            const updatedState = [...prevState];
 
-            // Add a new element to the nested array
-            updatedState[layoutID] = [...updatedState[layoutID], <CategoryLayout layoutID={layoutID} inputID="0" placeholder="Value"/>];
+            //setTest(yAxisInputs)
+            return [...prevState, <CategoryLayout layoutID={layoutID} />];
 
             // Return the updated state
-            //setTest(updatedState)
-            console.log(yAxisInputs)
-            return updatedState;
         });
-
-
-
     };
+
+    /*
+    KOMMENTERAR BORT MEN KANSKE BEHÖVS SENARE TILL Y-INPUT
+
+    const renderYInputs = () => {
+        setTest("RenderYInputs")
+        const renderedInputs = [];
+        for (let i = 0; i < yAxisInputs.length; i++) {
+            if (yAxisInputs[i].layoutID === layoutID) {
+                renderedInputs.push(
+                    <CategoryLayout layoutID={yAxisInputs[i].layoutID} /> // value={yAxisInputs[i].value}
+                );
+            }
+        }
+
+        return renderedInputs;
+    };
+
+     */
 
     const handleRemoveYInput = () => {
         setyAxisInputs(prevState => prevState.slice(1))
@@ -195,6 +248,7 @@ export default function StudioToolbar(props) {
      * Adds a category layout when "add" has been pressed
      */
     function addCategoryLayout() {
+        /*
         setChartCategoryLayout(prevInputs =>
             [...prevInputs,
                 <CategoryLayout
@@ -204,6 +258,8 @@ export default function StudioToolbar(props) {
 
                 />]
         )
+
+         */
         createCategoryButton();
     }
 
@@ -230,6 +286,7 @@ export default function StudioToolbar(props) {
     }
 
     function deleteInput(id) {
+        /*
         setChartCategoryLayout(prevInputs => {
             let newInputs = [];
             for (let i = 0; i < prevInputs.length-1; i++) {
@@ -237,6 +294,8 @@ export default function StudioToolbar(props) {
             }
             return newInputs
         })
+
+         */
         setCategoryButton(prevState => {
             let newInputs = [];
             for (let i = 0; i < prevState.length-1; i++) {
@@ -313,10 +372,10 @@ export default function StudioToolbar(props) {
                     <div className="toolbar--value">
                         <div className="toolbar--yaxis--title">
                             <h2>Value</h2>
-
+                            {/* yAxisInput here */}
+                            {yAxisInputButtons}
                         </div>
                     </div>
-                {yAxisInputs}
             </div>
 
             <div>
@@ -331,3 +390,22 @@ export default function StudioToolbar(props) {
         </div>
     );
 }
+
+
+
+/*
+
+Will generate the elements in "yAxisInputs" but the problem is that there are more
+xAxisInputs than yAxisInputs.
+
+<div>
+                    {yAxisInputs.map(layout => {
+                        if (layout.props.layoutID === layoutID) {
+                            return <CategoryLayout value={"LayoutID: " + layout.props.layoutID} />;
+                        }
+                        return null;
+                    })}
+                </div>
+
+
+ */

@@ -5,7 +5,9 @@ import {defaultKeyMap} from "@testing-library/user-event/dist/keyboard/keyMap";
 
 export default function CategoryLayout(props) {
 
-    return <input placeholder={props.placeholder}/>
+    const layoutID = props.layoutID
+
+    return <input placeholder={props.value}/>
 
 }
 
