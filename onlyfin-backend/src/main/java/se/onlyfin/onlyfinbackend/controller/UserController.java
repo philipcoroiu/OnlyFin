@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("/user-debug")
     @Deprecated
-    public ResponseEntity<?> fetchUserDebug(Principal principal, @RequestParam String username) {
+    public ResponseEntity<?> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
         if (!username.isEmpty()) {
             Optional<User> userOptional = userRepository.findByUsername(username);
             if (userOptional.isPresent()) {

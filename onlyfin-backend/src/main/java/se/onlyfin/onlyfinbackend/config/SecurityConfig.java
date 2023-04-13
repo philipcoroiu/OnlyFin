@@ -40,10 +40,9 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors();
-        http.csrf().disable()
+        http.cors().and().
+                csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .requestMatchers(
                                 "/user",
                                 "/search-all-analysts",
@@ -57,16 +56,18 @@ public class SecurityConfig {
                                 "/fetch-about-me",
                                 "/update-about-me")
                         .hasRole("USER")
+                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .requestMatchers(
                                 "/",
                                 "/register",
+                                "/plz",
                                 "/login",
                                 "/assets/**")
                         .permitAll()
                         //uncomment the row below to enable user debug:
-                        //.requestMatchers("/user-debug").permitAll()
+                        .requestMatchers("/user-debug").permitAll()
                 )
-                .formLogin();
+                .formLogin().loginProcessingUrl("/plz");
         return http.build();
     }
 
@@ -90,6 +91,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/*").allowedOrigins("http://localhost:3000").allowCredentials(true);
+            }
+        };
     }
 
 
