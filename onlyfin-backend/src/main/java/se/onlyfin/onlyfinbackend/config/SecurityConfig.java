@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/register",
+                                "/login",
                                 "/assets/**")
                         .permitAll()
                         //uncomment the row below to enable user debug:
