@@ -1,50 +1,71 @@
-import React from "react"
-import LoginImg from "../../images/login-image.jpg"
-import { Link, Outlet } from "react-router-dom"
-import axios from "axios"
+import React, {useState} from 'react';
+import axios from 'axios';
+import './Login.css';
 
 export default function Login() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
 
-    const [username, setUsername] = React.useState();
-    const [password, setPassword] = React.useState();
+    function handleUsernameChange(event) {
+        setUsername(event.target.value);
+    }
 
-    function submitLogin() {
-        axios.post('http://localhost:8080/login',{
-            username: username,
-            password: password
-        })
-            .then(function(response) {
-                console.log(response)
+    function handlePasswordChange(event) {
+        setPassword(event.target.value);
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        setError(null);
+
+        axios
+            .post(
+                'http://localhost:8080/plz',
+                `username=${username}&password=${password}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    withCredentials: true,
+                }
+            )
+            .then(() => {
+                window.location.href = 'http://localhost:3000/Login/UserDebug';
             })
-            .catch(function(error) {
-                console.log(error)
-            })
+            .catch((error) => {
+                setError(error.response.data.error);
+            });
     }
 
-    function handleUsernameInput(event) {
-        setUsername(event.target.value)
-    }
-
-    function handlePasswordInput(event) {
-        setPassword(event.target.value)
-    }
-
-    return(
-        <div className="login--container">
-            <div className="login--credentials--container">
-                <div className="login--credentials">
-                    <h1>Log in</h1>
-                    <h3>Welcome to OnlyFin, please put your credentials below to start using the app</h3>
-                    <input type="text" placeholder="Email"  onChange={handleUsernameInput}></input>
-                    <input type="text" placeholder="Password" onChange={handlePasswordInput}></input>
-                    <Link to="LoginTest">
-                        <button onClick={submitLogin}>Submit</button>
-                    </Link>
-                </div>
+    return (
+        <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group">
+                <label htmlFor="username">Email:</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    className="form-control"
+                />
             </div>
-            <div>
-                <img src={LoginImg} className="login--img"/>
+            <div className="form-group">
+                <label htmlFor="password">Password:</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    className="form-control"
+                />
             </div>
-        </div>
-    )
+            {error && <div className="error-message">{error}</div>}
+            <button type="submit" className="btn btn-primary">
+                Submit
+            </button>
+        </form>
+    );
 }

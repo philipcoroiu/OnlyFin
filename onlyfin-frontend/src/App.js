@@ -5,6 +5,7 @@ import Login from "./components/login/Login"
 import Dashboard from "./components/dashboard/Dashboard"
 import LoginTest from "./components/login/LoginTest"
 import Studio from "./components/Studio/Studio"
+import UserDebug from "./components/login/UserDebug"
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
         <Route path="LoginTest">
           <Route path="" element={<LoginTest />}/>
         </Route>
+          <Route path="UserDebug">
+              <Route path="" element={<UserDebug />}/>
+          </Route>
       </Route>
     </Routes>
   );
