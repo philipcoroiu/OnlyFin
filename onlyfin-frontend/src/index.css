@@ -37,24 +37,7 @@ code {
   width: 200px;
 }
 
-.toolbar--categories{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  border: none;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  margin: 10px 5px 5px 5px;
-  width: 780px;
-  height: 7%;
-}
 
-.studio--sidebar--buttons{
-  display: flex;
-  width: 130px;
-  justify-content: space-between;
-}
 
 .toolbar--axis--name{
   display: flex;
@@ -70,42 +53,6 @@ code {
   margin: 5px;
 }
 
-.toolbar--columns{
-  display: flex;
-  justify-content: space-between;
-  height: 85%;
-}
-
-.toolbar--xaxis{
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  width: 50%;
-}
-
-.toolbar--xaxis--title{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding: 5px;
-  align-items: center;
-}
-
-.toolbar--xaxis > input{margin: 10px}
-
-.toolbar--value{
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  width: 50%;
-}
-.toolbar--value > input{margin: 10px}
 
 .studio--sidebar--select{
   margin-top: 15px;
@@ -146,7 +93,6 @@ code {
   background-color: #00c2ff;
 }
 
-
 .chart {
   display: flex;
   justify-content: center;
@@ -159,16 +105,49 @@ code {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-button-container {
-  position: relative; /* Set relative position for container */
+.studio-values{
+  display: flex;
+  width: 800px;
+  height: 585px;
 }
 
-.dropdown-menu {
-  position: absolute; /* Set absolute position for dropdown menu */
-  top: 100%; /* Position dropdown menu below button */
-  left: 0; /* Position dropdown menu at left edge of container */
-  padding: 8px; /* Add padding for spacing */
-  background-color: #fff; /* Add background color */
-  border: 1px solid #ccc; /* Add border */
-  width: 200px; /* Set width for dropdown menu */
+.studio--category-container{
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  width: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.studio--category-count-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.studio--category-count-btn > button{
+  background-color: #ffff;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.category-input-fields{
+  display: flex;
+  flex-direction: column;
+}
+
+.studio--dataset-container{
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dataset-input-fields{
+  display: flex;
+  flex-direction: column;
 }

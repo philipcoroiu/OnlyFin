@@ -1,94 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const DynamicTable = () => {
-    const [tableData, setTableData] = useState([
-        ['Header 1', 'Header 2'], // Row 1
-        ['Data 1', 'Data 2'], // Row 2
-    ]);
+export default function Table(props) {
+    const [categoryCount, setCategoryCount] = useState(1);
+    const [datasets, setDatasets] = useState([{ name: "", data: Array(categoryCount).fill("") }]);
+    const [activeDatasetIndex, setActiveDatasetIndex] = useState(0);
+    const handleCategoryCountChange = (count) => {
+        const existingData = datasets[0].data.slice(0, count);
+        setCategoryCount(count);
+        setDatasets(datasets.map(dataset => ({ ...dataset, data: [...existingData, ...Array(count - existingData.length).fill("")] })));
+        props.handleCategoryCountChange(count)
+    }
 
-    const handleAddColumn = () => {
-        const updatedTableData = tableData.map(row => [...row, '']);
-        setTableData(updatedTableData);
-    };
+    const handleDatasetAdd = () => {
+        setDatasets([...datasets, { name: "", data: Array(categoryCount).fill("") }]);
+        props.handleDatasetAdd();
+    }
 
-    const handleRemoveColumn = (index) => {
+    const handleDatasetRemove = (indexToRemove) => {
+        setDatasets(datasets.filter((_, index) => index !== indexToRemove));
+        setActiveDatasetIndex(0);
+        props.handleDatasetRemove();
+    }
 
-        const updatedTableData = tableData.map(row => {
-            row.splice(index, 1);
-            return row;
-        });
-        setTableData(updatedTableData);
-    };
+    const handleDatasetNameChange = (index, name) => {
+        setDatasets(datasets.map((dataset, i) => i === index ? { ...dataset, name } : dataset));
+        props.changeSeriesName(index, name);
+    }
 
-    const handleAddRow = () => {
-        const newRow = Array(tableData[0].length).fill('');
-        const updatedTableData = [...tableData, newRow];
-        setTableData(updatedTableData);
-    };
-
-    const handleRemoveRow = (index) => {
-        const updatedTableData = tableData.filter((row, rowIndex) => rowIndex !== index);
-        setTableData(updatedTableData);
-    };
-
-    const handleCellChange = (rowIndex, colIndex, value) => {
-        // Update table data for a cell at given row and column index
-        const updatedTableData = tableData.map((row, rIndex) => {
-            if (rIndex === rowIndex) {
-                return row.map((cell, cIndex) => {
-                    if (cIndex === colIndex) {
-                        return value;
-                    }
-                    return cell;
-                });
+    const handleDatasetDataChange = (index, dataIndex, value) => {
+        setDatasets(datasets.map((dataset, i) => {
+            if (i === index) {
+                const newData = [...dataset.data];
+                newData[dataIndex] = value;
+                return { ...dataset, data: newData };
+            } else {
+                return dataset;
             }
-            return row;
-        });
-        setTableData(updatedTableData);
-    };
+        }));
+        props.changeSeriesValue(index,dataIndex,value)
+    }
+
+    const handleDatasetTabClick = (index) => {
+        setActiveDatasetIndex(index);
+    }
+
+
 
     return (
-        <div>
-            <table>
-                <thead>
-                <tr>
-                    {tableData[0].map((header, colIndex) => (
-                        <th key={colIndex}>
-                            {header}
-                            <button onClick={() => handleRemoveColumn(colIndex)}>Remove Column</button>
-                        </th>
+        <div className="studio-values">
+            <div className="studio--category-container">
+                <div className="studio--category-count-btn">
+                    <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>+</button>
+                    <h2>Categories</h2>
+                    <button onClick={() => handleCategoryCountChange(Math.max(1, categoryCount - 1))}>-</button>
+                </div>
+                <div className="category-input-fields">
+                    {Array.from({ length: categoryCount }, (_, index) => (
+                        <input key={index} type="text" placeholder={`Category ${index + 1}`} />
                     ))}
-                    <th>
-                        <button onClick={handleAddColumn}>Add Column</button>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {tableData.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        {row.map((cell, colIndex) => (
-                            <td key={colIndex}>
-                                <input
-                                    type="text"
-                                    value={cell}
-                                    onChange={(e) => handleCellChange(rowIndex, colIndex, e.target.value)}
-                                />
-                            </td>
-                        ))}
-                        <td>
-                            <button onClick={() => handleRemoveRow(rowIndex)}>Remove Row</button>
-                        </td>
-                    </tr>
-                ))}
-                <tr>
-                    <td colSpan={tableData[0].length}>
-                        <button onClick={handleAddRow}>Add Row</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                </div>
+            </div>
+            <div className="studio--dataset-container">
+                <h2>Datasets</h2>
+                <div className="add-dataset-btn">
+                    <button onClick={handleDatasetAdd}>Add Dataset</button>
+                </div>
+                <div className="dataset-tabs-btn">
+                    {datasets.map((dataset, index) => (
+                        <button key={index} onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}</button>
+                    ))}
+                </div>
+                <div className="dataset-tab-container">
+                    {datasets.map((dataset, index) => (
+                        <div key={index} style={{ display: activeDatasetIndex === index ? "block" : "none" }}>
+                            <div className="remove-dataset-btn">
+                                <button onClick={() => handleDatasetRemove(index)}>Remove Dataset</button>
+                            </div>
+                            <div className="dataset-input-name">
+                                <input type="text" placeholder="Name" value={dataset.name} onChange={(e) => handleDatasetNameChange(index, e.target.value)} />
+                            </div>
+                            <div className="dataset-input-fields">
+                                {dataset.data.map((data, dataIndex) => (
+                                    <input key={dataIndex} type="number" placeholder={`Data ${dataIndex + 1}`} value={data} onChange={(e) => handleDatasetDataChange(index, dataIndex, e.target.value)} />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
-};
-
-export default DynamicTable;
+}

@@ -19,19 +19,7 @@ export default function Chart(props) {
                 text: `${props.valueTitile}`
             }
         },
-        series: [{
-            name: "Revenue",
-            data: [15,3,7]
-        },{
-            name: "sigma",
-            data: [12,4,25]
-        },{
-            name: "Fima",
-            data: [10,8,9]
-        },{
-            name: "ligma",
-            data: [20,30,7]
-        }, ]
+        series: props.series
     };
 
 
