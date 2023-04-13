@@ -8,9 +8,9 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
 import se.onlyfin.onlyfinbackend.repository.*;
 
+@CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/studio")
-@CrossOrigin(origins = "*")
 public class StudioController {
 
     private final StockRepository stockRepository;

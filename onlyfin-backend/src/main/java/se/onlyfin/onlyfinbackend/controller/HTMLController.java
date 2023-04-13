@@ -1,6 +1,7 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -10,6 +11,7 @@ import java.security.Principal;
 /**
  * This class is responsible for handling all HTML page endpoints.
  */
+@CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @Controller
 public class HTMLController {
 

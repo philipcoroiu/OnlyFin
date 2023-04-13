@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/dashboard")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class DashboardController {
 
     @Autowired

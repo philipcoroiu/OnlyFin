@@ -14,6 +14,7 @@ import java.util.Optional;
 /**
  * This class is responsible for handling requests related to user management.
  */
+@CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @Controller
 public class UserController {
     private final UserRepository userRepository;

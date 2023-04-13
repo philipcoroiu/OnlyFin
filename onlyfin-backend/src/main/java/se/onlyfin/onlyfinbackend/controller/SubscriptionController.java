@@ -2,10 +2,7 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.SubscriptionRepository;
@@ -18,6 +15,7 @@ import java.util.Optional;
 /**
  * This class is responsible for handling requests related to subscriptions.
  */
+@CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @RestController
 public class SubscriptionController {
     private final UserRepository userRepository;
