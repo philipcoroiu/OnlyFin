@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardSidebar from "./DashboardSidebar";
-import './Dashboard.css';
 import {Link} from "react-router-dom";
 import DashboardChart from "./DashboardChart";
 /*import { SearchBox } from 'react-search-box';*/
