@@ -1,72 +1,253 @@
-import React from "react"
+import React, {useState} from "react"
 import StudioToolbar from "./StudioToolbar";
 import Chart from "./Chart"
 import {Link, NavLink} from "react-router-dom";
 import axios from "axios"
+import StudioNavbar from "./StudioNavbar";
+import "./Studio.css";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
 
 export default function Studio() {
 
-    /*
-    const [testData, setTestData] = React.useState();
 
-    axios.get('https://localhost:8080/dashboard/8')
-        .then(function (response) {
-            console.log(response)
-            setTestData(response)
-        })
-
-     */
-
-
-    /**
-     * TODO: needs to be updated simultaneously with StudioToolbar and Chart
-     */
-    const [sendData, setSendData] = React.useState({
-        nameOfDiagram: "",
-        valueTitle: "",
-        typeOfDiagram: "",
-        categories: [{},{
-            name: "Revenue",
-            data: [10,3,7]
-        }]
-    })
-    console.log(sendData)
-    function changeStats(event){
-        const {name, value} = event.target;
-        setSendData(prevState => {
-            return{
-                ...prevState,
-                [name]: value
+    const colorscheme = [
+        {index: 0, color: "#FF8C00"},
+        {index: 1, color: "#D2691E"},
+        {index: 2, color: "#A0522D"},
+        {index: 3, color: "#FFC68E"},
+        {index: 4, color: "#FFA74C"},
+    ];
+    const [categoryCount, setCategoryCount] = useState(1)
+    const [studioChart, setStudioChart] = useState({
+        chart: {
+            type: "line",
+            style:{
+                fontFamily: "Tahoma"
             }
-        })
+        },
+        style:{
+            borderColor:"#1A1616"
+        },
+        title: {
+            text: "",
+            style: {
+                color: "#1A1616",
+                fontWeight: "lighter"
+            }
+        },
+        xAxis: {
+            categories: ["Category 1"],
+            labels:{
+                style:{
+                    color: "#1A1616"
+                }
+            },
+            gridLineColor: "#1A1616"
+        },
+        yAxis: {
+            title: {
+                text: "",
+                style: {
+                    color: "#1A1616"
+                }
+            },
+            gridLineColor: "#1A1616",
+            labels:{
+                style:{
+                    color: "#1A1616"
+                }
+            }
+        },
+        labels:{
+            style: {
+                color: "#1A1616"
+            }
+        },
+        series: [{
+            name: "name",
+            data: [""],
+            borderWidth: 0,
+            color: "#FF8C00",
+        }]
+    });
+
+    function handleCategoryCountDecrease(count) {
+        setCategoryCount(count);
+        setStudioChart(prevState => {
+            const updatedSeries = prevState.series.map(series => {
+                const updatedData = [...series.data];
+                updatedData.pop();
+                return { ...series, data: updatedData };
+            });
+            const updatedCategories = [...prevState.xAxis.categories];
+            updatedCategories.pop();
+            return {
+                ...prevState,
+                series: updatedSeries,
+                xAxis: {
+                    ...prevState.xAxis,
+                    categories: updatedCategories
+                }
+            };
+        });
+    }
+
+    function handleCategoryCountIncrease(count){
+        setCategoryCount(count);
+        setStudioChart(prevState => {
+            const categories = [...prevState.xAxis.categories, `Category ${prevState.xAxis.categories.length + 1}`];
+            const series = prevState.series.map(series => ({
+                ...series,
+                data: [...series.data, ""]
+            }));
+            return {
+                ...prevState,
+                xAxis: {
+                    ...prevState.xAxis,
+                    categories: categories
+                },
+                series: series
+            };
+        });
+    }
+
+    function handleDatasetAdd(){
+        const colorIndex = studioChart.series.length % colorscheme.length;
+        const color = colorscheme[colorIndex].color;
+
+        const newSeries = {
+            name: "name",
+            data: Array(categoryCount).fill(""),
+            borderWidth: 0,
+            color: color
+        };
+
+        setStudioChart(prevState => ({
+            ...prevState,
+            series: [
+                ...prevState.series,
+                newSeries
+            ]
+        }));
+    }
+    function handleDatasetRemove(indexToRemove){
+        setStudioChart(prevState => {
+            const filteredSeries = prevState.series.filter((_, index) => index !== indexToRemove);
+            return {
+                ...prevState,
+                series: filteredSeries
+            }
+        });
+    }
+    function handleDatasetDataChange(index, dataIndex, value){
+        setStudioChart(prevChart => {
+            const seriesToUpdate = {...prevChart.series[index]};
+            seriesToUpdate.data[dataIndex] = parseInt(value);
+            const updatedSeries = [...prevChart.series];
+            updatedSeries[index] = seriesToUpdate;
+            return {
+                ...prevChart,
+                series: updatedSeries
+            }
+        });
+    }
+
+    function handleDataSetNameChange(index, name) {
+        setStudioChart(prevChart => {
+            const updatedSeries = prevChart.series.map((series, i) => {
+                if (i === index) {
+                    return { ...series, name };
+                }
+                return series;
+            });
+            return { ...prevChart, series: updatedSeries };
+        });
+    }
+
+    function handleCategoryNameChange(index, name) {
+        setStudioChart(prevChart => {
+            const updatedXAxis = {
+                ...prevChart.xAxis,
+                categories: [
+                    ...prevChart.xAxis.categories.slice(0, index),
+                    name,
+                    ...prevChart.xAxis.categories.slice(index + 1),
+                ]
+            };
+            return {
+                ...prevChart,
+                xAxis: updatedXAxis,
+            };
+        });
+    }
+
+    function handleChartNameChange(name) {
+        setStudioChart(prevState => ({
+            ...prevState,
+            title: {
+                ...prevState.title,
+                text: name
+            }
+        }));
+    }
+
+    function handleYAxisNameChange(name) {
+        setStudioChart(prevState => {
+            return {
+                ...prevState,
+                yAxis: {
+                    ...prevState.yAxis,
+                    title: {
+                        text: name,
+                        style: {
+                            color: "#FF8C00"
+                        }
+                    }
+                }
+            };
+        });
+    }
+
+    function postChart(){
+        const chartToSend = studioChart;
+
+        chartToSend.chart.width = 365;
+        chartToSend.chart.height = 345;
+
+        const postChart ={
+            category_id: 37,
+            module_type: "column",
+            content: chartToSend
+        }
+
+        axios.post("http://localhost:8080/studio/createModule", postChart)
     }
 
     return (
-        <div>
-            <div className="studio--navbar">
-                <h1>Studio</h1>
-                <Link to="Dashboard">
-                    <button className="studio--navbar--button">Dashboard</button>
-                </Link>
+        <>
+            <StudioNavbar />
+            <div className="studio--container">
+                <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}>
+                    <HighchartsReact
+                        highcharts={Highcharts}
+                        options={studioChart}
+                    /></div>
+                <div className="studio--toolbar">
+                    <StudioToolbar
+                        handleCategoryCountIncrease={handleCategoryCountIncrease}
+                        handleCategoryCountDecrease={handleCategoryCountDecrease}
+                        handleDatasetAdd={handleDatasetAdd}
+                        handleDatasetRemove={handleDatasetRemove}
+                        handleDatasetDataChange={handleDatasetDataChange}
+                        handleDatasetNameChange={handleDataSetNameChange}
+                        handleCategoryNameChange={handleCategoryNameChange}
+                        handleChartNameChange={handleChartNameChange}
+                        handleYAxisNameChange={handleYAxisNameChange}
+                    />
+                </div>
+                <button onClick={() => postChart()}> post </button>
             </div>
-            <StudioToolbar
-                name={sendData.nameOfDiagram}
-                valueName={sendData.valueTitle}
-                typeOfDiagram={sendData.typeOfDiagram}
-                function={changeStats}
-                categories={sendData.categories}
-                onyAxisChange={changeStats}
-
-            />
-            <div className="chart">
-                <Chart
-                    diagramName={sendData.nameOfDiagram}
-                    valueTitile={sendData.valueTitle}
-                    typeOfDiagram={sendData.typeOfDiagram}
-                    categories={sendData.categories}
-
-                />
-            </div>
-        </div>
+        </>
     )
 }

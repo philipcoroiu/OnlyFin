@@ -1,27 +1,41 @@
 import React, { useState } from "react";
-//import '../Studio/Studio.css';
 
-export default function Studio() {
+export default function ColumnTable(props) {
     const [categoryCount, setCategoryCount] = useState(1);
     const [datasets, setDatasets] = useState([{ name: "", data: Array(categoryCount).fill("") }]);
     const [activeDatasetIndex, setActiveDatasetIndex] = useState(0);
     const handleCategoryCountChange = (count) => {
-        const existingData = datasets[0].data.slice(0, count);
+        if (count > categoryCount) {
+            props.handleCategoryCountIncrease(count);
+        } else if (count < categoryCount) {
+            props.handleCategoryCountDecrease(count);
+        }
         setCategoryCount(count);
-        setDatasets(datasets.map(dataset => ({ ...dataset, data: [...existingData, ...Array(count - existingData.length).fill("")] })));
-    }
+        setDatasets(datasets.map(dataset => {
+            const newData = [...dataset.data];
+            if (newData.length < count) {
+                newData.push(...Array(count - newData.length).fill(""));
+            } else if (newData.length > count) {
+                newData.splice(count);
+            }
+            return { ...dataset, data: newData };
+        }));
+    };
 
     const handleDatasetAdd = () => {
         setDatasets([...datasets, { name: "", data: Array(categoryCount).fill("") }]);
+        props.handleDatasetAdd();
     }
 
     const handleDatasetRemove = (indexToRemove) => {
         setDatasets(datasets.filter((_, index) => index !== indexToRemove));
         setActiveDatasetIndex(0);
+        props.handleDatasetRemove(indexToRemove);
     }
 
     const handleDatasetNameChange = (index, name) => {
         setDatasets(datasets.map((dataset, i) => i === index ? { ...dataset, name } : dataset));
+        props.handleDatasetNameChange(index, name);
     }
 
     const handleDatasetDataChange = (index, dataIndex, value) => {
@@ -34,26 +48,45 @@ export default function Studio() {
                 return dataset;
             }
         }));
+        props.handleDatasetDataChange(index,dataIndex,value)
     }
 
+    const handleCategoryNameChange = (index, name) => {
+        props.handleCategoryNameChange(index, name)
+    }
     const handleDatasetTabClick = (index) => {
         setActiveDatasetIndex(index);
     }
 
+    const handleYAxisNameChange = (name) => {
+        props.handleYAxisNameChange(name)
+    }
+
     return (
-        <div className="studio-container">
-            <div className="category-container">
-                <div className="category-count-btn">
-                    <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>+</button>
+        <div className="studio-values">
+            <div className="studio--category-container">
+                <h2>Categories</h2>
+                <div className="category-y-axis-input">
+                    <input placeholder={"y-axis"} onChange={(event) => handleYAxisNameChange(event.target.value)}/>
+                </div>
+                <div className="studio--category-count-btn">
+
                     <button onClick={() => handleCategoryCountChange(Math.max(1, categoryCount - 1))}>-</button>
+                    <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>+</button>
                 </div>
                 <div className="category-input-fields">
                     {Array.from({ length: categoryCount }, (_, index) => (
-                    <input key={index} type="text" placeholder={`Category ${index + 1}`} />
-                ))}
+                        <input
+                            key={index}
+                            type="text"
+                            placeholder={`Category ${index + 1}`}
+                            onChange={(e) => handleCategoryNameChange(index, e.target.value)}
+                        />
+                    ))}
                 </div>
             </div>
-            <div className="dataset-container">
+            <div className="studio--dataset-container">
+                <h2>Datasets</h2>
                 <div className="add-dataset-btn">
                     <button onClick={handleDatasetAdd}>Add Dataset</button>
                 </div>
@@ -72,9 +105,9 @@ export default function Studio() {
                                 <input type="text" placeholder="Name" value={dataset.name} onChange={(e) => handleDatasetNameChange(index, e.target.value)} />
                             </div>
                             <div className="dataset-input-fields">
-                            {dataset.data.map((data, dataIndex) => (
-                                <input key={dataIndex} type="text" placeholder={`Data ${dataIndex + 1}`} value={data} onChange={(e) => handleDatasetDataChange(index, dataIndex, e.target.value)} />
-                            ))}
+                                {dataset.data.map((data, dataIndex) => (
+                                    <input key={dataIndex} type="number" placeholder={`Data ${dataIndex + 1}`} value={data} onChange={(e) => handleDatasetDataChange(index, dataIndex, e.target.value)} />
+                                ))}
                             </div>
                         </div>
                     ))}

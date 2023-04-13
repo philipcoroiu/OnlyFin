@@ -1,7 +1,7 @@
 :root {
     --container-width: 100px;
     --dashboard-margin: 25px;
-    --module-border-radius: 0px;
+    --module-border-radius: 7px;
 
     --main-color: #2C2C2E ;
     --light-color: #505052 ;
@@ -173,8 +173,8 @@ body {
 .module-entity-container {
     border: 0px solid var(--module-border-color);
     padding: 0px;
-    width: 365px;
-    height: 345px;
+    width: 385px;
+    height: 365px;
     display: inline-grid;
     margin: 20px;
     color: var(--button-text-color);

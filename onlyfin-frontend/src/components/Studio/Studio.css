@@ -1,0 +1,56 @@
+
+:root{
+    --chart-size: 50%; /* precentage of the screen */
+    --studio-toolbar: calc(100% - chart-size);
+}
+
+.studio-container {
+    border: 1px solid white;
+    display: inline-flex;
+}
+
+.category-container{
+    border: 1px solid white;
+    width: 500px;
+    height: 500px;
+
+}
+.dataset-container{
+    border: 1px solid white;
+    width: 500px;
+    height: 500px;
+    border: 1px solid white;
+}
+.category-input-fields input {
+    display: block;
+    border: 1px solid white;
+}
+
+.studio--container{
+    display: flex;
+    bottom: 0;
+    border: 1px solid white;
+}
+
+.dataset-input-fields input {
+    display: block;
+}
+.studio--chart {
+    width: var(--chart-size);
+    bottom: 0;
+    border: 1px solid white;
+}
+.studio-values {
+    display: flex;
+    flex-direction: row;
+}
+
+.studio--category-container {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.studio--dataset-container {
+    flex: 2;
+}
+
