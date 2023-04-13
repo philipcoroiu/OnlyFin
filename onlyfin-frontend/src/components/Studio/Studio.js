@@ -52,6 +52,8 @@ export default function Studio() {
         })
     }
 
+
+
     return (
         <div>
             <div className="studio--navbar">

@@ -2,8 +2,7 @@ import React from 'react';
 import CategoryLayout from "./CategoryLayout";
 import CategoryButton from "./CategoryButton"
 import DropdownButton from "./DropdownButton"
-import XaxisInput from "./XaxisInput";
-import YaxisInput from "./YaxisInput";
+import Table from "./Table"
 
 export default function StudioToolbar(props) {
 
@@ -19,6 +18,8 @@ export default function StudioToolbar(props) {
     const [yAxisInputValues, setyAxisInputValues] = React.useState([]);
 
     const [yAxisInputButtons, setyAxisInputButtons] = React.useState([]);
+
+    const [savedyAxisInputButtons, setSavedyAxisInputButtons] = React.useState([])
 
     const [test, setTest] = React.useState("test")
 
@@ -67,7 +68,7 @@ export default function StudioToolbar(props) {
     function addyAxisInputButton() {
         setyAxisInputButtons(prevState => {
             return [...prevState,
-                <CategoryLayout id={categoryInput.length} onChange={(event) => handleOnyAxisChange(event, categoryInput.length)}/>
+                <CategoryLayout id={categoryInput.length} onChange={(event) => handleOnyAxisChange(event, categoryInput.length)} />
             ]
         })
         //setTest("input created with the id: " + categoryInput.length)
@@ -296,7 +297,15 @@ export default function StudioToolbar(props) {
      * @param id
      */
     function handleLayout(id){
-        setLayoutID(id)
+        setLayoutID(prevState => id)
+        saveLayout();
+    }
+
+    function saveLayout() {
+        //För varje värde på yAxisInputButtons – spara i savedyAxisInputButtons, sedan ta bort element från yAxisInputButtons
+        setSavedyAxisInputButtons([...savedyAxisInputButtons, ...yAxisInputButtons]); // Add elements from yAxisInputButtons to savedyAxisInputButtons
+
+        setyAxisInputButtons(yAxisInputButtons.map(item => React.cloneElement(item, { value: '' })));
     }
 
     function deleteInput(id) {
@@ -318,6 +327,8 @@ export default function StudioToolbar(props) {
             return newInputs
         })
     }
+
+
 
 
 
@@ -388,6 +399,7 @@ export default function StudioToolbar(props) {
                             <h2>Value</h2>
                             {/* yAxisInput here */}
                             {yAxisInputButtons}
+                            {<Table />}
                         </div>
                     </div>
             </div>
