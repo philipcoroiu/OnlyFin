@@ -66,8 +66,7 @@ public class SecurityConfig {
                         //uncomment the row below to enable user debug:
                         //.requestMatchers("/user-debug").permitAll()
                 )
-                .formLogin()
-                .and().cors();
+                .formLogin();
         return http.build();
     }
 
