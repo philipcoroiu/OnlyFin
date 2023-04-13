@@ -34,7 +34,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().disable()
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .requestMatchers(
@@ -56,9 +55,9 @@ public class SecurityConfig {
                                 "/assets/**")
                         .permitAll()
                         //uncomment the row below to enable user debug:
-                        //.requestMatchers("/user-debug").permitAll()
+                        .requestMatchers("/user-debug").permitAll()
                 )
-                .formLogin();
+                .httpBasic();
         return http.build();
     }
 
@@ -66,7 +65,7 @@ public class SecurityConfig {
      * This method can be used to disable authentication globally for testing purposes.
      * It should not be used in production.
      */
-    /*
+/*
     @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         //DISABLE AUTH GLOBALLY
@@ -74,7 +73,7 @@ public class SecurityConfig {
 
     }
 
-     */
+ */
 
     /**
      * This method is used to configure which password encoder to use.

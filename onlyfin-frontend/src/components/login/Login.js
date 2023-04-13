@@ -2,6 +2,7 @@ import React from "react"
 import LoginImg from "../../images/login-image.jpg"
 import { Link, Outlet } from "react-router-dom"
 import axios from "axios"
+import Cookies from "js-cookie"
 
 export default function Login() {
 
@@ -9,12 +10,22 @@ export default function Login() {
     const [password, setPassword] = React.useState();
 
     function submitLogin() {
+
+
+
         axios.post('http://localhost:8080/login',{
-            username: username,
-            password: password
-        })
+                username: username,
+                password: password
+        },
+            {headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                withCredentials: true
+            })
             .then(function(response) {
-                console.log(response)
+                const cookies = response.headers['set-cookie'];
+                const jsessionId = cookies.find(cookie => cookie.includes('JSESSIONID')).split(';')[0];
+                Cookies.set('JSESSIONID', jsessionId);
             })
             .catch(function(error) {
                 console.log(error)

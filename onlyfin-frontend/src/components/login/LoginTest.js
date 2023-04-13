@@ -1,7 +1,20 @@
 import React from "react"
+import axios from "axios";
+import Cookies from "js-cookie"
 
 export default function LoginTest() {
+
+    function getRequestTest()  {
+
+            axios.get('http://localhost:8080/search-all-analysts' , {
+                withCredentials: true
+            })
+                .then((response) => {
+                    console.log(response)
+                })
+    }
+
     return (
-        <h1>This is Login Test</h1>
+        <button onClick={getRequestTest}>This is Login Test</button>
     )
 }

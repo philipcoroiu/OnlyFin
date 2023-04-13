@@ -1,6 +1,7 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
 /**
  * This class is responsible for handling all requests related to searching for analysts.
  */
+
 @RestController
 public class SearchController {
     private final UserRepository userRepository;
@@ -30,6 +32,7 @@ public class SearchController {
      *
      * @return a list of all analysts in the database.
      */
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @GetMapping("/search-all-analysts")
     public ResponseEntity<Iterable<ProfileDTO>> findAllAnalysts() {
         Iterable<User> foundUsers = userRepository.findByisAnalystIsTrue();
