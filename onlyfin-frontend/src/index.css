@@ -16,8 +16,15 @@ Studio
   justify-content: space-between;
   align-items: center;
   padding: 0px 100px;
-  border: none;
-  box-shadow: 0px 0px 10px #cbcbcb;
+  box-shadow: 0px 0px 10px #e0e0e0;
+}
+
+.studio--navbar > h1{
+  background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+  background-size: 400% 400%;
+  background-clip: text;
+  color: transparent;
+  animation: gradient 5s ease infinite;
 }
 
 .studio--navbar > h1:hover{
@@ -308,4 +315,87 @@ Studio
   text-align: center;
   outline: none;
   caret-color: #cbcbcb;
+}
+
+
+/**
+Login
+ */
+
+.login--container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, #6bd06b, #d0d06f, #9569b9, #62a6c4);
+  background-size: 700% 700%;
+  animation: gradient 10s ease infinite;
+  height: 100vh;
+}
+
+@keyframes gradient {
+  0%{
+    background-position: 0% 50%;
+  }
+  50%{
+    background-position: 50% 100%;
+  }
+  100%{
+    background-position: 0% 50%;
+  }
+}
+
+.login--credentials--container{
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  padding: 100px;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(50px);
+  opacity: 0.8;
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+}
+
+.login--inputs{
+  display: flex;
+  justify-content: space-around;
+}
+
+.login--inputs > input{
+  margin: 20px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.41);
+  backdrop-filter: blur(50px);
+  opacity: 0.8;
+  outline: none;
+  text-align: center;
+
+  width: 250px;
+  height: 30px;
+}
+
+.login--inputs > input::placeholder{
+  color: #282c34;
+}
+
+.login--submit--holder{
+  margin-top: 20px;
+  display: flex;
+  justify-content: start;
+}
+
+.login--submit{
+  margin: 20px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(50px);
+  box-shadow: 0px 0px 15px #626262;
+  opacity: 0.8;
+  outline: none;
+  text-align: center;
+  font-size: 15px;
+  width: 100px;
+  height: 30px;
 }
