@@ -12,11 +12,11 @@ export default function Studio() {
 
 
     const colorscheme = [
-        {index: 0, color: "#FF8C00"},
-        {index: 1, color: "#D2691E"},
-        {index: 2, color: "#A0522D"},
-        {index: 3, color: "#FFC68E"},
-        {index: 4, color: "#FFA74C"},
+        {index: 0, color: "#b0ffa6"},
+        {index: 1, color: "#ff6363"},
+        {index: 2, color: "#f7ff87"},
+        {index: 3, color: "#ffb164"},
+        {index: 4, color: "#5d8eff"},
     ];
     const [categoryCount, setCategoryCount] = useState(1)
     const [studioChart, setStudioChart] = useState({
@@ -68,7 +68,7 @@ export default function Studio() {
             name: "name",
             data: [""],
             borderWidth: 0,
-            color: "#FF8C00",
+            color: "#b0ffa6",
         }]
     });
 
