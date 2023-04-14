@@ -7,15 +7,53 @@ import Profile from "./Profile";
 
 export default function SearchPage() {
 
-    const [searchData, setSearchData] = React.useState();
+    const [searchData, setSearchData] = React.useState(null);
+
 
     useEffect(() => {
         const fetchData = async () => {
-            
+            try {
+                const response = await axios.get(`http://localhost:8080/search-all-analysts`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    });
+
+                console.log('API response:', response.data);
+                setSearchData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
         fetchData();
     }, []);
+
+
+    const getAllAnalysts = () => {
+        axios.get(`http://localhost:8080/search-all-analysts`,
+            {
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                withCredentials: true,
+            }
+
+        )
+            .then(response => {
+                console.log('API response:', response.data);
+                setSearchData(response.data)
+
+            })
+            .catch(error => {
+
+                console.error('API error:', error);
+
+            });
+    }
+
 
     const onSearch = (searchTerm) => {
         console.log('Performing search with searchTerm:', searchTerm);
@@ -31,7 +69,7 @@ export default function SearchPage() {
             )
             .then(response => {
 
-                console.log('API response:', response.data);
+                console.log('API response:', response.data[0].username);
                 setSearchData(response.data)
 
             })
@@ -47,7 +85,20 @@ export default function SearchPage() {
         <div>
             <Sidebar/>
             <SearchBar onSearch={onSearch}/>
-            <Profile />
+
+            {searchData === null ? (
+                <div>Failed to get search result</div> // Vad ska det stå här?
+            ) : (
+                <div>
+                    {searchData.map(data => (
+                        <Profile key={data.id} name={data.username}></Profile>
+                    ))}
+                </div>
+            )}
+
+
+
+            <button onClick={getAllAnalysts}>Get all analysts</button>
         </div>
 
     )

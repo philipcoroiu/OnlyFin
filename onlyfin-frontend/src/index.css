@@ -173,6 +173,7 @@ code {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   width: 300px; /* or any desired width */
+  margin-bottom: 50px;
 }
 
 .searchpage--profile img {
