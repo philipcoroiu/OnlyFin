@@ -11,13 +11,12 @@ export default function Studio() {
      */
     const [categoryCount, setCategoryCount] = useState(1);
     const [series, setSeries] = useState([{ name: "", data: Array(categoryCount).fill("")}]);
-    const [object, setObjects] = useState([{ name: "", data: []}])
 
     const [sendData, setSendData] = React.useState({
         nameOfDiagram: "",
         valueTitle: "",
         typeOfDiagram: "",
-        series: object,
+        series: series,
         categories: []
     })
     console.log(sendData)
@@ -26,7 +25,6 @@ export default function Studio() {
         const existingData = series[0].data.slice(0, count);
         setCategoryCount(count);
         setSeries(series.map(dataset => ({ ...dataset, data: [...existingData, ...Array(count - existingData.length).fill("")] })));
-        setObjects()
     }
 
     const handleDatasetAdd = () => {
