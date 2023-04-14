@@ -6,6 +6,8 @@ import Dashboard from "./components/dashboard/Dashboard"
 import LoginTest from "./components/login/LoginTest"
 import Studio from "./components/Studio/Studio"
 import UserDebug from "./components/login/UserDebug"
+import SearchPage from "./components/searchPage.js/SearchPage";
+import PersonalPage from "./components/personalPage/PersonalPage";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
               <Route path="" element={<UserDebug />}/>
           </Route>
       </Route>
+        <Route path="searchpage" element={<SearchPage />}></Route>
+        <Route path="personalpage" element={<PersonalPage />}></Route>
     </Routes>
   );
 }
