@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import './Login.css';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -38,6 +37,7 @@ export default function Login() {
             });
     }
 
+    require("./Login.css");
     return (
         <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">

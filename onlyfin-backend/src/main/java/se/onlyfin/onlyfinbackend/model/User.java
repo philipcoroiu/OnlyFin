@@ -39,7 +39,7 @@ public class User {
     private List<Subscription> subscribers;
 
     @Column(name = "about_me", columnDefinition="TEXT")
-    private String aboutMe;
+    private String aboutMe = "Lorem ipsum";
 
     public String getUsername() {
         return username;
