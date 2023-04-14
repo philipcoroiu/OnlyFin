@@ -2,30 +2,45 @@ import React, {useEffect} from "react"
 import Avatar from "../../images/avatar.png"
 import Sidebar from "../dashboard/DashboardSidebar"
 import axios from "axios";
+import {useParams} from "react-router-dom";
 
 export default function PersonalPage() {
 
-    const [data, setData] = React.useState([]);
+    const { username } = useParams();
+    const [userData, setUserData] = React.useState([]);
 
     useEffect(() => {
+
         const fetchData = async () => {
             try {
-                const response = await axios.get('/api/data'); // Replace with your API endpoint
-                setData(response.data);
+                const response = await axios.get(`http://localhost:8080/fetch-about-me?username=${username}`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    });
+
+                console.log('API response:', response.data);
+                setUserData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [username]);
+
+    if (!userData) {
+        return <div>Loading...</div>;
+    }
 
     return(
         <div>
             <Sidebar/>
             <img src={Avatar} width="100px"/>
-            <h2>Profile name</h2>
-            <p>Welcome! I'm Johannes, a financial analyst specializing in Apple Inc. (AAPL) stock. With expertise in financial statements, market trends, and risk assessment, I provide valuable insights for informed investing. Let's explore the world of finance and unlock the potential of Apple stock together!</p>
+            <h2>{username}</h2>
+            <p>{userData}</p>
             <button>Subscribe</button>
         </div>
     )

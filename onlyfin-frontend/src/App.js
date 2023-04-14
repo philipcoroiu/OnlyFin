@@ -27,7 +27,7 @@ function App() {
           </Route>
       </Route>
         <Route path="searchpage" element={<SearchPage />}></Route>
-        <Route path="personalpage" element={<PersonalPage />}></Route>
+        <Route path="searchpage/:username" element={<PersonalPage />}></Route>
     </Routes>
   );
 }
