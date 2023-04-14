@@ -7,103 +7,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
-}
-
-
-
-.studio--sidebar {
-  float: right;
-  margin: 20px;
-  width: 55%;
-  height: 660px;
-  border: none;
-}
-
-.studio--sidebar--header{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  border: none;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  margin: 5px;
-}
-
-.studio--sidebar--header > input {
-  width: 200px;
-}
-
-.toolbar--categories{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  border: none;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  margin: 10px 5px 5px 5px;
-  width: 780px;
-  height: 7%;
-}
-
-.studio--sidebar--buttons{
-  display: flex;
-  width: 130px;
-  justify-content: space-between;
-}
-
-.toolbar--axis--name{
-  display: flex;
-  justify-content: space-around;
-}
-
-.toolbar--axis--name > input{
-  width: 48%;
-  height: 20px;
-  border: none;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  margin: 5px;
-}
-
-.toolbar--columns{
-  display: flex;
-  justify-content: space-between;
-  height: 85%;
-}
-
-.toolbar--xaxis{
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  width: 50%;
-}
-.toolbar--xaxis > input{margin: 10px}
-
-.toolbar--value{
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 0px 5px #bbbbbb;
-  border-radius: 5px;
-  width: 50%;
-}
-.toolbar--value > input{margin: 10px}
-
-.studio--sidebar--select{
-  margin-top: 15px;
-  margin-bottom: 15px;
-  width: 150px;
-  font: inherit;
-}
+/**
+Studio
+ */
 
 .studio--navbar{
   display: flex;
@@ -137,29 +43,269 @@ code {
   background-color: #00c2ff;
 }
 
-
-.chart {
+.studio--container{
   display: flex;
+  height: 100%;
+}
+
+.studio--chart {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 40%;
-  height: 620px;
-  margin: 20px;
-  padding: 20px;
+  height: 680px;
+  width: 50%;
+  margin: 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-button-container {
-  position: relative; /* Set relative position for container */
+.studio--chart > button{
+  margin-top: 100px;
+  width: 70px;
+  height: 30px;
+  font-size: 25px;
+  border: none;
+  background-color: #b4b4b4;
+  transition: all 0.2s ease-in-out;
+  background-clip: text;
+  color: transparent;
+  cursor: pointer;
 }
 
-.dropdown-menu {
-  position: absolute; /* Set absolute position for dropdown menu */
-  top: 100%; /* Position dropdown menu below button */
-  left: 0; /* Position dropdown menu at left edge of container */
-  padding: 8px; /* Add padding for spacing */
-  background-color: #fff; /* Add background color */
-  border: 1px solid #ccc; /* Add border */
-  width: 200px; /* Set width for dropdown menu */
+.studio--chart > button:hover{
+  background-color: #00c2ff;
+}
+
+.studio--toolbar{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 50%;
+  margin: 10px;
+  padding: 15px;
+
+}
+
+.studio--toolbar--heading{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.studio--toolbar--heading > input{
+  width: 250px;
+  border: none;
+  margin: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+  caret-color: #cbcbcb;
+}
+
+.studio--toolbar--heading > input::placeholder{
+  transition: all 0.2s ease-in-out;
+}
+
+.studio--toolbar--heading > input:hover::placeholder{
+  transition: all 0.2s ease-in-out;
+  color: transparent;
+}
+
+.studio--toolbar--selects > select{
+  margin: 20px 60px;
+  border: none;
+  background-color: #ffff;
+  outline: none;
+  font-weight: bold;
+  font-size: 15px;
+  appearance: none;
+  text-align: center;
+}
+.studio--toolbar--selects{
+  border-bottom: 1px solid #cbcbcb;
+}
+
+.studio--toolbar--columns{
+  display: flex;
+  justify-content: space-around;
+  height: 530px;
+}
+
+.studio--category-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 530px;
+  border-right: 1px solid #cbcbcb;
+}
+
+.studio--dataset-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 530px;
+}
+
+.studio--category-y-axis-input > input{
+  border: none;
+  border-bottom: 1px solid #cbcbcb;
+  margin: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+  caret-color: #cbcbcb;
+}
+
+.studio--category-count-btn > button{
+  margin: 10px 40px;
+  width: 75px;
+  height: 35px;
+
+  border: 1px dashed #cbcbcb;
+  transition: all 0.3s ease-in-out;
+  border-radius: 20px;
+  background-color: #ffff;
+
+  font-size: 15px;
+}
+
+.studio--category-count-btn > button:hover{
+  border: 1px dotted #61dafb;
+  transition: all 0.3s ease-in-out;
+}
+
+.studio--category-input-fields{
+  height: 530px;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.studio--category-input-fields::-webkit-scrollbar{
+  display: none;
+}
+
+.studio--category-input-fields > input{
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-bottom: 1px solid #cbcbcb;
+  margin-top: 35px;
+  font-size: 15px;
+  text-align: center;
+  outline: none;
+  caret-color: #cbcbcb;
+}
+
+.studio--add-dataset-btn> button{
+  margin: 10px 40px;
+  width: 75px;
+  height: 45px;
+
+  border: 1px dashed #cbcbcb;
+  transition: all 0.3s ease-in-out;
+  border-radius: 20px;
+  background-color: #ffff;
+
+  font-size: 15px;
+}
+
+.studio--add-dataset-btn > button:hover{
+  border: 1px dotted #61dafb;
+  transition: all 0.3s ease-in-out;
+}
+
+.studio--dataset-tabs-btn{
+  margin: 10px 0px;
+  width: 300px;
+  height: 40px;
+  border-bottom: 1px solid #b4b4b4;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.studio--dataset-tabs-btn::-webkit-scrollbar{
+  display: none;
+}
+
+.studio--dataset-tabs-btn > button{
+  font-size: 15px;
+  margin: 0px 10px;
+  border: none;
+  background-color: #ffff;
+  border-bottom: 1px solid #cbcbcb;
+}
+
+.studio--dataset-tab-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.studio--remove-dataset-btn{
+  display: flex;
+  justify-content: center;
+}
+
+.studio--dataset--value--container{
+  overflow: auto;
+}
+
+.studio--remove-dataset-btn > button{
+  margin: 15px 40px;
+  width: 85px;
+  height: 45px;
+
+  border: 1px dashed #cbcbcb;
+  transition: all 0.3s ease-in-out;
+  border-radius: 20px;
+  background-color: #ffff;
+
+  font-size: 15px;
+}
+
+.studio--remove-dataset-btn > button:hover{
+  border: 1px dotted #61dafb;
+  transition: all 0.3s ease-in-out;
+}
+
+.studio--dataset-input-name{display: flex; justify-content: center}
+
+.studio--dataset-input-name > input{
+  border: none;
+  border-bottom: 1px dashed #cbcbcb;
+  margin: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+  caret-color: #cbcbcb;
+}
+
+.dataset-input-fields{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dataset-input-fields > input{
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  border: none;
+  border-bottom: 1px solid #cbcbcb;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+  caret-color: #cbcbcb;
 }

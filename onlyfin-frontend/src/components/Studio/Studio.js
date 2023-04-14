@@ -4,7 +4,6 @@ import Chart from "./Chart"
 import {Link, NavLink} from "react-router-dom";
 import axios from "axios"
 import StudioNavbar from "./StudioNavbar";
-import "./Studio.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
@@ -228,11 +227,15 @@ export default function Studio() {
         <>
             <StudioNavbar />
             <div className="studio--container">
-                <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}>
+                <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}
+                    className="studio--chart"
+                >
                     <HighchartsReact
                         highcharts={Highcharts}
                         options={studioChart}
-                    /></div>
+                    />
+                <button onClick={() => postChart()}> Post </button>
+                </div>
                 <div className="studio--toolbar">
                     <StudioToolbar
                         handleCategoryCountIncrease={handleCategoryCountIncrease}
@@ -246,7 +249,6 @@ export default function Studio() {
                         handleYAxisNameChange={handleYAxisNameChange}
                     />
                 </div>
-                <button onClick={() => postChart()}> post </button>
             </div>
         </>
     )

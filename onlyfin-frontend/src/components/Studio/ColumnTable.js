@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 export default function ColumnTable(props) {
     const [categoryCount, setCategoryCount] = useState(1);
-    const [datasets, setDatasets] = useState([{ name: "", data: Array(categoryCount).fill("") }]);
+    const [datasets, setDatasets] = useState([{name: "", data: Array(categoryCount).fill("")}]);
     const [activeDatasetIndex, setActiveDatasetIndex] = useState(0);
     const handleCategoryCountChange = (count) => {
         if (count > categoryCount) {
@@ -18,12 +18,12 @@ export default function ColumnTable(props) {
             } else if (newData.length > count) {
                 newData.splice(count);
             }
-            return { ...dataset, data: newData };
+            return {...dataset, data: newData};
         }));
     };
 
     const handleDatasetAdd = () => {
-        setDatasets([...datasets, { name: "", data: Array(categoryCount).fill("") }]);
+        setDatasets([...datasets, {name: "", data: Array(categoryCount).fill("")}]);
         props.handleDatasetAdd();
     }
 
@@ -34,7 +34,7 @@ export default function ColumnTable(props) {
     }
 
     const handleDatasetNameChange = (index, name) => {
-        setDatasets(datasets.map((dataset, i) => i === index ? { ...dataset, name } : dataset));
+        setDatasets(datasets.map((dataset, i) => i === index ? {...dataset, name} : dataset));
         props.handleDatasetNameChange(index, name);
     }
 
@@ -43,12 +43,12 @@ export default function ColumnTable(props) {
             if (i === index) {
                 const newData = [...dataset.data];
                 newData[dataIndex] = value;
-                return { ...dataset, data: newData };
+                return {...dataset, data: newData};
             } else {
                 return dataset;
             }
         }));
-        props.handleDatasetDataChange(index,dataIndex,value)
+        props.handleDatasetDataChange(index, dataIndex, value)
     }
 
     const handleCategoryNameChange = (index, name) => {
@@ -63,19 +63,19 @@ export default function ColumnTable(props) {
     }
 
     return (
-        <div className="studio-values">
+        <div className="studio--toolbar--columns">
             <div className="studio--category-container">
                 <h2>Categories</h2>
-                <div className="category-y-axis-input">
+                <div className="studio--category-y-axis-input">
                     <input placeholder={"y-axis"} onChange={(event) => handleYAxisNameChange(event.target.value)}/>
                 </div>
                 <div className="studio--category-count-btn">
 
-                    <button onClick={() => handleCategoryCountChange(Math.max(1, categoryCount - 1))}>-</button>
-                    <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>+</button>
+                    <button onClick={() => handleCategoryCountChange(Math.max(1, categoryCount - 1))}>Remove</button>
+                    <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>Add</button>
                 </div>
-                <div className="category-input-fields">
-                    {Array.from({ length: categoryCount }, (_, index) => (
+                <div className="studio--category-input-fields">
+                    {Array.from({length: categoryCount}, (_, index) => (
                         <input
                             key={index}
                             type="text"
@@ -87,26 +87,31 @@ export default function ColumnTable(props) {
             </div>
             <div className="studio--dataset-container">
                 <h2>Datasets</h2>
-                <div className="add-dataset-btn">
+                <div className="studio--add-dataset-btn">
                     <button onClick={handleDatasetAdd}>Add Dataset</button>
                 </div>
-                <div className="dataset-tabs-btn">
+                <div className="studio--dataset-tabs-btn">
                     {datasets.map((dataset, index) => (
-                        <button key={index} onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}</button>
+                        <button key={index}
+                                onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}</button>
                     ))}
                 </div>
-                <div className="dataset-tab-container">
+                <div className="studio--dataset--value--container">
                     {datasets.map((dataset, index) => (
-                        <div key={index} style={{ display: activeDatasetIndex === index ? "block" : "none" }}>
-                            <div className="remove-dataset-btn">
+                        <div className="studio--dataset-tab-container" key={index}
+                             style={{display: activeDatasetIndex === index ? "block" : "none"}}>
+                            <div className="studio--remove-dataset-btn">
                                 <button onClick={() => handleDatasetRemove(index)}>Remove Dataset</button>
                             </div>
-                            <div className="dataset-input-name">
-                                <input type="text" placeholder="Name" value={dataset.name} onChange={(e) => handleDatasetNameChange(index, e.target.value)} />
+                            <div className="studio--dataset-input-name">
+                                <input type="text" placeholder="Name" value={dataset.name}
+                                       onChange={(e) => handleDatasetNameChange(index, e.target.value)}/>
                             </div>
                             <div className="dataset-input-fields">
                                 {dataset.data.map((data, dataIndex) => (
-                                    <input key={dataIndex} type="number" placeholder={`Data ${dataIndex + 1}`} value={data} onChange={(e) => handleDatasetDataChange(index, dataIndex, e.target.value)} />
+                                    <input key={dataIndex} type="number" placeholder={`Data ${dataIndex + 1}`}
+                                           value={data}
+                                           onChange={(e) => handleDatasetDataChange(index, dataIndex, e.target.value)}/>
                                 ))}
                             </div>
                         </div>

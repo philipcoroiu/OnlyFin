@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --container-width: 100px;
     --dashboard-margin: 25px;
     --module-border-radius: 7px;
@@ -17,25 +17,8 @@
     --lightest-orange: #FF8C00;
     --lightest-orange: #D2691E;
     --lightest-orange: #A0522D;
-
-
-    /*--main-color: #403D39;
-    --light-color: #7C7972;
-    --dark-color: #EB5E28;
-    --header-color: #252422;
-
-    --button-text-color: #FFFCF2;
-
-    --main-color: #4C6A78;
-    --light-color: #AFD1D5;
-    --dark-color: #22404A;
-    --header-color: #3a5765;
-
-
-    --light-color: #FFFCF2;*/
-
-
 }
+
 body {
     background-color: var(--backgrond-color);
 }
@@ -55,16 +38,15 @@ body {
     margin-right: var(--dashboard-margin);
     box-shadow:  0 0 10px 5px rgba(0, 0, 0, 0.2);
 }
+*/
 
-.button-underlay{
+/* .button-underlay{
     position: fixed;
     height: 115px;
-    /*border: 1px solid black;*/
     margin-right: var(--dashboard-margin);
     margin-left: var(--dashboard-margin);
     right: 0;
     left: var(--container-width);
-    /*border-top-left-radius: 15px;*/
     border-top-right-radius: 0px;
     background-color: var(--header-color);
     z-index: 2;
@@ -80,14 +62,13 @@ body {
     background-color: var(--main-color);
 }
 .dashboard--container li{
-    /*border: 1px solid #232323;*/
 }
-
+*/
+/*
 .stock-tab-buttons {
     display: flex;
     margin-top: 20px;
     margin-bottom: 10px;
-    /*border: 1px solid #232323;*/
     margin-left: 20px;
     position: fixed;
     z-index: 3;
@@ -199,9 +180,9 @@ body {
     border: none;
     z-index: 3;
 }
-
+*/
 /* {JSON.stringify(moduleEntity.content, null, 2)} */
-
+/*
 .dashboard--container button{
     border-radius: 25px;
     height: 50px;
@@ -242,14 +223,4 @@ img {
     margin-top: 25%;
 
 }
-
-
-
-
-
-
-
-
-
-
-
+ */
