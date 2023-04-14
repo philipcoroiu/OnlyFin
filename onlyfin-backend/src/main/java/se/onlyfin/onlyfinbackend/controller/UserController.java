@@ -23,9 +23,19 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * WARNING: ONLY FOR DEVELOPMENT.
+     * SHOULD NOT BE INCLUDED IN PRODUCTION!
+     * Debug method to fetch the user object of the logged-in user.
+     * Alternatively, if a username is passed in, the user object with that username is returned.
+     *
+     * @param principal The logged-in user
+     * @param username  optional username search string
+     * @return Response with the entire user object
+     */
     @GetMapping("/user-debug")
     @Deprecated
-    public ResponseEntity<?> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
+    public ResponseEntity<User> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
         if (!username.isEmpty()) {
             Optional<User> userOptional = userRepository.findByUsername(username);
             if (userOptional.isPresent()) {
@@ -68,6 +78,7 @@ public class UserController {
         userToRegister.setRoles("ROLE_USER");
         userToRegister.setAnalyst(false);
         userRepository.save(userToRegister);
+
         return ResponseEntity.ok(user.username());
     }
 
@@ -119,6 +130,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Returns the user id of the logged-in user
+     *
+     * @param principal The logged-in user
+     * @return user id of principal
+     */
     @GetMapping("/fetch-current-user-id")
     public ResponseEntity<Integer> fetchCurrentUserId(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
@@ -127,10 +144,15 @@ public class UserController {
         }
 
         User userToFetchUserIdFrom = userOptional.get();
-
         return ResponseEntity.ok().body(userToFetchUserIdFrom.getId());
     }
 
+    /**
+     * Returns the "about me" text for a specific user
+     *
+     * @param username the username of the target user
+     * @return "about me" text
+     */
     @GetMapping("/fetch-about-me")
     public ResponseEntity<?> fetchAboutMeFor(@RequestParam String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -142,6 +164,13 @@ public class UserController {
         return ResponseEntity.ok().body(userToGetAboutMeFrom.getAboutMe());
     }
 
+    /**
+     * Method to update the "about me" text for the logged-in user
+     *
+     * @param principal The logged-in user
+     * @param text      the new "about me" text
+     * @return Updated text if ok, bad request otherwise
+     */
     @PutMapping("update-about-me")
     public ResponseEntity<?> updateAboutMe(Principal principal, @RequestBody String text) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());

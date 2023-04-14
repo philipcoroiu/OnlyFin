@@ -35,8 +35,11 @@ public class SearchController {
     @GetMapping("/search-all-analysts")
     public ResponseEntity<Iterable<ProfileDTO>> findAllAnalysts() {
         Iterable<User> foundUsers = userRepository.findByisAnalystIsTrue();
+
         List<ProfileDTO> usersToReturnToClient = new ArrayList<>();
-        foundUsers.forEach((currentUser -> usersToReturnToClient.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId()))));
+        foundUsers.forEach((currentUser ->
+                usersToReturnToClient.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId()))));
+
         return ResponseEntity.ok(usersToReturnToClient);
     }
 
@@ -48,15 +51,15 @@ public class SearchController {
      */
     @GetMapping("/get-analyst-by-name")
     public ResponseEntity<ProfileDTO> findAnalystByName(@RequestParam String username) {
-        ProfileDTO profileDTOToSendToClient;
         Optional<User> userOptional = userRepository.findByisAnalystIsTrueAndUsernameEquals(username);
-        if (userOptional.isPresent()) {
-            User fetchedUser = userOptional.get();
-            profileDTOToSendToClient = new ProfileDTO(fetchedUser.getUsername(), fetchedUser.getId());
-            return ok(profileDTOToSendToClient);
-        } else {
+        if (userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
+        User fetchedUser = userOptional.get();
+        ProfileDTO profileDTOToSendToClient = new ProfileDTO(fetchedUser.getUsername(), fetchedUser.getId());
+
+        return ResponseEntity.ok().body(profileDTOToSendToClient);
     }
 
     /**
@@ -67,16 +70,14 @@ public class SearchController {
      */
     @GetMapping("/search-analyst")
     public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search) {
-        //fetch all users
         List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
-
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         List<ProfileDTO> profileDTOListToSend = new ArrayList<>();
-        //convert each user object to profile object
-        userList.forEach((currentUser) -> profileDTOListToSend.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+        userList.forEach((currentUser) ->
+                profileDTOListToSend.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
 
         return ResponseEntity.ok().body(profileDTOListToSend);
     }
