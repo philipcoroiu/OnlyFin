@@ -1,19 +1,18 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import se.onlyfin.onlyfinbackend.model.ProfileDTO;
+import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 /**
  * This class is responsible for handling all requests related to searching for analysts.
@@ -23,6 +22,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class SearchController {
     private final UserRepository userRepository;
 
+    @Autowired
     public SearchController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

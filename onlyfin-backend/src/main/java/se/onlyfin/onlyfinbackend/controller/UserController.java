@@ -1,11 +1,12 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.model.User;
-import se.onlyfin.onlyfinbackend.model.UserDTO;
+import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class UserController {
     private final UserRepository userRepository;
 
+    @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

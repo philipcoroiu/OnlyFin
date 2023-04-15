@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class SubscriptionController {
     private final UserRepository userRepository;
     private final SubscriptionRepository subscriptionRepository;
 
+    @Autowired
     public SubscriptionController(UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;

@@ -1,4 +1,4 @@
-package se.onlyfin.onlyfinbackend.model;
+package se.onlyfin.onlyfinbackend.DTO;
 
 /**
  * This DTO is responsible for containing the user registration forms data.

@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import se.onlyfin.onlyfinbackend.service.OnlyfinUserDetailsService;
 public class SecurityConfig {
     private final OnlyfinUserDetailsService onlyfinUserDetailsService;
 
+    @Autowired
     public SecurityConfig(OnlyfinUserDetailsService onlyfinUserDetailsService) {
         this.onlyfinUserDetailsService = onlyfinUserDetailsService;
     }
@@ -49,7 +51,7 @@ public class SecurityConfig {
                                 "/fetch-about-me",
                                 "/update-about-me")
                         .hasRole("USER")
-                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/",
                                 "/register",
