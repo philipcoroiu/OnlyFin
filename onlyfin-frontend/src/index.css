@@ -416,7 +416,7 @@ Login
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #6bd06b, #d0d06f, #9569b9, #62a6c4);
+    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 100vh;
