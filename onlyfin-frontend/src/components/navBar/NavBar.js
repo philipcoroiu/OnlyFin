@@ -23,6 +23,5 @@ export default function NavBar() {
                 <img src={homeIcon} alt="Studio" />
             </Link>
         </div>
-
     )
 }

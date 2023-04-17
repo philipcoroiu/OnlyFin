@@ -1,9 +1,9 @@
-import './App.css';
+import './style/App.css';
 import {Route, Routes} from "react-router-dom";
 import Home from "./components/home/Home"
 import Login from "./components/login/Login"
 import Dashboard from "./components/dashboard/Dashboard"
-import Studio from "./components/Studio/Studio"
+import Studio from "./components/studio/Studio"
 import UserDebug from "./components/login/UserDebug"
 import Register from "./components/registration/Register";
 
