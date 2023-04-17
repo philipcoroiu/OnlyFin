@@ -17,7 +17,6 @@ export default function Dashboard() {
     const userName = null;
 
     useEffect(() => {
-        //userId = axios.get("http://localhost:8080/fetch-current-user-id");
 
         axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
             setUserId(response.data)
