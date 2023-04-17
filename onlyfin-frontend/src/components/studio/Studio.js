@@ -284,7 +284,7 @@ export default function Studio() {
                 content: chartToSend
             };
 
-            axios.post("http://localhost:8080/studio/createModule", postChart)
+            axios.post("http://localhost:8080/studio/createModule", {withCredentials: true}, postChart)
             setSuccessMessage("SUCCESS: Your chart has been posted")
             showSuccessMessageForDuration(successMessage, 5000)
             setStudioChart(studioChartInitState)

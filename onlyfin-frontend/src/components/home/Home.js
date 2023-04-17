@@ -1,7 +1,7 @@
 import React from "react"
 import {Link, NavLink} from "react-router-dom";
-import mallDashboard from "../../images/mallDashboard.png";
-import studioPic from "../../images/studio.png";
+import mallDashboard from "../../assets/images/mallDashboard.png";
+import studioPic from "../../assets/images/studio.png";
 
 export default function Home() {
     return (

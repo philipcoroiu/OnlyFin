@@ -19,7 +19,7 @@ export default function Dashboard() {
     useEffect(() => {
         //userId = axios.get("http://localhost:8080/fetch-current-user-id");
 
-        axios.get("http://localhost:8080/dashboard/" + userId).then((response) => {
+        axios.get("http://localhost:8080/dashboard/" + userId, {withCredentials: true}).then((response) => {
             console.log(response.data)
 
             setDashboard(response.data);

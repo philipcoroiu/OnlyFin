@@ -18,7 +18,7 @@ export default function StandardToolbar(props) {
     };
 
     useEffect( () => {
-        axios.get("http://localhost:8080/studio/getStocksAndCategories/" + userId).then((response) =>{
+        axios.get("http://localhost:8080/studio/getStocksAndCategories/" + userId, {withCredentials: true}).then((response) =>{
             setStockTree(response.data);
         })
     });
