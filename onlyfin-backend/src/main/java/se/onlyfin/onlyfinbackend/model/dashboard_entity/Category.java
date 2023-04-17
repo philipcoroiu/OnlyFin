@@ -47,6 +47,10 @@ public class Category {
         return moduleEntities; //moduleEntities;
     }
 
+    public void setModuleEntities(List<ModuleEntity> moduleEntities){
+        this.moduleEntities = moduleEntities;
+    }
+
     public int getStock_id() {
         return stock_id.getId();
     }

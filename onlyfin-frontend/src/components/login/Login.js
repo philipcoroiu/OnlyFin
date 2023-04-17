@@ -1,7 +1,7 @@
 import React from "react"
-import LoginImg from "../../images/login-image.jpg"
+import LoginImg from "../../assets/images/login-image.jpg"
 import {Link, Outlet} from "react-router-dom"
-import backgroundImage from "../../images/background.jpg"
+import backgroundImage from "../../assets/images/background.jpg"
 
 export default function Login() {
     return (

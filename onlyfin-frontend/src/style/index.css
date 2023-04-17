@@ -1,3 +1,24 @@
+:root {
+  --container-width: 100px;
+  --dashboard-margin: 25px;
+  --dashboard-module-border-radius: 7px;
+
+  --main-color: #2C2C2E ;
+  --light-color: #505052 ;
+  --dark-color: #FF8C00 ;
+  --header-color: #3A3A3C;
+  --backgrond-color: #3e3e41;
+
+  --button-text-color: #FFF5E6;
+  --module-border-color: #939393;
+
+  --lightest-orange: #FFC68E;
+  --lightest-orange: #FFA74C;
+  --lightest-orange: #FF8C00;
+  --lightest-orange: #D2691E;
+  --lightest-orange: #A0522D;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,13 +26,14 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--backgrond-color);
 }
 
 /**
 Studio
  */
 
-.studio--navbar{
+.studio-navbar{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,7 +41,7 @@ Studio
   box-shadow: 0px 0px 10px #e0e0e0;
 }
 
-.studio--navbar > h1{
+.studio-navbar > h1{
   background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
   background-size: 400% 400%;
   background-clip: text;
@@ -27,7 +49,7 @@ Studio
   animation: gradient 5s ease infinite;
 }
 
-.studio--navbar > h1:hover{
+.studio-navbar > h1:hover{
   cursor: default;
 }
 
