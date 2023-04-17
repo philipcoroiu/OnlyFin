@@ -523,7 +523,7 @@ Welcome
     justify-content: space-between;
     box-shadow: 0px 0px 25px #b7b7b7;
     padding: 5px 25px;
-    border-bottom: 3px solid;
+    border-bottom: 1px solid;
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     border-image-slice: 1;
     background-color: #fff;
@@ -574,10 +574,7 @@ Welcome
 
 .welcome--hero > h1{
     font-size: 50px;
-    padding: 30px;
-    border-bottom: 1px solid;
-    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    border-image-slice: 1;
+    padding: 30px 30px 0px 30px;
 }
 
 .welcome--hero--fin{
