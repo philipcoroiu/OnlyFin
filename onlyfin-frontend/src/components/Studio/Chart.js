@@ -1,41 +1,42 @@
-import React from "react";
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
-export default function Chart(props) {
-    //change categories and series with new props as they added
-    const testChart = {
+export default function Chart({ chart }) {
+    const options = {
         chart: {
-            type: `${props.typeOfDiagram}`
+            type: chart.chart.type,
         },
         title: {
-            text: `${props.diagramName}`
+            text: chart.title.text,
+            style: {
+                color: chart.title.style.color,
+            },
         },
         xAxis: {
-            categories: ['2016']
+            categories: chart.xAxis.categories,
+            style: {
+                color: chart.xAxis.style.color,
+            },
         },
         yAxis: {
             title: {
-                text: `${props.valueTitile}`
-            }
+                text: chart.yAxis.title.text,
+                style: {
+                    color: chart.yAxis.title.style.color,
+                },
+            },
         },
-        series: [{
-            name: "Revenue",
-            data: [15,3,7]
-        },{
-            name: "sigma",
-            data: [12,4,25]
-        },{
-            name: "Fima",
-            data: [10,8,9]
-        },{
-            name: "ligma",
-            data: [20,30,7]
-        }, ]
+        labels: {
+            style: {
+                color: chart.labels.style.color,
+            },
+        },
+        series: chart.series,
     };
 
-
     return (
-        <HighchartsReact highcharts={Highcharts} options={testChart} />
-    )
+        <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}>
+            <HighchartsReact highcharts={Highcharts} options={options} />
+        </div>
+    );
 }
