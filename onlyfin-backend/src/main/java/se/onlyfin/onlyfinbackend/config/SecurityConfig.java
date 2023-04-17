@@ -51,7 +51,10 @@ public class SecurityConfig {
                                 "/fetch-about-me",
                                 "/update-about-me",
                                 "/dashboard/**",
-                                "/studio/**")
+                                "/studio/**",
+                                "/studio/deleteStock/**",
+                                "/studio/deleteCategory/**",
+                                "/studio/deleteModule/**")
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
