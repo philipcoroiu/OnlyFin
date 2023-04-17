@@ -37,7 +37,6 @@ Studio
     height: 19px;
     border: none;
     background-color: #b4b4b4;
-    transition: all 0.2s ease-in-out;
     background-clip: text;
     color: transparent;
     cursor: pointer;
@@ -47,7 +46,11 @@ Studio
 }
 
 .studio--navbar--button:hover {
-    background-color: #00c2ff;
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 5s ease infinite;
+    background-clip: text;
+    color: transparent;
 }
 
 .studio--container {
@@ -74,14 +77,17 @@ Studio
     font-size: 25px;
     border: none;
     background-color: #b4b4b4;
-    transition: all 0.2s ease-in-out;
     background-clip: text;
     color: transparent;
     cursor: pointer;
 }
 
 .studio--chart > button:hover {
-    background-color: #00c2ff;
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 5s ease infinite;
+    background-clip: text;
+    color: transparent;
 }
 
 .studio--toolbar {
@@ -330,7 +336,7 @@ Register
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+    background: linear-gradient(45deg, #3bb273,#E1BC29, #ffffff, #9569b9, #4d9de0);
     background-size: 800% 800%;
     animation: gradient 60s ease infinite;
     height: 100vh;
@@ -416,7 +422,7 @@ Login
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #6bd06b, #d0d06f, #9569b9, #62a6c4);
+    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 100vh;
@@ -503,4 +509,69 @@ Login
 
 .login--submit:hover{
     cursor: pointer;
+}
+
+/**
+Welcome
+ */
+
+.welcome--navbar{
+    width: 100%;
+    top: 0;
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    box-shadow: 0px 0px 25px #b7b7b7;
+    padding: 5px 25px;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    border-image-slice: 1;
+    background-color: #fff;
+}
+
+.welcome--navbar > ul{
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
+
+.welcome--navbar > ul > li > a{
+    text-decoration: none;
+    color: #b4b4b4;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.welcome--navbar > ul > li{
+    color: #b4b4b4;
+    margin: 15px 85px;
+}
+.welcome--navbar > ul > li > a:hover{
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+    transition: all 0.3s ease-in-out;
+}
+
+.welcome--navbar--title{
+    font-size: 30px;
+    padding-left: 80px;
+}
+
+.welcome--navbar--title:hover{
+    cursor: default;
+}
+
+.welcome--hero{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 120px;
+}
+
+.welcome--hero--image{
+    width: 50%;
 }
