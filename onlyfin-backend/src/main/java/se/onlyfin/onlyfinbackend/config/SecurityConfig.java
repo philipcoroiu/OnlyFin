@@ -49,7 +49,9 @@ public class SecurityConfig {
                                 "/disable-analyst",
                                 "/fetch-current-user-id",
                                 "/fetch-about-me",
-                                "/update-about-me")
+                                "/update-about-me",
+                                "/dashboard/**",
+                                "/studio/**")
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
@@ -93,7 +95,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/*").allowedOrigins("http://localhost:3000").allowCredentials(true);
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowCredentials(true);
             }
         };
     }
