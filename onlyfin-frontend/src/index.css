@@ -572,6 +572,45 @@ Welcome
     margin-top: 120px;
 }
 
+.welcome--hero > h1{
+    font-size: 50px;
+    padding: 30px;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    border-image-slice: 1;
+}
+
+.welcome--hero--fin{
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
 .welcome--hero--image{
     width: 50%;
+}
+
+.welcome--hero--button{
+    margin: 50px;
+    padding: 50px;
+    width: 400px;
+    font-size: 50px;
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+}
+
+.welcome--hero--button:hover{
+    cursor: pointer;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    border-image-slice: 1;
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+    transition: all 0.5s ease-in-out;
 }
