@@ -41,25 +41,46 @@ export default function Register() {
             });
     }
 
-    require("./Register.css");
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="email">Email:</label>
-                <input type="email" id="email" name="email" value={email} onChange={handleEmailChange} required/>
-            </div>
-            <div>
-                <label htmlFor="username">Username:</label>
-                <input type="text" id="username" name="username" value={username} onChange={handleUsernameChange}
-                       required/>
-            </div>
-            <div>
-                <label htmlFor="password">Password:</label>
-                <input type="password" id="password" name="password" value={password} onChange={handlePasswordChange}
-                       required/>
-            </div>
-            {error && <div>{error}</div>}
-            <button type="submit">Register</button>
-        </form>
+        <div className="register">
+            <form onSubmit={handleSubmit} className="register--holder">
+                <div className="register--title">
+                    <h1>Elevate your investments</h1>
+                    <p>Sign up now and take control of your financial future</p>
+                </div>
+                <div className="register--inputs--container">
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        placeholder="Email"
+                        required
+                    />
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        placeholder="Username"
+                        required
+                    />
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        placeholder="Password"
+                        required/>
+                </div>
+                {error && <div>{error}</div>}
+                <button type="submit" className="register--submit">Sign up</button>
+            </form>
+        </div>
     );
 }

@@ -37,35 +37,38 @@ export default function Login() {
             });
     }
 
-    require("./Login.css");
     return (
-        <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-group">
-                <label htmlFor="username">Email:</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    className="form-control"
-                />
-            </div>
-            {error && <div className="error-message">{error}</div>}
-            <button type="submit" className="btn btn-primary">
-                Submit
-            </button>
-        </form>
+        <div className="login">
+            <form onSubmit={handleSubmit} className="login--holder">
+                <div className="login--titel">
+                    <h1>Log in</h1>
+                    <p>Welcome to OnlyFin, please put your credentals below to start using the website</p>
+                </div>
+                <div className="login--inputs">
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        className="form-control"
+                        placeholder="Email"
+                    />
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className="form-control"
+                        placeholder="Password"
+                    />
+                </div>
+                {error && <div className="error-message">{error}</div>}
+                <button type="submit" className="login--submit">
+                    Log in
+                </button>
+            </form>
+        </div>
     );
 }
