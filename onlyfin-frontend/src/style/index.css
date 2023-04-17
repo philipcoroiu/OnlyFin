@@ -3,6 +3,27 @@
     --dashboard-margin: 25px;
     --dashboard-module-border-radius: 7px;
 
+    --main-color: #EEEEEE ;
+    --light-color: #DDDDDD ;
+    --dark-color: #306b43;
+    --header-color: #DDDDDD;
+    --backgrond-color: #3e3e41;
+
+    --button-text-color: #FFF5E6;
+    --module-border-color: #939393;
+
+    --lightest-orange: #FFC68E;
+    --lightest-orange: #FFA74C;
+    --lightest-orange: #FF8C00;
+    --lightest-orange: #D2691E;
+    --lightest-orange: #A0522D;
+}
+
+/*
+    --container-width: 100px;
+    --dashboard-margin: 25px;
+    --dashboard-module-border-radius: 7px;
+
     --main-color: #2C2C2E ;
     --light-color: #505052 ;
     --dark-color: #FF8C00 ;
@@ -17,7 +38,7 @@
     --lightest-orange: #FF8C00;
     --lightest-orange: #D2691E;
     --lightest-orange: #A0522D;
-}
+ */
 
 body {
     margin: 0;
