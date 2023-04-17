@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-export default function ColumnTable(props) {
+export default function StandardTable(props) {
     const [categoryCount, setCategoryCount] = useState(1);
     const [datasets, setDatasets] = useState([{name: "", data: Array(categoryCount).fill("")}]);
     const [activeDatasetIndex, setActiveDatasetIndex] = useState(0);
@@ -28,9 +28,12 @@ export default function ColumnTable(props) {
     }
 
     const handleDatasetRemove = (indexToRemove) => {
-        setDatasets(datasets.filter((_, index) => index !== indexToRemove));
-        setActiveDatasetIndex(0);
-        props.handleDatasetRemove(indexToRemove);
+        if(datasets.length != 1){
+            setDatasets(datasets.filter((_, index) => index !== indexToRemove));
+            setActiveDatasetIndex(0);
+            props.handleDatasetRemove(indexToRemove);
+        }
+
     }
 
     const handleDatasetNameChange = (index, name) => {
