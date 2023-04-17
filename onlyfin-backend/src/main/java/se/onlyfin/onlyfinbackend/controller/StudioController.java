@@ -4,9 +4,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
 import se.onlyfin.onlyfinbackend.repository.*;
+
+import java.util.Optional;
 
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @RestController
@@ -16,11 +19,13 @@ public class StudioController {
     private final StockRepository stockRepository;
     private final CategoryRepository categoryRepository;
     private final ModuleRepository moduleRepository;
+    private final DashboardRepository dashboardRepository;
 
-    public StudioController(StockRepository stockRepository, CategoryRepository categoryRepository, ModuleRepository moduleRepository) {
+    public StudioController(StockRepository stockRepository, CategoryRepository categoryRepository, ModuleRepository moduleRepository, DashboardRepository dashboardRepository) {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
+        this.dashboardRepository = dashboardRepository;
     }
 
     @PostMapping("/createStock")
@@ -120,6 +125,22 @@ public class StudioController {
             System.out.println(e);
         }
         return "Could not module category";
+    }
+
+    @GetMapping("getStocksAndCategories/{id}")
+    public ResponseEntity<?> getStocksAndCategories(@PathVariable Integer id){
+        Dashboard dashboard;
+        if (dashboardRepository.existsById(id)) {
+            Optional<Dashboard> dashboardOptional= dashboardRepository.findById(id);
+            dashboard = dashboardOptional.orElse(null);
+            for (int i = 0; i < dashboard.getStocks().size(); i++){
+                for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++){
+                    dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
+                }
+            }
+            return ResponseEntity.ok(dashboard);
+        }
+        return ResponseEntity.badRequest().body("cant find dashboard");
     }
 
     /*@PutMapping("/updateModuleContent")
