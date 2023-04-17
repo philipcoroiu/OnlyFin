@@ -9,7 +9,7 @@ export default function StandardToolbar(props) {
     const [selectedChartType, setSelectedChartType] = useState("column");
     const [stockTree, setStockTree] = useState(null);
     const [selectedStock, setSelectedStock] = useState("");
-    let userId = 8;
+    const [userId, setUserId] = useState(null);
 
     const handleStockChange = (name) => {
         setSelectedStock(name);
@@ -18,8 +18,11 @@ export default function StandardToolbar(props) {
     };
 
     useEffect( () => {
-        axios.get("http://localhost:8080/studio/getStocksAndCategories/" + userId, {withCredentials: true}).then((response) =>{
-            setStockTree(response.data);
+        axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
+            setUserId(response.data)
+            axios.get("http://localhost:8080/studio/getStocksAndCategories/" + userId, {withCredentials: true}).then((response) =>{
+                setStockTree(response.data);
+            })
         })
     });
 

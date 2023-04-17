@@ -13,18 +13,20 @@ export default function Dashboard() {
     const [activeStockTab, setActiveStockTab] = useState(0);
     const [activeCategoryTab, setActiveCategoryTab] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    let userId = 8;
+    const [userId, setUserId] = useState();
     const userName = null;
 
     useEffect(() => {
         //userId = axios.get("http://localhost:8080/fetch-current-user-id");
 
-        axios.get("http://localhost:8080/dashboard/" + userId, {withCredentials: true}).then((response) => {
+        axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
+            setUserId(response.data)
             console.log(response.data)
-
-            setDashboard(response.data);
-            setIsLoading(false);
-        });
+            axios.get("http://localhost:8080/dashboard/" + response.data, {withCredentials: true}).then((response) => {
+                setDashboard(response.data);
+                setIsLoading(false);
+            });
+        })
     }, []);
 
     const handleStockTabClick = (index) => {
