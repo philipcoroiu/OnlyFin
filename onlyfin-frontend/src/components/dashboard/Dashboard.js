@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DashboardSidebar from "./DashboardSidebar";
+import NavBar from "../navBar/NavBar";
+import '../../style/dashboard.css';
+import '../../style/highCharts.css';
 import {Link} from "react-router-dom";
-import DashboardChart from "./DashboardChart";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 /*import { SearchBox } from 'react-search-box';*/
 
 export default function Dashboard() {
@@ -17,6 +20,8 @@ export default function Dashboard() {
         //userId = axios.get("http://localhost:8080/fetch-current-user-id");
 
         axios.get("http://localhost:8080/dashboard/" + userId).then((response) => {
+            console.log(response.data)
+
             setDashboard(response.data);
             setIsLoading(false);
         });
@@ -32,68 +37,69 @@ export default function Dashboard() {
     };
 
     if (isLoading) {
-        return <div className="isLoading">Loading dashboard...</div>;
+        return <div className="dashboard-is-loading">Loading dashboard...</div>;
     }
 
     const { stocks } = dashboard;
 
     return (
         <>
-            <DashboardSidebar />
-                <div className="content-wrapper">
-                    <div className="button-underlay"></div>
-                    <Link to="/profile_page">
-                        <button className="profile-button">
-                        </button>
-                    </Link>
-                    <div className="stock-tab-container">
-                        <div className="stock-tab-buttons">
-                            {stocks.map((stock, index) => (
-                                <button
-                                    key={stock.id}
-                                    className={index === activeStockTab ? "active" : ""}
-                                    onClick={() => handleStockTabClick(index)}
-                                >
-                                    {stock.stock_ref_id.name}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="stock-tab-content">
-                            <div className="category-tab-container">
-                                <div className="category-tab-buttons">
-                                    {stocks[activeStockTab].categories.map((category, index) => (
-                                        <button
-                                            key={category.id}
-                                            className={index === activeCategoryTab ? "active" : ""}
-                                            onClick={() => handleCategoryTabClick(index)}
-                                        >
-                                            {category.name}
-                                        </button>
-                                    ))}
-                                </div>
-                                <div className="category-tab-content">
-                                    {stocks[activeStockTab].categories.map((category, index) => (
-                                        <div
-                                            key={category.id}
-                                            className={`module-container ${
-                                                index === activeCategoryTab ? "active" : ""
-                                            }`}
-                                        >
-                                            {category.moduleEntities.map((moduleEntity) => (
-                                                <div key={moduleEntity.id} className="module-entity-container">
-                                                    <pre>
-                                                        <DashboardChart moduleItem={moduleEntity.content}/>
-                                                    </pre>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))}
-                                </div>
+            <NavBar />
+            <div className="dashboard-content-wrapper">
+                <div className="dashboard-button-underlay"></div>
+                <Link to="/profile_page">
+                    <button className="dashboard-profile-button">
+                    </button>
+                </Link>
+                <div className="dashboard-stock-tab-container">
+                    <div className="dashboard-stock-tab-buttons">
+                        {stocks.map((stock, index) => (
+                            <button
+                                key={stock.id}
+                                className={index === activeStockTab ? "active" : ""}
+                                onClick={() => handleStockTabClick(index)}
+                            >
+                                {stock.stock_ref_id.name}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="stock-tab-content">
+                        <div className="dashboard-category-tab-container">
+                            <div className="dashboard-category-tab-buttons">
+                                {stocks[activeStockTab].categories.map((category, index) => (
+                                    <button
+                                        key={category.id}
+                                        className={index === activeCategoryTab ? "active" : ""}
+                                        onClick={() => handleCategoryTabClick(index)}
+                                    >
+                                        {category.name}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="dashboard-category-tab-content">
+                                {stocks[activeStockTab].categories.map((category, index) => (
+                                    <div
+                                        key={category.id}
+                                        className={`module-container ${
+                                            index === activeCategoryTab ? "active" : ""
+                                        }`}
+                                    >
+                                        {category.moduleEntities.map((moduleEntity) => (
+                                            <div key={moduleEntity.id} className="dashboard-module-container">
+                                                <pre>
+                                                    <HighchartsReact
+                                                        highcharts={Highcharts}
+                                                        options={moduleEntity.content}/>
+                                                </pre>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
         </>
     );
 }

@@ -1,11 +1,11 @@
 import React, {useState} from "react"
-import StudioToolbar from "./StudioToolbar";
-import Chart from "./Chart"
+import StudioToolbar from "./studioToolbar/StudioToolbar";
 import {Link, NavLink} from "react-router-dom";
 import axios from "axios"
 import StudioNavbar from "./StudioNavbar";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
+import '../../style/studio.css';
 
 export default function Studio() {
 
@@ -17,8 +17,7 @@ export default function Studio() {
         {index: 3, color: "#c99664"},
         {index: 4, color: "#6384d2"},
     ];
-    const [categoryCount, setCategoryCount] = useState(1)
-    const [studioChart, setStudioChart] = useState({
+    const studioChartInitState = {
         chart: {
             type: "column",
             style:{
@@ -36,6 +35,12 @@ export default function Studio() {
             }
         },
         xAxis: {
+            title:{
+                text: "",
+                style: {
+                    color: "#1A1616"
+                }
+            },
             categories: ["Category 1"],
             labels:{
                 style:{
@@ -63,13 +68,28 @@ export default function Studio() {
                 color: "#1A1616"
             }
         },
+        plotOptions:{
+            bb:{
+
+            }
+        },
         series: [{
             name: "name",
             data: [""],
             borderWidth: 0,
             color: "#b0ffa6",
         }]
-    });
+    };
+
+    const [toolbarKey, setToolbarKey] = useState(0);
+    const [errorMessage, setErrorMessage] = useState ([]);
+    const [showErrorMessage, setShowErrorMessage] = useState (false);
+    const [successMessage, setSuccessMessage] = useState ("SUCCESS: Your chart has been posted");
+    const [showSuccessMessage, setShowSuccessMessage] = useState (false);
+    const [categoryCount, setCategoryCount] = useState(1);
+    const [categoryId, setCategoryId] = useState(null);
+    const [chartType, setChartType] = useState("column");
+    const [studioChart, setStudioChart] = useState(studioChartInitState);
 
     function handleCategoryCountDecrease(count) {
         setCategoryCount(count);
@@ -92,6 +112,9 @@ export default function Studio() {
         });
     }
 
+    function putChartToInitState(){
+        /*setStudioChart(studioChartInitState)*/
+    }
     function handleCategoryCountIncrease(count){
         setCategoryCount(count);
         setStudioChart(prevState => {
@@ -130,6 +153,7 @@ export default function Studio() {
             ]
         }));
     }
+
     function handleDatasetRemove(indexToRemove){
         setStudioChart(prevState => {
             const filteredSeries = prevState.series.filter((_, index) => index !== indexToRemove);
@@ -139,6 +163,7 @@ export default function Studio() {
             }
         });
     }
+
     function handleDatasetDataChange(index, dataIndex, value){
         setStudioChart(prevChart => {
             const seriesToUpdate = {...prevChart.series[index]};
@@ -208,19 +233,117 @@ export default function Studio() {
         });
     }
 
-    function postChart(){
-        const chartToSend = studioChart;
+    function checkForError() {
+        let hasError = false;
+        setErrorMessage([])
 
-        chartToSend.chart.width = 365;
-        chartToSend.chart.height = 345;
 
-        const postChart ={
-            category_id: 37,
-            module_type: "column",
-            content: chartToSend
+        if(categoryId === null) {
+            setErrorMessage(prevState =>  [...prevState, "ERROR: select both stock and category"])
+            hasError = true;
         }
 
-        axios.post("http://localhost:8080/studio/createModule", postChart)
+        studioChart.series.forEach((serie) => {
+            if (serie.data.filter((data) => data !== "").length === 0) {
+                setErrorMessage(prevState =>  [...prevState, "ERROR: atleast one dataset has no data"])
+                hasError = true;
+            }
+        });
+
+
+        return hasError;
+    }
+
+    function showSuccessMessageForDuration(message, duration){
+        setSuccessMessage(message)
+        setShowSuccessMessage(true);
+
+        setTimeout(() => {
+            setShowSuccessMessage(false);
+        }, duration);
+    }
+
+    function showErrorMessageForDuration(duration) {
+        setShowErrorMessage(true);
+
+        setTimeout(() => {
+            setShowErrorMessage(false);
+        }, duration);
+    }
+
+    function postChart(){
+        if(!checkForError()){
+            const chartToSend = studioChart;
+
+            chartToSend.chart.width = 365;
+            chartToSend.chart.height = 345;
+
+            const postChart ={
+                category_id: categoryId,
+                module_type: chartType,
+                content: chartToSend
+            };
+
+            axios.post("http://localhost:8080/studio/createModule", postChart)
+            setSuccessMessage("SUCCESS: Your chart has been posted")
+            showSuccessMessageForDuration(successMessage, 5000)
+            setStudioChart(studioChartInitState)
+            setShowErrorMessage(false);
+            setToolbarKey(key => key + 1);
+            setCategoryId(null);
+            setCategoryCount(1);
+
+        } else {
+            showErrorMessageForDuration(5000);
+        }
+    }
+
+    function handleChartTypeChange(type) {
+        setChartType(type);
+        setStudioChart(prevState => {
+            return {
+                ...prevState,
+                chart: {
+                    ...prevState.chart,
+                    type: type
+                }
+            }
+        })
+        /*setStudioChart(prevState => {
+            return {
+                ...prevState,
+                chart: {
+                    ...prevState.chart,
+                    type: type
+                },
+                yAxis: {
+                    ...prevState.yAxis,
+                    title: {
+                        ...prevState.title,
+                        text: ""
+                    }
+                },
+                xAxis: {
+                    ...prevState.xAxis,
+                    title: {
+                        ...prevState.xAxis,
+                        text: ""
+                    },
+                    categories: ["Category 1"]
+                },
+                series:[{
+                    name: "name",
+                    data: [""],
+                    borderWidth: 0,
+                    color: "#b0ffa6",
+                }]
+            };
+        });*/
+    }
+
+    function handleCategoryIdChange(id){
+        if (id === "") setCategoryId(null)
+        else setCategoryId(id);
     }
 
     return (
@@ -228,7 +351,7 @@ export default function Studio() {
             <StudioNavbar />
             <div className="studio--container">
                 <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}
-                    className="studio--chart"
+                      className="studio--chart"
                 >
                     <HighchartsReact
                         highcharts={Highcharts}
@@ -238,6 +361,7 @@ export default function Studio() {
                 </div>
                 <div className="studio--toolbar">
                     <StudioToolbar
+                        key={toolbarKey}
                         handleCategoryCountIncrease={handleCategoryCountIncrease}
                         handleCategoryCountDecrease={handleCategoryCountDecrease}
                         handleDatasetAdd={handleDatasetAdd}
@@ -247,8 +371,25 @@ export default function Studio() {
                         handleCategoryNameChange={handleCategoryNameChange}
                         handleChartNameChange={handleChartNameChange}
                         handleYAxisNameChange={handleYAxisNameChange}
+                        handleChartTypeChange={handleChartTypeChange}
+                        handleCategoryIdChange={handleCategoryIdChange}
+                        putChartToInitState={putChartToInitState}
                     />
                 </div>
+            </div>
+            <div className={`studio-message-container ${showErrorMessage || showSuccessMessage ? 'show' : ''}`}>
+                {showErrorMessage && (
+                    <div className="studio-error-message">
+                        {errorMessage.map((message,index) => (
+                            <p key={index}>{message}<br/></p>
+                        ))}
+                    </div>
+                )}
+                {showSuccessMessage && (
+                    <div className="studio-success-message">
+                        <p>{successMessage}</p>
+                    </div>
+                )}
             </div>
         </>
     )
