@@ -8,6 +8,8 @@ import Studio from "./components/Studio/Studio"
 import UserDebug from "./components/login/UserDebug"
 import SearchPage from "./components/searchPage.js/SearchPage";
 import PersonalPage from "./components/personalPage/PersonalPage";
+import MyPage from "./components/personalPage/MyPage";
+import UserNotFound from "./components/personalPage/UserNotFound"
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
       </Route>
         <Route path="searchpage" element={<SearchPage />}></Route>
         <Route path="searchpage/:username" element={<PersonalPage />}></Route>
+        <Route path="mypage/:username" element={<MyPage />}></Route>
+        <Route path="usernotfound" element={<UserNotFound />}></Route>
     </Routes>
   );
 }

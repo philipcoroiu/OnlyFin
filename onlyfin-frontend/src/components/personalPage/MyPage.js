@@ -3,12 +3,11 @@ import Avatar from "../../images/avatar.png"
 import Sidebar from "../dashboard/DashboardSidebar"
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import UserNotFound from "./UserNotFound"
 
 export default function PersonalPage() {
 
     const { username } = useParams();
-    const [userData, setUserData] = React.useState(null);
+    const [userData, setUserData] = React.useState([]);
 
     useEffect(() => {
 
@@ -32,19 +31,19 @@ export default function PersonalPage() {
         fetchData();
     }, [username]);
 
-    if (userData === null) {
+    if (!userData) {
         return <div>Loading...</div>;
-    } else if (userData.error) {
-        return <div>User does not exist</div>;
-    } else {
-        return(
-            <div>
-                <Sidebar/>
-                <img src={Avatar} width="100px"/>
-                <h2>{username}</h2>
-                <p>{userData}</p>
-                <button>Subscribe</button>
-            </div>
-        )
     }
+
+    // `http://localhost:8080/update-about-me`
+
+    return(
+        <div>
+            <Sidebar/>
+            <img src={Avatar} width="100px"/>
+            <h2>{username}</h2>
+            <p>{userData}</p>
+            <button>Update my text</button>
+        </div>
+    )
 }
