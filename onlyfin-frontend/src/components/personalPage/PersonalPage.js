@@ -1,6 +1,5 @@
 import React, {useEffect} from "react"
-import Avatar from "../../images/avatar.png"
-import Sidebar from "../dashboard/DashboardSidebar"
+import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useParams} from "react-router-dom";
 import UserNotFound from "./UserNotFound"

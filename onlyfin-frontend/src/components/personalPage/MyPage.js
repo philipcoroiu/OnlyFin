@@ -1,19 +1,18 @@
 import React, {useEffect} from "react"
-import Avatar from "../../images/avatar.png"
-import Sidebar from "../dashboard/DashboardSidebar"
+import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useParams} from "react-router-dom";
 
 export default function PersonalPage() {
 
-    const { username } = useParams();
+    const [username, setUsername] = React.useState();
     const [userData, setUserData] = React.useState([]);
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/fetch-about-me?username=${username}`,
+                const response = await axios.get(`http://localhost:8080/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -21,8 +20,18 @@ export default function PersonalPage() {
                         withCredentials: true,
                     });
 
-                console.log('API response:', response.data);
-                setUserData(response.data);
+                setUsername(response.data);
+
+                const response2 = await axios.get(`http://localhost:8080/fetch-about-me?username=${response.data}`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    });
+
+                console.log('API response:', response2.data);
+                setUserData(response2.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -30,6 +39,8 @@ export default function PersonalPage() {
 
         fetchData();
     }, [username]);
+
+
 
     if (!userData) {
         return <div>Loading...</div>;
@@ -39,7 +50,6 @@ export default function PersonalPage() {
 
     return(
         <div>
-            <Sidebar/>
             <img src={Avatar} width="100px"/>
             <h2>{username}</h2>
             <p>{userData}</p>
