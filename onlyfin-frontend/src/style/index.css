@@ -209,7 +209,7 @@ Studio toolbar
     color: transparent;
 }
 
-.studio--toolbar--selects > select, studio--toolbar--standards--selects {
+.studio--toolbar--selects > select, studio--toolbar--standards--selects > select, studio--toolbar--standards--selects > select {
     margin: 20px 60px;
     border: none;
     background-color: #ffff;
