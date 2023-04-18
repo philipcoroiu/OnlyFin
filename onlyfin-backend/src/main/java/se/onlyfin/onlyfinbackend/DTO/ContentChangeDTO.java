@@ -1,4 +1,4 @@
-package se.onlyfin.onlyfinbackend.model;
+package se.onlyfin.onlyfinbackend.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;

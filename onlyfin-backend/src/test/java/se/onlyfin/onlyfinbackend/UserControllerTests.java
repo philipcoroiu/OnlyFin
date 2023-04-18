@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import se.onlyfin.onlyfinbackend.controller.UserController;
 import se.onlyfin.onlyfinbackend.model.User;
-import se.onlyfin.onlyfinbackend.model.UserDTO;
+import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

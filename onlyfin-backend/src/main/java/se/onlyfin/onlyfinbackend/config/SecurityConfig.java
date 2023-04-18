@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import se.onlyfin.onlyfinbackend.service.OnlyfinUserDetailsService;
 public class SecurityConfig {
     private final OnlyfinUserDetailsService onlyfinUserDetailsService;
 
+    @Autowired
     public SecurityConfig(OnlyfinUserDetailsService onlyfinUserDetailsService) {
         this.onlyfinUserDetailsService = onlyfinUserDetailsService;
     }
@@ -47,9 +49,17 @@ public class SecurityConfig {
                                 "/disable-analyst",
                                 "/fetch-current-user-id",
                                 "/fetch-about-me",
-                                "/update-about-me")
+                                "/update-about-me",
+                                "/dashboard/**",
+                                "/studio/**",
+                                "/studio/deleteStock/**",
+                                "/studio/deleteCategory/**",
+                                "/studio/deleteModule/**",
+                                "/principal-username",
+                                "/principal-id"
+                        )
                         .hasRole("USER")
-                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/",
                                 "/register",
@@ -91,7 +101,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/*").allowedOrigins("http://localhost:3000").allowCredentials(true);
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowCredentials(true);
             }
         };
     }

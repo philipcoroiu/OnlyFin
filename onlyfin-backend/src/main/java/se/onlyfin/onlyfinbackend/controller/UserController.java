@@ -1,11 +1,12 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.model.User;
-import se.onlyfin.onlyfinbackend.model.UserDTO;
+import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
@@ -19,13 +20,24 @@ import java.util.Optional;
 public class UserController {
     private final UserRepository userRepository;
 
+    @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * WARNING: ONLY FOR DEVELOPMENT.
+     * SHOULD NOT BE INCLUDED IN PRODUCTION!
+     * Debug method to fetch the user object of the logged-in user.
+     * Alternatively, if a username is passed in, the user object with that username is returned.
+     *
+     * @param principal The logged-in user
+     * @param username  optional username search string
+     * @return Response with the entire user object
+     */
     @GetMapping("/user-debug")
     @Deprecated
-    public ResponseEntity<?> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
+    public ResponseEntity<User> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
         if (!username.isEmpty()) {
             Optional<User> userOptional = userRepository.findByUsername(username);
             if (userOptional.isPresent()) {
@@ -68,6 +80,7 @@ public class UserController {
         userToRegister.setRoles("ROLE_USER");
         userToRegister.setAnalyst(false);
         userRepository.save(userToRegister);
+
         return ResponseEntity.ok(user.username());
     }
 
@@ -119,6 +132,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Returns the user id of the logged-in user
+     *
+     * @param principal The logged-in user
+     * @return user id of principal
+     */
     @GetMapping("/fetch-current-user-id")
     public ResponseEntity<Integer> fetchCurrentUserId(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
@@ -127,10 +146,15 @@ public class UserController {
         }
 
         User userToFetchUserIdFrom = userOptional.get();
-
         return ResponseEntity.ok().body(userToFetchUserIdFrom.getId());
     }
 
+    /**
+     * Returns the "about me" text for a specific user
+     *
+     * @param username the username of the target user
+     * @return "about me" text
+     */
     @GetMapping("/fetch-about-me")
     public ResponseEntity<?> fetchAboutMeFor(@RequestParam String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -142,6 +166,13 @@ public class UserController {
         return ResponseEntity.ok().body(userToGetAboutMeFrom.getAboutMe());
     }
 
+    /**
+     * Method to update the "about me" text for the logged-in user
+     *
+     * @param principal The logged-in user
+     * @param text      the new "about me" text
+     * @return Updated text if ok, bad request otherwise
+     */
     @PutMapping("update-about-me")
     public ResponseEntity<?> updateAboutMe(Principal principal, @RequestBody String text) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
@@ -157,6 +188,40 @@ public class UserController {
         userRepository.save(userWantingToUpdateAboutMe);
 
         return ResponseEntity.ok().body(text);
+    }
+
+    /**
+     * Returns the username of the logged-in user
+     *
+     * @param principal The logged-in user
+     * @return username of principal
+     */
+    @GetMapping("/principal-username")
+    public ResponseEntity<?> fetchUsernameOfPrincipal(Principal principal) {
+        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User userToGetUsernameOf = userOptional.get();
+        return ResponseEntity.ok().body(userToGetUsernameOf.getUsername());
+    }
+
+    /**
+     * Returns the user id of the logged-in user
+     *
+     * @param principal The logged-in user
+     * @return user id of principal
+     */
+    @GetMapping("/principal-id")
+    public ResponseEntity<?> fetchUserIdOfPrincipal(Principal principal) {
+        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User userToGetUserIdOf = userOptional.get();
+        return ResponseEntity.ok().body(userToGetUserIdOf.getId());
     }
 
 }

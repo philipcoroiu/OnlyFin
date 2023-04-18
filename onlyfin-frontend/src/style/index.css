@@ -1,0 +1,693 @@
+:root {
+    --container-width: 100px;
+    --dashboard-margin: 25px;
+    --dashboard-module-border-radius: 7px;
+
+    --main-color: #EEEEEE ;
+    --light-color: #ffffff;
+    --dark-color: #306b43;
+    --header-color: #DDDDDD;
+    --backgrond-color: #3e3e41;
+
+    --button-text-color: #FFF5E6;
+    --module-border-color: #939393;
+
+    --lightest-orange: #FFC68E;
+    --lightest-orange: #FFA74C;
+    --lightest-orange: #FF8C00;
+    --lightest-orange: #D2691E;
+    --lightest-orange: #A0522D;
+}
+
+/*
+    --container-width: 100px;
+    --dashboard-margin: 25px;
+    --dashboard-module-border-radius: 7px;
+
+    --main-color: #2C2C2E ;
+    --light-color: #505052 ;
+    --dark-color: #FF8C00 ;
+    --header-color: #3A3A3C;
+    --backgrond-color: #3e3e41;
+
+    --button-text-color: #FFF5E6;
+    --module-border-color: #939393;
+
+    --lightest-orange: #FFC68E;
+    --lightest-orange: #FFA74C;
+    --lightest-orange: #FF8C00;
+    --lightest-orange: #D2691E;
+    --lightest-orange: #A0522D;
+ */
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/**
+Chart
+ */
+
+.highcharts-background {
+    fill: var(--light-color);
+}
+
+/**
+Studio
+ */
+
+.studio-message-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.studio-message-container.show {
+    opacity: 1;
+}
+
+.studio-error-message {
+    color: red;
+}
+
+.studio-success-message {
+    color: green;
+}
+
+.studio--navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 100px;
+    box-shadow: 0px 0px 10px #e0e0e0;
+}
+
+.studio--navbar > h1 {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.studio--navbar > h1:hover {
+    cursor: default;
+}
+
+.studio--navbar--button {
+    font-size: 18px;
+    width: 95px;
+    height: 19px;
+    border: none;
+    background-color: #b4b4b4;
+    background-clip: text;
+    color: transparent;
+    cursor: pointer;
+    padding: 0px;
+    margin: 0px;
+    font-weight: bold;
+}
+
+.studio--navbar--button:hover {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 5s ease infinite;
+    background-clip: text;
+    color: transparent;
+}
+
+.studio--container {
+    display: flex;
+    height: 100%;
+}
+
+/**
+Studio chart
+ */
+
+.studio--chart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 680px;
+    width: 50%;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.studio--chart > button {
+    margin-top: 100px;
+    width: 70px;
+    height: 30px;
+    font-size: 25px;
+    border: none;
+    background-color: #b4b4b4;
+    background-clip: text;
+    color: transparent;
+    cursor: pointer;
+}
+
+.studio--chart > button:hover {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 5s ease infinite;
+    background-clip: text;
+    color: transparent;
+}
+
+/**
+Studio toolbar
+ */
+
+.studio--toolbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 50%;
+    margin: 10px;
+    padding: 15px;
+
+}
+
+.studio--toolbar--heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.studio--toolbar--input > input {
+    width: 250px;
+    border: none;
+    margin: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+    caret-color: #cbcbcb;
+}
+
+.studio--toolbar--input > input::placeholder {
+    transition: all 0.2s ease-in-out;
+}
+
+.studio--toolbar--input > input:hover::placeholder {
+    transition: all 0.2s ease-in-out;
+    color: transparent;
+}
+
+.studio--toolbar--selects > select, studio--toolbar--standards--selects > select, studio--toolbar--standards--selects > select {
+    margin: 20px 60px;
+    border: none;
+    background-color: #ffff;
+    outline: none;
+    font-weight: bold;
+    font-size: 15px;
+    appearance: none;
+    text-align: center;
+}
+
+.studio--toolbar--selects {
+    border-bottom: 1px solid #cbcbcb;
+}
+
+.studio--toolbar--columns {
+    display: flex;
+    justify-content: space-around;
+    height: 530px;
+}
+
+.studio--category-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 530px;
+    border-right: 1px solid #cbcbcb;
+}
+
+.studio--dataset-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 530px;
+}
+
+.studio--category-y-axis-input > input {
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    margin: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+    caret-color: #cbcbcb;
+}
+
+.studio--category-count-btn > button {
+    margin: 10px 40px;
+    width: 75px;
+    height: 35px;
+
+    border: 1px dashed #cbcbcb;
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    background-color: #ffff;
+
+    font-size: 15px;
+}
+
+.studio--category-count-btn > button:hover {
+    border: 1px dotted #61dafb;
+    transition: all 0.3s ease-in-out;
+}
+
+.studio--category-input-fields {
+    height: 530px;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.studio--category-input-fields::-webkit-scrollbar {
+    display: none;
+}
+
+.studio--category-input-fields > input {
+    display: flex;
+    flex-direction: column;
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    margin-top: 35px;
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+    caret-color: #cbcbcb;
+}
+
+.studio--add-dataset-btn > button {
+    margin: 10px 40px;
+    width: 75px;
+    height: 45px;
+
+    border: 1px dashed #cbcbcb;
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    background-color: #ffff;
+
+    font-size: 15px;
+}
+
+.studio--add-dataset-btn > button:hover {
+    border: 1px dotted #61dafb;
+    transition: all 0.3s ease-in-out;
+}
+
+.studio--dataset-tabs-btn {
+    margin: 10px 0px;
+    width: 300px;
+    height: 40px;
+    border-bottom: 1px solid #b4b4b4;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.studio--dataset-tabs-btn::-webkit-scrollbar {
+    display: none;
+}
+
+.studio--dataset-tabs-btn > button {
+    font-size: 15px;
+    margin: 0px 10px;
+    border: none;
+    background-color: #ffff;
+    border-bottom: 1px solid #cbcbcb;
+}
+
+.studio--dataset-tab-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.studio--remove-dataset-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.studio--dataset--value--container {
+    overflow: auto;
+}
+
+.studio--remove-dataset-btn > button {
+    margin: 15px 40px;
+    width: 85px;
+    height: 45px;
+
+    border: 1px dashed #cbcbcb;
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    background-color: #ffff;
+
+    font-size: 15px;
+}
+
+.studio--remove-dataset-btn > button:hover {
+    border: 1px dotted #61dafb;
+    transition: all 0.3s ease-in-out;
+}
+
+.studio--dataset-input-name {
+    display: flex;
+    justify-content: center
+}
+
+.studio--dataset-input-name > input {
+    border: none;
+    border-bottom: 1px dashed #cbcbcb;
+    margin: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+    caret-color: #cbcbcb;
+}
+
+.dataset-input-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dataset-input-fields > input {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+    caret-color: #cbcbcb;
+}
+
+
+/**
+Register
+ */
+
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, #3bb273,#E1BC29, #ffffff, #9569b9, #4d9de0);
+    background-size: 800% 800%;
+    animation: gradient 60s ease infinite;
+    height: 100vh;
+}
+
+
+.register--holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    padding: 50px;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(50px);
+    opacity: 0.8;
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+}
+
+.register--title{
+    color: #ececec;
+    font-size: 20px;
+    text-align: center;
+    color: #282c34;
+
+}
+
+.register--title > p{
+    color: #282c34;
+}
+
+.register--inputs--container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register--inputs--container > input {
+    margin: 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.41);
+    backdrop-filter: blur(50px);
+    box-shadow: 0px 0px 7px #727272;
+    opacity: 0.8;
+    outline: none;
+    font-size: 17px;
+    text-align: center;
+    width: 290px;
+    height: 30px;
+}
+
+.register--inputs--container > input::placeholder{
+    color: #282c34;
+}
+
+.register--submit {
+    margin: 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.59);
+    backdrop-filter: blur(50px);
+    box-shadow: 0px 0px 7px #727272;
+    opacity: 0.8;
+    outline: none;
+    text-align: center;
+    font-size: 15px;
+    width: 100px;
+    height: 30px;
+}
+
+.register--submit:hover{
+    cursor: pointer;
+}
+
+/**
+Login
+ */
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 700% 700%;
+    animation: gradient 60s ease infinite;
+    height: 100vh;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: bottom left;
+    }
+    50% {
+        background-position: top right;
+    }
+    100% {
+        background-position: bottom left;
+    }
+}
+
+.login--holder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    padding: 50px;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(50px);
+    opacity: 0.8;
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+}
+
+.login--title{
+    color: #ececec;
+    font-size: 20px;
+    text-align: center;
+    color: #282c34;
+
+}
+
+.login--inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.login--inputs > input {
+    margin: 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.41);
+    backdrop-filter: blur(50px);
+    box-shadow: 0px 0px 7px #727272;
+    opacity: 0.8;
+    outline: none;
+    font-size: 17px;
+    text-align: center;
+    width: 290px;
+    height: 30px;
+}
+
+.login--inputs > input::placeholder {
+    color: #282c34;
+}
+
+.login--submit--holder {
+    margin-top: 20px;
+    display: flex;
+    justify-content: start;
+}
+
+.login--submit {
+    margin: 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(50px);
+    box-shadow: 0px 0px 15px #626262;
+    opacity: 0.8;
+    outline: none;
+    text-align: center;
+    font-size: 15px;
+    width: 100px;
+    height: 30px;
+}
+
+.login--submit:hover{
+    cursor: pointer;
+}
+
+/**
+Welcome
+ */
+
+.welcome--navbar{
+    width: 100%;
+    top: 0;
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    box-shadow: 0px 0px 25px #b7b7b7;
+    padding: 5px 25px;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    border-image-slice: 1;
+    background-color: #fff;
+}
+
+.welcome--navbar > ul{
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
+
+.welcome--navbar > ul > li > a{
+    text-decoration: none;
+    color: #b4b4b4;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.welcome--navbar > ul > li{
+    color: #b4b4b4;
+    margin: 15px 85px;
+}
+.welcome--navbar > ul > li > a:hover{
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+    transition: all 0.3s ease-in-out;
+}
+
+.welcome--navbar--title{
+    font-size: 30px;
+    padding-left: 80px;
+}
+
+.welcome--navbar--title:hover{
+    cursor: default;
+}
+
+.welcome--hero{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 120px;
+}
+
+.welcome--hero > h1{
+    font-size: 50px;
+    padding: 30px 30px 0px 30px;
+}
+
+.welcome--hero--fin{
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome--hero--image{
+    width: 50%;
+}
+
+.welcome--hero--button{
+    margin: 50px;
+    padding: 50px;
+    width: 400px;
+    font-size: 50px;
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+}
+
+.welcome--hero--button:hover{
+    cursor: pointer;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    border-image-slice: 1;
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+    transition: all 0.5s ease-in-out;
+}

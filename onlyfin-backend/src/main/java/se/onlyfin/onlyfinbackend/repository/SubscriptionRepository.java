@@ -14,7 +14,7 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
      * Check if a subscription exists.
      *
      * @param subscriber   id of the subscriber
-     * @param subscribedTo id of the subscribed to user.
+     * @param subscribedTo id of the subscribed-to user.
      * @return true if the subscription exists, false otherwise
      */
     boolean existsBySubscriberAndSubscribedTo(User subscriber, User subscribedTo);
