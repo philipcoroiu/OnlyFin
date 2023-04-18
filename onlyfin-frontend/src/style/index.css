@@ -4,7 +4,7 @@
     --dashboard-module-border-radius: 7px;
 
     --main-color: #EEEEEE ;
-    --light-color: #DDDDDD ;
+    --light-color: #ffffff;
     --dark-color: #306b43;
     --header-color: #DDDDDD;
     --backgrond-color: #3e3e41;
@@ -50,8 +50,38 @@ body {
 }
 
 /**
+Chart
+ */
+
+.highcharts-background {
+    fill: var(--light-color);
+}
+
+/**
 Studio
  */
+
+.studio-message-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.studio-message-container.show {
+    opacity: 1;
+}
+
+.studio-error-message {
+    color: red;
+}
+
+.studio-success-message {
+    color: green;
+}
 
 .studio--navbar {
     display: flex;
@@ -100,6 +130,10 @@ Studio
     height: 100%;
 }
 
+/**
+Studio chart
+ */
+
 .studio--chart {
     display: flex;
     flex-direction: column;
@@ -132,6 +166,10 @@ Studio
     color: transparent;
 }
 
+/**
+Studio toolbar
+ */
+
 .studio--toolbar {
     display: flex;
     flex-direction: column;
@@ -151,7 +189,7 @@ Studio
     align-items: center;
 }
 
-.studio--toolbar--heading > input {
+.studio--toolbar--input > input {
     width: 250px;
     border: none;
     margin: 10px;
@@ -162,16 +200,16 @@ Studio
     caret-color: #cbcbcb;
 }
 
-.studio--toolbar--heading > input::placeholder {
+.studio--toolbar--input > input::placeholder {
     transition: all 0.2s ease-in-out;
 }
 
-.studio--toolbar--heading > input:hover::placeholder {
+.studio--toolbar--input > input:hover::placeholder {
     transition: all 0.2s ease-in-out;
     color: transparent;
 }
 
-.studio--toolbar--selects > select {
+.studio--toolbar--selects > select, studio--toolbar--standards--selects {
     margin: 20px 60px;
     border: none;
     background-color: #ffff;

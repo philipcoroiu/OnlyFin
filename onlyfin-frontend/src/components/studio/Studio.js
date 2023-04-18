@@ -2,10 +2,8 @@ import React, {useState} from "react"
 import StudioToolbar from "./studioToolbar/StudioToolbar";
 import {Link, NavLink} from "react-router-dom";
 import axios from "axios"
-import StudioNavbar from "./StudioNavbar";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-import '../../style/studio.css';
 
 export default function Studio() {
 
@@ -349,7 +347,12 @@ export default function Studio() {
 
     return (
         <>
-            <StudioNavbar />
+            <div className="studio--navbar">
+                <h1>Studio</h1>
+                <Link to="/Dashboard">
+                    <button className="studio--navbar--button">Dashboard</button>
+                </Link>
+            </div>
             <div className="studio--container">
                 <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}
                       className="studio--chart"
