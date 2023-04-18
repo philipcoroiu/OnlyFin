@@ -50,5 +50,20 @@ public class Stock {
         return categories;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setStock_ref_id(Stock_ref stock_ref_id) {
+        this.stock_ref_id = stock_ref_id;
+    }
+
+    public void setDashboard_id(Dashboard dashboard_id) {
+        this.dashboard_id = dashboard_id;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
 }
 

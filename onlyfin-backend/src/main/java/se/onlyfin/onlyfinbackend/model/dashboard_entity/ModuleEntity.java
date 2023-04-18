@@ -1,23 +1,18 @@
 package se.onlyfin.onlyfinbackend.model.dashboard_entity;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
-@Table (name = "module")
+@Table(name = "module")
 public class ModuleEntity {
-
-    public ModuleEntity(){}
-    public ModuleEntity(int id){
-        this.id = id;
-    }
-
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,6 +26,12 @@ public class ModuleEntity {
     @Column(name = "module_type")
     private String module_type;
 
+    @Column(name = "post_date")
+    private Instant postDate;
+
+    @Column(name = "updated_date")
+    private Instant updatedDate;
+
     public int getId() {
         return id;
     }
@@ -42,24 +43,41 @@ public class ModuleEntity {
     public JsonNode getContent() {
         return content;
     }
+
     public String getModule_type() {
         return module_type;
     }
+
     public void setContent(JsonNode content) {
         this.content = content;
     }
-
 
     public void setModule_type(JsonNode module_type) {
         this.module_type = module_type.asText();
     }
 
     public void setCategory_id(JsonNode categoryId) {
-        try{
+        try {
             this.category_id = new Category(Integer.parseInt(categoryId.asText()));
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public Instant getPostDate() {
+        return postDate;
+    }
+
+    public void setPostDate(Instant postDate) {
+        this.postDate = postDate;
+    }
+
+    public Instant getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Instant updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
