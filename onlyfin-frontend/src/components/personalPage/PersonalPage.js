@@ -9,6 +9,8 @@ export default function PersonalPage() {
 
     const { username } = useParams();
     const [userData, setUserData] = React.useState(null);
+    const [error, setError] = React.useState(null)
+
 
     useEffect(() => {
 
@@ -25,26 +27,32 @@ export default function PersonalPage() {
                 console.log('API response:', response.data);
                 setUserData(response.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                if (error.response && error.response.status === 400) {
+                    // Handle 400 error
+                    console.error('Bad Request:', error);
+                    setError("User not found")
+                } else {
+                    console.error('Error fetching data:', error);
+                    setError("Failed to load page")
+                }
             }
         };
 
         fetchData();
     }, [username]);
 
-    if (userData === null) {
-        return <div>Loading...</div>;
-    } else if (userData.error) {
-        return <div>User does not exist</div>;
-    } else {
-        return(
-            <div>
-                <Sidebar/>
-                <img src={Avatar} width="100px"/>
-                <h2>{username}</h2>
-                <p>{userData}</p>
-                <button>Subscribe</button>
-            </div>
-        )
-    }
+
+    return (
+        <div>
+            {error ? <p>{error}</p> : (
+                <div>
+                    <Sidebar/>
+                    <img src={Avatar} width="100px"/>
+                    <h2>{username}</h2>
+                    <p>{userData}</p>
+                    <button>Subscribe</button>
+                </div>
+            )}
+        </div>
+    );
 }
