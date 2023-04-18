@@ -1,6 +1,5 @@
 import React, {useEffect} from "react"
-import Avatar from "../../images/avatar.png"
-import Sidebar from "../dashboard/DashboardSidebar"
+import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useParams} from "react-router-dom";
 
@@ -39,7 +38,6 @@ export default function PersonalPage() {
 
     return(
         <div>
-            <Sidebar/>
             <img src={Avatar} width="100px"/>
             <h2>{username}</h2>
             <p>{userData}</p>

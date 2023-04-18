@@ -1,6 +1,5 @@
 import React, {useEffect} from "react"
-import Avatar from "../../images/avatar.png"
-import Sidebar from "../dashboard/DashboardSidebar"
+import Avatar from "../../assets/images/avatar.png"
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import Profile from "./Profile";
@@ -83,7 +82,6 @@ export default function SearchPage() {
 
     return(
         <div>
-            <Sidebar/>
             <SearchBar onSearch={onSearch}/>
 
             {searchData === null ? (
