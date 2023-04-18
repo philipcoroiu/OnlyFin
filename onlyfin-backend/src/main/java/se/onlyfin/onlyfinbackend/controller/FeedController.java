@@ -21,7 +21,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 @RestController
@@ -36,6 +35,12 @@ public class FeedController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * This method fetches all the feed cards for the user that is logged in.
+     *
+     * @param principal the user that is logged in
+     * @return a list of feed cards
+     */
     @GetMapping("/all-the-things")
     public ResponseEntity<List<FeedCardDTO>> fetchAllTheFeed(Principal principal) {
         //check that user exists
@@ -91,6 +96,12 @@ public class FeedController {
         return ResponseEntity.ok().body(feedCardDTOS);
     }
 
+    /**
+     * This method fetches feed cards from the last 7 days for the user that is logged in.
+     *
+     * @param principal the user that is logged in
+     * @return a list of feed cards from the last 7 days
+     */
     @GetMapping("/week")
     public ResponseEntity<List<FeedCardDTO>> fetchWeeklyFeed(Principal principal) {
         //check that user exists
