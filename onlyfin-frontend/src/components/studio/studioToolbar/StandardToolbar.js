@@ -68,7 +68,6 @@ export default function StandardToolbar(props) {
                     <option value="spline"> Spline</option>
                     <option value="areaspline"> Areaspline</option>
                 </select>
-                stock select (placeholder)
                 {stockTree && (
                     <div className="studio--toolbar--standards--selects">
                         <select name="stock" value={selectedStock} onChange={(e) => handleStockChange(e.target.value)}>
@@ -81,7 +80,6 @@ export default function StandardToolbar(props) {
                         </select>
                     </div>
                 )}
-                category select (placeholder)
                 {selectedStock && (
                     <div className="studio--toolbar--standards--selects">
                         <select id="category" name="category" value={selectedCategory}
