@@ -190,4 +190,38 @@ public class UserController {
         return ResponseEntity.ok().body(text);
     }
 
+    /**
+     * Returns the username of the logged-in user
+     *
+     * @param principal The logged-in user
+     * @return username of principal
+     */
+    @GetMapping("/principal-username")
+    public ResponseEntity<?> fetchUsernameOfPrincipal(Principal principal) {
+        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User userToGetUsernameOf = userOptional.get();
+        return ResponseEntity.ok().body(userToGetUsernameOf.getUsername());
+    }
+
+    /**
+     * Returns the user id of the logged-in user
+     *
+     * @param principal The logged-in user
+     * @return user id of principal
+     */
+    @GetMapping("/principal-id")
+    public ResponseEntity<?> fetchUserIdOfPrincipal(Principal principal) {
+        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User userToGetUserIdOf = userOptional.get();
+        return ResponseEntity.ok().body(userToGetUserIdOf.getId());
+    }
+
 }

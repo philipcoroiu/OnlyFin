@@ -54,7 +54,10 @@ public class SecurityConfig {
                                 "/studio/**",
                                 "/studio/deleteStock/**",
                                 "/studio/deleteCategory/**",
-                                "/studio/deleteModule/**")
+                                "/studio/deleteModule/**",
+                                "/principal-username",
+                                "/principal-id"
+                        )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
