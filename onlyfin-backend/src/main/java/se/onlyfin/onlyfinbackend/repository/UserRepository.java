@@ -55,7 +55,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      *
      * @return all users that are analysts
      */
-    Iterable<User> findByisAnalystIsTrue();
+    List<User> findByisAnalystIsTrue();
 
     /**
      * Find analyst by username

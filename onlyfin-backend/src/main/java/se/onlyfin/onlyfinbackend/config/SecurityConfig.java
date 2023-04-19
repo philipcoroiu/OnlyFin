@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/studio/deleteModule/**",
                                 "/principal-username",
                                 "/principal-id",
-                                "/feed/**"
+                                "/feed/**",
+                                "/fetch-current-user-subscriptions"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
