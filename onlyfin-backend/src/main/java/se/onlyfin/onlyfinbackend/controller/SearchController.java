@@ -33,8 +33,8 @@ public class SearchController {
      * @return a list of all analysts in the database.
      */
     @GetMapping("/search-all-analysts")
-    public ResponseEntity<Iterable<ProfileDTO>> findAllAnalysts() {
-        Iterable<User> foundUsers = userRepository.findByisAnalystIsTrue();
+    public ResponseEntity<List<ProfileDTO>> findAllAnalysts() {
+        List<User> foundUsers = userRepository.findByisAnalystIsTrue();
 
         List<ProfileDTO> usersToReturnToClient = new ArrayList<>();
         foundUsers.forEach((currentUser ->

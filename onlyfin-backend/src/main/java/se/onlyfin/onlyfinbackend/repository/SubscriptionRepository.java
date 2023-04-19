@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,4 +28,6 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
      * @return the subscription if it exists, empty otherwise
      */
     Optional<Subscription> findBySubscriberAndSubscribedTo(User subscriber, User subscribedTo);
+
+    List<Subscription> findBySubscriber(User subscriber);
 }

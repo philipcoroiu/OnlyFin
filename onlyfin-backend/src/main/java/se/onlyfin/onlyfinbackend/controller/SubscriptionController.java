@@ -4,12 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.SubscriptionRepository;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -93,6 +96,24 @@ public class SubscriptionController {
         subscriptionRepository.delete(subscriptionOptional.get());
 
         return ResponseEntity.ok().body(userToUnsubscribeFrom.getUsername());
+    }
+
+    @GetMapping("/fetch-current-user-subscriptions")
+    public ResponseEntity<List<ProfileDTO>> fetchCurrentUserSubscriptions(Principal principal) {
+        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        User userToFetchSubscriptionsFrom = userOptional.get();
+
+        List<Subscription> subscriptionList = subscriptionRepository.findBySubscriber(userToFetchSubscriptionsFrom);
+        List<ProfileDTO> subscriptionsDTOList = new ArrayList<>();
+        subscriptionList.forEach((currentSubscription) -> subscriptionsDTOList.add(new ProfileDTO(
+                currentSubscription.getSubscribedTo().getUsername(),
+                currentSubscription.getSubscribedTo().getId()))
+        );
+
+        return ResponseEntity.ok().body(subscriptionsDTOList);
     }
 
 }
