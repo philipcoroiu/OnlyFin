@@ -65,7 +65,9 @@ public class SecurityConfig {
                                 "/register",
                                 "/plz",
                                 "/login",
-                                "/assets/**")
+                                "/assets/**",
+                                "/test-login"
+                                )
                         .permitAll()
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
