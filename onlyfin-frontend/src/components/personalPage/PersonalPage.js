@@ -45,7 +45,6 @@ export default function PersonalPage() {
         <div>
             {error ? <p>{error}</p> : (
                 <div>
-                    <Sidebar/>
                     <img src={Avatar} width="100px"/>
                     <h2>{username}</h2>
                     <p>{userData}</p>

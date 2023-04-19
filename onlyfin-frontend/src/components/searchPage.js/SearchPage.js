@@ -84,7 +84,7 @@ export default function SearchPage() {
             <SearchBar onSearch={onSearch}/>
 
             {searchData === null ? (
-                <div>Failed to get search result</div> // Vad ska det stå här?
+                <div>Failed to get search result</div>
             ) : (
                 <div>
                     {searchData.map(data => (
