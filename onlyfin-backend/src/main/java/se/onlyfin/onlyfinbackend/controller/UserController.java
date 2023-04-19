@@ -224,13 +224,4 @@ public class UserController {
         return ResponseEntity.ok().body(userToGetUserIdOf.getId());
     }
 
-    @GetMapping("/test-login")
-    public ResponseEntity<?> checkLoginStatus(Principal principal) {
-        if (principal != null) {
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.badRequest().build();
-    }
-
 }

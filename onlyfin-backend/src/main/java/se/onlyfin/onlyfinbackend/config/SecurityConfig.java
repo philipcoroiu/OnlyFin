@@ -56,7 +56,8 @@ public class SecurityConfig {
                                 "/studio/deleteCategory/**",
                                 "/studio/deleteModule/**",
                                 "/principal-username",
-                                "/principal-id"
+                                "/principal-id",
+                                "/feed/**"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -65,9 +66,7 @@ public class SecurityConfig {
                                 "/register",
                                 "/plz",
                                 "/login",
-                                "/assets/**",
-                                "/test-login"
-                                )
+                                "/assets/**")
                         .permitAll()
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
