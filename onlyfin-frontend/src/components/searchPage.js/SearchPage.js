@@ -110,55 +110,49 @@ export default function SearchPage() {
         }
     }
 
-    const onSubscribe = async(username) => {
+    const onSubscribe = async (username) => {
         console.log('Subscribing to:', username);
 
-        await axios.post(`http://localhost:8080/subscribe?username=${username}`,
+        await axios.post(
+            `http://localhost:8080/subscribe?username=${username}`,
+            {},
             {
                 headers: {
                     'Content-type': 'application/json'
                 },
                 withCredentials: true,
             }
-
         )
             .then(response => {
-
                 console.log('Subscription successful');
-                console.log(response)
-
+                console.log(response.data)
             })
             .catch(error => {
-
                 console.error('API error:', error);
-
             });
     };
 
     const onUnsubscribe = async (username) => {
         console.log('Unsubscribing to:', username);
 
-        await axios.post(`http://localhost:8080/unsubscribe?username=${username}`,
+        await axios.delete(
+            `http://localhost:8080/unsubscribe?username=${username}`,
             {
                 headers: {
                     'Content-type': 'application/json'
                 },
-                withCredentials: true,
+                withCredentials: true
             }
-
         )
             .then(response => {
-
                 console.log('Unsubscription successful');
-                console.log(response)
-
+                console.log(response.data)
             })
             .catch(error => {
-
                 console.error('API error:', error);
-
             });
     };
+
 
 
 
