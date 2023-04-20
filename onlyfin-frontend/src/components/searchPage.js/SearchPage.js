@@ -6,7 +6,7 @@ import Profile from "./Profile";
 export default function SearchPage() {
 
     const [searchData, setSearchData] = React.useState(null);
-    const [subscribers, setSubscribers] = React.useState();
+    const [subscribers, setSubscribers] = React.useState([]);
 
 
     useEffect(() => {
@@ -30,9 +30,10 @@ export default function SearchPage() {
 
                 setSubscribers(response2.data)
 
-                console.log('API response:', response.data);
+                //console.log('All analysts:', response.data);
                 setSearchData(response.data);
 
+                console.log("Subcribers")
                 console.log(response2.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -91,10 +92,73 @@ export default function SearchPage() {
             });
     };
 
-    const isSubscribed = (userID) => {
-        return subscribers && subscribers.includes(userID);
+    const isSubscribed = (username) => {
+        //console.log("userId: " + userID)
+
+        if(subscribers.some((user) => user.username === username)) {
+            console.log("subscriber username: " + username)
+        }
+
+        return subscribers && subscribers.some((user) => user.username === username)
     }
 
+    function handleSubscription(username) {
+        if(isSubscribed(username)) {
+            onUnsubscribe(username)
+        } else {
+            onSubscribe(username)
+        }
+    }
+
+    const onSubscribe = async(username) => {
+        console.log('Subscribing to:', username);
+
+        await axios.post(`http://localhost:8080/subscribe?username=${username}`,
+            {
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                withCredentials: true,
+            }
+
+        )
+            .then(response => {
+
+                console.log('Subscription successful');
+                console.log(response)
+
+            })
+            .catch(error => {
+
+                console.error('API error:', error);
+
+            });
+    };
+
+    const onUnsubscribe = async (username) => {
+        console.log('Unsubscribing to:', username);
+
+        await axios.post(`http://localhost:8080/unsubscribe?username=${username}`,
+            {
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                withCredentials: true,
+            }
+
+        )
+            .then(response => {
+
+                console.log('Unsubscription successful');
+                console.log(response)
+
+            })
+            .catch(error => {
+
+                console.error('API error:', error);
+
+            });
+    };
 
 
 
@@ -109,9 +173,8 @@ export default function SearchPage() {
                     {searchData.map(data => (
                         <div>
                             <Profile key={data.id} name={data.username}></Profile>
-                            <button>{isSubscribed(data.id) ? "Unsubscribe" : "Subscribe"}</button>
+                            <button onClick={() => handleSubscription(data.username)} >{isSubscribed(data.username) ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
-
 
                     ))}
                 </div>
