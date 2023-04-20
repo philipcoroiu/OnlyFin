@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
-import '../../style/dashboard.css';
 import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -41,13 +40,13 @@ export default function Dashboard() {
         return <div className="dashboard-is-loading">Loading dashboard...</div>;
     }
 
-    const { stocks } = dashboard;
+    const {stocks} = dashboard;
 
     return (
+
         <div className="dashboard">
-            <NavBar />
+            <NavBar/>
             <div className="dashboard-content-wrapper">
-                <div className="dashboard-button-underlay"></div>
                 <Link to="/profile_page">
                     <button className="dashboard-profile-button">
                     </button>

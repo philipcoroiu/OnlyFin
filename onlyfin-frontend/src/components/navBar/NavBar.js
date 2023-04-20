@@ -2,7 +2,6 @@ import React from "react"
 import {Link} from "react-router-dom";
 import homeIcon from "../../assets/icons/homeicon.png"
 import studioIcon from "../../assets/icons/studioIcon.png"
-import '../../style/navBar.css';
 import Avatar from "../../assets/images/avatar.png";
 
 export default function NavBar() {

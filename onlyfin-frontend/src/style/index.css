@@ -1,6 +1,5 @@
 :root {
     --container-width: 100px;
-    --dashboard-margin: 25px;
     --dashboard-module-border-radius: 7px;
 
     --main-color: #EEEEEE ;
@@ -26,6 +25,7 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
 }
 
 /**
@@ -57,18 +57,17 @@ Navbar
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 15px;
-    height: 98%;
-    margin-top: 10px;
+    height: 94%;
+    margin-top: 25px;
     margin-left: 15px;
+    border-radius: 15px;
     background-color: rgb(245, 245, 245);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
 }
 
 .navbar-container img {
     margin-top: 25px;
     border-radius: 55px;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
     right: 25px;
 }
 
@@ -716,31 +715,35 @@ Welcome
 Dashboard
  */
 
+.dashboard{
+    background-color: #d5d5d5;
+    height: 100vh;
+}
+
 .dashboard-content-wrapper {
     display: flex;
     position: fixed;
     top: 0;
-    left: var(--container-width);
+    left: 100px;
     right: 0;
     bottom: 0;
-    background-color: var(--main-color);
     margin: 25px;
-    margin-left: var(--dashboard-margin);
-    margin-right: var(--dashboard-margin);
-    box-shadow:  0 0 10px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 35px;
+    margin-right: 25px;
+    border-radius: 15px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
 }
 
 .dashboard-button-underlay{
     position: fixed;
     height: 115px;
-    margin-right: var(--dashboard-margin);
-    margin-left: var(--dashboard-margin);
-    right: 0;
-    left: var(--container-width);
+    margin-right: 25px;
+    margin-left: 25px;
+    left: 100px;
     border-top-right-radius: 0px;
-    background-color: var(--header-color);
+    background-color: rgb(245, 245, 245);
     z-index: 2;
-
 }
 
 .dashboard-stock-tab-buttons {
@@ -750,6 +753,7 @@ Dashboard
     margin-left: 20px;
     position: fixed;
     z-index: 3;
+
 }
 
 .dashboard-stock-tab-buttons button {
@@ -822,6 +826,7 @@ Dashboard
 .dashboard-stock-tab-container{
     width: 100%;
     overflow: scroll;
+    border: 2px solid red;
 }
 
 .dashboard-category-tab-container{
