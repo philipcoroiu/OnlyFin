@@ -6,7 +6,7 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
 export default function Studio() {
-
+    document.title = "Studio"
 
     const colorscheme = [
         {index: 0, color: "#79d06e"},

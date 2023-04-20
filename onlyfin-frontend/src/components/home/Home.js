@@ -4,6 +4,7 @@ import mallDashboard from "../../assets/images/mallDashboard.png";
 import studioPic from "../../assets/images/studio.png";
 
 export default function Home() {
+    document.title = "OnlyFin"
     return (
         <div className="welcome">
             <nav className="welcome--navbar">

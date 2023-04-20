@@ -8,6 +8,7 @@ import HighchartsReact from "highcharts-react-official";
 /*import { SearchBox } from 'react-search-box';*/
 
 export default function Dashboard() {
+    document.title = "Dashboard"
     const [dashboard, setDashboard] = useState(null);
     const [activeStockTab, setActiveStockTab] = useState(0);
     const [activeCategoryTab, setActiveCategoryTab] = useState(0);
@@ -43,7 +44,7 @@ export default function Dashboard() {
     const { stocks } = dashboard;
 
     return (
-        <>
+        <div className="dashboard">
             <NavBar />
             <div className="dashboard-content-wrapper">
                 <div className="dashboard-button-underlay"></div>
@@ -100,6 +101,6 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
