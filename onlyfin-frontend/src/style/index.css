@@ -238,6 +238,10 @@ Studio toolbar
     caret-color: #cbcbcb;
 }
 
+.studio--dataset--buttons{
+    display: flex;
+}
+
 .studio--category-count-btn > button {
     margin: 10px 40px;
     width: 75px;
