@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
 import '../../style/dashboard.css';
-import '../../style/highCharts.css';
 import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";

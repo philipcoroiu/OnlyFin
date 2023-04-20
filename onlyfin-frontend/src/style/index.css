@@ -209,8 +209,8 @@ Studio toolbar
     color: transparent;
 }
 
-.studio--toolbar--selects > select, studio--toolbar--standards--selects > select, studio--toolbar--standards--selects > select {
-    margin: 20px 60px;
+.studio--toolbar--selects > select, .studio--toolbar--standards--selects > select, .studio--toolbar--standards--selects > select {
+    margin: 20px 20px;
     border: none;
     background-color: #ffff;
     outline: none;
@@ -222,6 +222,7 @@ Studio toolbar
 
 .studio--toolbar--selects {
     border-bottom: 1px solid #cbcbcb;
+    display: flex;
 }
 
 .studio--toolbar--columns {
