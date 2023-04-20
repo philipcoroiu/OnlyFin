@@ -1,4 +1,3 @@
-import './style/App.css';
 import {Route, Routes} from "react-router-dom";
 import Home from "./components/home/Home"
 import Login from "./components/login/Login"
@@ -27,7 +26,7 @@ function App() {
       </Route>
         <Route path="searchpage" element={<SearchPage />}></Route>
         <Route path="searchpage/:username" element={<PersonalPage />}></Route>
-        <Route path="mypage/:username" element={<MyPage />}></Route>
+        <Route path="mypage" element={<MyPage />}></Route>
         <Route path="usernotfound" element={<UserNotFound />}></Route>
         <Route path="register" element={<Register />}></Route>
     </Routes>

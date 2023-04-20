@@ -1,5 +1,4 @@
 import React, {useEffect} from "react"
-import Avatar from "../../assets/images/avatar.png"
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import Profile from "./Profile";
@@ -7,6 +6,7 @@ import Profile from "./Profile";
 export default function SearchPage() {
 
     const [searchData, setSearchData] = React.useState(null);
+    const [subscribers, setSubscribers] = React.useState();
 
 
     useEffect(() => {
@@ -20,8 +20,20 @@ export default function SearchPage() {
                         withCredentials: true,
                     });
 
+                const response2 = await axios.get("http://localhost:8080/fetch-current-user-subscriptions",
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    });
+
+                setSubscribers(response2.data)
+
                 console.log('API response:', response.data);
                 setSearchData(response.data);
+
+                console.log(response2.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -79,17 +91,28 @@ export default function SearchPage() {
             });
     };
 
+    const isSubscribed = (userID) => {
+        return subscribers && subscribers.includes(userID);
+    }
+
+
+
 
     return(
         <div>
             <SearchBar onSearch={onSearch}/>
 
             {searchData === null ? (
-                <div>Failed to get search result</div> // Vad ska det stå här?
+                <div>Failed to get search result</div>
             ) : (
                 <div>
                     {searchData.map(data => (
-                        <Profile key={data.id} name={data.username}></Profile>
+                        <div>
+                            <Profile key={data.id} name={data.username}></Profile>
+                            <button>{isSubscribed(data.id) ? "Unsubscribe" : "Subscribe"}</button>
+                        </div>
+
+
                     ))}
                 </div>
             )}
@@ -97,6 +120,8 @@ export default function SearchPage() {
 
 
             <button onClick={getAllAnalysts}>Get all analysts</button>
+
+            {}
         </div>
 
     )
