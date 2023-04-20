@@ -4,6 +4,12 @@ export default function StandardTable(props) {
     const [categoryCount, setCategoryCount] = useState(1);
     const [datasets, setDatasets] = useState([{name: "", data: Array(categoryCount).fill("")}]);
     const [activeDatasetIndex, setActiveDatasetIndex] = useState(0);
+    const [indexRemove, setIndexRemove] = React.useState(0);
+
+    function changeIndex(newIndex) {
+        setIndexRemove(newIndex);
+    }
+
     const handleCategoryCountChange = (count) => {
         if (count > categoryCount) {
             props.handleCategoryCountIncrease(count);
@@ -28,7 +34,7 @@ export default function StandardTable(props) {
     }
 
     const handleDatasetRemove = (indexToRemove) => {
-        if(datasets.length != 1){
+        if (datasets.length != 1) {
             setDatasets(datasets.filter((_, index) => index !== indexToRemove));
             setActiveDatasetIndex(0);
             props.handleDatasetRemove(indexToRemove);
@@ -59,6 +65,7 @@ export default function StandardTable(props) {
     }
     const handleDatasetTabClick = (index) => {
         setActiveDatasetIndex(index);
+        changeIndex(index)
     }
 
     const handleYAxisNameChange = (name) => {
@@ -89,23 +96,26 @@ export default function StandardTable(props) {
                 </div>
             </div>
             <div className="studio--dataset-container">
-                <h2>Datasets</h2>
-                <div className="studio--add-dataset-btn">
-                    <button onClick={handleDatasetAdd}>Add Dataset</button>
+                <div className="studio--dataset--buttons">
+                    <div className="studio--add-dataset-btn">
+                        <button onClick={handleDatasetAdd}>Add Dataset</button>
+                    </div>
+                    <div className="studio--remove-dataset-btn">
+                        <button onClick={() => handleDatasetRemove(indexRemove)}>Remove Dataset
+                        </button>
+                    </div>
                 </div>
                 <div className="studio--dataset-tabs-btn">
                     {datasets.map((dataset, index) => (
                         <button key={index}
-                                onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}</button>
+                                onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}
+                        </button>
                     ))}
                 </div>
                 <div className="studio--dataset--value--container">
                     {datasets.map((dataset, index) => (
                         <div className="studio--dataset-tab-container" key={index}
                              style={{display: activeDatasetIndex === index ? "block" : "none"}}>
-                            <div className="studio--remove-dataset-btn">
-                                <button onClick={() => handleDatasetRemove(index)}>Remove Dataset</button>
-                            </div>
                             <div className="studio--dataset-input-name">
                                 <input type="text" placeholder="Name" value={dataset.name}
                                        onChange={(e) => handleDatasetNameChange(index, e.target.value)}/>

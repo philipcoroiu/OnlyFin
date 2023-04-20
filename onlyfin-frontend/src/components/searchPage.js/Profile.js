@@ -14,7 +14,7 @@ export default function Profile(props) {
             <Link to={`${props.name}`}>
                 <h2>{props.name}</h2>
             </Link>
-            {/*<button onClick={handleSubscribe}>Subscribe</button>*/}
+            <button onClick={handleSubscribe}>Subscribe</button>
         </div>
 
     )

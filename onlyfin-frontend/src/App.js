@@ -11,26 +11,26 @@ import UserNotFound from "./components/personalPage/UserNotFound"
 import Register from "./components/registration/Register";
 
 function App() {
-  return (
-    <Routes className="App">
-      <Route path="/" element={<Home />}></Route>
-        <Route path="Dashboard"> {/* moved "Dashboard" to next line */}
-            <Route path="" element={<Dashboard/>}></Route>
+    return (
+        <Routes className="App">
+            <Route path="/" element={<Home/>}></Route>
+            <Route path="Dashboard"> {/* moved "Dashboard" to next line */}
+                <Route path="" element={<Dashboard/>}></Route>
+            </Route>
             <Route path="Studio" element={<Studio/>}></Route>
-        </Route>
-      <Route path="Login">
-        <Route path="" element={<Login/>}></Route>
-          <Route path="UserDebug">
-              <Route path="" element={<UserDebug />}/>
-          </Route>
-      </Route>
-        <Route path="searchpage" element={<SearchPage />}></Route>
-        <Route path="searchpage/:username" element={<PersonalPage />}></Route>
-        <Route path="mypage" element={<MyPage />}></Route>
-        <Route path="usernotfound" element={<UserNotFound />}></Route>
-        <Route path="register" element={<Register />}></Route>
-    </Routes>
-  );
+            <Route path="Login">
+                <Route path="" element={<Login/>}></Route>
+                <Route path="UserDebug">
+                    <Route path="" element={<UserDebug/>}/>
+                </Route>
+            </Route>
+            <Route path="searchpage" element={<SearchPage/>}></Route>
+            <Route path="searchpage/:username" element={<PersonalPage/>}></Route>
+            <Route path="mypage" element={<MyPage/>}></Route>
+            <Route path="usernotfound" element={<UserNotFound/>}></Route>
+            <Route path="register" element={<Register/>}></Route>
+        </Routes>
+    );
 }
 
 export default App;

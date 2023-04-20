@@ -35,11 +35,11 @@ public class SubscriptionController {
      * Adds a subscription from the logged-in user to the user with the given ID.
      *
      * @param principal     the logged-in user
-     * @param subscribeToId the ID of the user to subscribe to
+     * @param username the username of the user to subscribe to
      * @return response entity with the username of the subscribed-to user if successful
      */
     @PostMapping("/subscribe")
-    public ResponseEntity<String> addSubscription(Principal principal, @RequestParam("id") Integer subscribeToId) {
+    public ResponseEntity<String> addSubscription(Principal principal, @RequestParam("username") String username) {
         User userWantingToSubscribe =
                 userRepository.findByUsername(principal.getName()).orElseThrow(() ->
                         new UsernameNotFoundException("Logged in user not present in db"));
@@ -49,8 +49,8 @@ public class SubscriptionController {
             return ResponseEntity.badRequest().build();
         }
 
-        User userToSubscribeTo = userRepository.findById(subscribeToId).orElseThrow(() ->
-                new UsernameNotFoundException("Subscribe-to user not found with ID " + subscribeToId));
+        User userToSubscribeTo = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("Subscribe-to user not found with ID " + username));
 
         if (subscriptionRepository.existsBySubscriberAndSubscribedTo(userWantingToSubscribe, userToSubscribeTo)) {
             return ResponseEntity.badRequest().body("Already subscribed");
@@ -69,11 +69,11 @@ public class SubscriptionController {
      * Removes specified subscription from the logged-in user.
      *
      * @param principal      the logged-in user
-     * @param subscribedToId the ID of the user to unsubscribe from
+     * @param username the username of the user to unsubscribe from
      * @return response entity with the username of the unsubscribed-from user if successful
      */
     @DeleteMapping("/unsubscribe")
-    public ResponseEntity<String> removeSubscription(Principal principal, @RequestParam("id") Integer subscribedToId) {
+    public ResponseEntity<String> removeSubscription(Principal principal, @RequestParam("username") String username) {
 
         User userWantingToUnsubscribe = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("Logged in user not present in db"));
@@ -83,8 +83,8 @@ public class SubscriptionController {
             return ResponseEntity.badRequest().build();
         }
 
-        User userToUnsubscribeFrom = userRepository.findById(subscribedToId).orElseThrow(() ->
-                new UsernameNotFoundException("Subscribed-to user not found with ID " + subscribedToId));
+        User userToUnsubscribeFrom = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("Subscribed-to user not found with ID " + username));
 
         Optional<Subscription> subscriptionOptional =
                 subscriptionRepository.findBySubscriberAndSubscribedTo(userWantingToUnsubscribe, userToUnsubscribeFrom);
