@@ -17,13 +17,13 @@ export default function Studio() {
     ];
     const studioChartInitState = {
         chart: {
-            type: "column",
-            style:{
+            type: "line",
+            style: {
                 fontFamily: "Tahoma"
             }
         },
-        style:{
-            borderColor:"#1A1616"
+        style: {
+            borderColor: "#1A1616"
         },
         title: {
             text: "",
@@ -33,15 +33,15 @@ export default function Studio() {
             }
         },
         xAxis: {
-            title:{
-                text: "",
+            title: {
+                text: "Hej",
                 style: {
                     color: "#1A1616"
                 }
             },
             categories: ["Category 1"],
-            labels:{
-                style:{
+            labels: {
+                style: {
                     color: "#1A1616"
                 }
             },
@@ -55,21 +55,19 @@ export default function Studio() {
                 }
             },
             gridLineColor: "#1A1616",
-            labels:{
-                style:{
+            labels: {
+                style: {
                     color: "#1A1616"
                 }
             }
         },
-        labels:{
+        labels: {
             style: {
                 color: "#1A1616"
             }
         },
-        plotOptions:{
-            bb:{
-
-            }
+        plotOptions: {
+            bb: {}
         },
         series: [{
             name: "name",
@@ -80,10 +78,10 @@ export default function Studio() {
     };
 
     const [toolbarKey, setToolbarKey] = useState(0);
-    const [errorMessage, setErrorMessage] = useState ([]);
-    const [showErrorMessage, setShowErrorMessage] = useState (false);
-    const [successMessage, setSuccessMessage] = useState ("SUCCESS: Your chart has been posted");
-    const [showSuccessMessage, setShowSuccessMessage] = useState (false);
+    const [errorMessage, setErrorMessage] = useState([]);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("SUCCESS: Your chart has been posted");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [categoryCount, setCategoryCount] = useState(1);
     const [categoryId, setCategoryId] = useState(null);
     const [chartType, setChartType] = useState("column");
@@ -95,7 +93,7 @@ export default function Studio() {
             const updatedSeries = prevState.series.map(series => {
                 const updatedData = [...series.data];
                 updatedData.pop();
-                return { ...series, data: updatedData };
+                return {...series, data: updatedData};
             });
             const updatedCategories = [...prevState.xAxis.categories];
             updatedCategories.pop();
@@ -110,10 +108,11 @@ export default function Studio() {
         });
     }
 
-    function putChartToInitState(){
+    function putChartToInitState() {
         /*setStudioChart(studioChartInitState)*/
     }
-    function handleCategoryCountIncrease(count){
+
+    function handleCategoryCountIncrease(count) {
         setCategoryCount(count);
         setStudioChart(prevState => {
             const categories = [...prevState.xAxis.categories, `Category ${prevState.xAxis.categories.length + 1}`];
@@ -132,7 +131,7 @@ export default function Studio() {
         });
     }
 
-    function handleDatasetAdd(){
+    function handleDatasetAdd() {
         const colorIndex = studioChart.series.length % colorscheme.length;
         const color = colorscheme[colorIndex].color;
 
@@ -152,7 +151,7 @@ export default function Studio() {
         }));
     }
 
-    function handleDatasetRemove(indexToRemove){
+    function handleDatasetRemove(indexToRemove) {
         setStudioChart(prevState => {
             const filteredSeries = prevState.series.filter((_, index) => index !== indexToRemove);
             return {
@@ -162,7 +161,7 @@ export default function Studio() {
         });
     }
 
-    function handleDatasetDataChange(index, dataIndex, value){
+    function handleDatasetDataChange(index, dataIndex, value) {
         setStudioChart(prevChart => {
             const seriesToUpdate = {...prevChart.series[index]};
             seriesToUpdate.data[dataIndex] = parseInt(value);
@@ -179,11 +178,11 @@ export default function Studio() {
         setStudioChart(prevChart => {
             const updatedSeries = prevChart.series.map((series, i) => {
                 if (i === index) {
-                    return { ...series, name };
+                    return {...series, name};
                 }
                 return series;
             });
-            return { ...prevChart, series: updatedSeries };
+            return {...prevChart, series: updatedSeries};
         });
     }
 
@@ -236,14 +235,14 @@ export default function Studio() {
         setErrorMessage([])
 
 
-        if(categoryId === null) {
-            setErrorMessage(prevState =>  [...prevState, "ERROR: select both stock and category"])
+        if (categoryId === null) {
+            setErrorMessage(prevState => [...prevState, "ERROR: select both stock and category"])
             hasError = true;
         }
 
         studioChart.series.forEach((serie) => {
             if (serie.data.filter((data) => data !== "").length === 0) {
-                setErrorMessage(prevState =>  [...prevState, "ERROR: atleast one dataset has no data"])
+                setErrorMessage(prevState => [...prevState, "ERROR: atleast one dataset has no data"])
                 hasError = true;
             }
         });
@@ -252,7 +251,7 @@ export default function Studio() {
         return hasError;
     }
 
-    function showSuccessMessageForDuration(message, duration){
+    function showSuccessMessageForDuration(message, duration) {
         setSuccessMessage(message)
         setShowSuccessMessage(true);
 
@@ -269,14 +268,14 @@ export default function Studio() {
         }, duration);
     }
 
-    function postChart(){
-        if(!checkForError()){
+    function postChart() {
+        if (!checkForError()) {
             const chartToSend = studioChart;
 
             chartToSend.chart.width = 365;
             chartToSend.chart.height = 345;
 
-            const postChart ={
+            const postChart = {
                 category_id: categoryId,
                 module_type: chartType,
                 content: chartToSend
@@ -340,7 +339,7 @@ export default function Studio() {
         });*/
     }
 
-    function handleCategoryIdChange(id){
+    function handleCategoryIdChange(id) {
         if (id === "") setCategoryId(null)
         else setCategoryId(id);
     }
@@ -354,14 +353,17 @@ export default function Studio() {
                 </Link>
             </div>
             <div className="studio--container">
-                <div ref={(chartContainer) => { if (chartContainer && chartContainer.chart) { chartContainer.chart.reflow(); } }}
-                      className="studio--chart"
+                <div ref={(chartContainer) => {
+                    if (chartContainer && chartContainer.chart) {
+                        chartContainer.chart.reflow();
+                    }
+                }}
+                     className="studio--chart"
                 >
                     <HighchartsReact
                         highcharts={Highcharts}
                         options={studioChart}
                     />
-                <button onClick={() => postChart()}> Post </button>
                 </div>
                 <div className="studio--toolbar">
                     <StudioToolbar
@@ -379,12 +381,13 @@ export default function Studio() {
                         handleCategoryIdChange={handleCategoryIdChange}
                         putChartToInitState={putChartToInitState}
                     />
+                    <button onClick={() => postChart()}> Post</button>
                 </div>
             </div>
             <div className={`studio-message-container ${showErrorMessage || showSuccessMessage ? 'show' : ''}`}>
                 {showErrorMessage && (
                     <div className="studio-error-message">
-                        {errorMessage.map((message,index) => (
+                        {errorMessage.map((message, index) => (
                             <p key={index}>{message}<br/></p>
                         ))}
                     </div>
