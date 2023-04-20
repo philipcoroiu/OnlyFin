@@ -2,6 +2,7 @@ import React, {useEffect} from "react"
 import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useNavigate} from "react-router-dom"
+import NavBar from "../navBar/NavBar";
 
 export default function PersonalPage() {
 
@@ -49,13 +50,12 @@ export default function PersonalPage() {
     }, [navigate]);
 
 
-
     function handleTextAreaChange(e) {
         setUserData(e.target.value)
     }
 
     function handleButtonClick() {
-        if(isEditable) {
+        if (isEditable) {
             setIsEditable(false)
             updateUserText();
         } else {
@@ -63,10 +63,10 @@ export default function PersonalPage() {
         }
     }
 
-    const updateUserText = async() => {
+    const updateUserText = async () => {
         try {
             await axios.put(`http://localhost:8080/update-about-me`,
-                {text: userData},{
+                {text: userData}, {
                     headers: {
                         'Content-type': 'application/json',
                     },
@@ -75,25 +75,39 @@ export default function PersonalPage() {
 
             console.log("Puttar: " + userData)
 
-        } catch(error) {
+        } catch (error) {
             console.error('Error updating user text:', error);
         }
     }
 
-        return(
-            <div>
-                <img src={Avatar} width="100px"/>
-                <h2>{username}</h2>
-                {isEditable ? (<textarea
-                    value={userData}
-                    onChange={handleTextAreaChange}
-                    rows={5}
-                    cols={30}
-                    maxLength={700}
-                />) : (
-                    <p>{userData}</p>
-                )}
-                <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+    return (
+        <div className="mypage">
+            <NavBar/>
+            <div className="mypage--background">
+                <img
+                    src={Avatar}
+                    width="100px"
+                    className="mypage--img"
+                />
             </div>
-        )
+            <div className="mypage--text--container">
+                <h2>{username}</h2>
+                <div className="mypage--bio--container">
+                    {isEditable ? (
+                        <textarea
+                            value={userData}
+                            onChange={handleTextAreaChange}
+                            rows={5}
+                            cols={30}
+                            maxLength={700}
+                            className="mypage--bio"
+                        />
+                    ) : (
+                        <p>{userData}</p>
+                    )}
+                    <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                </div>
+            </div>
+        </div>
+    )
 }
