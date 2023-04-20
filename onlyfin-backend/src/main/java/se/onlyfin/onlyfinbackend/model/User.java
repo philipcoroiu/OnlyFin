@@ -1,5 +1,7 @@
 package se.onlyfin.onlyfinbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -33,9 +35,11 @@ public class User {
     private boolean isAnalyst;
 
     @OneToMany(mappedBy = "subscriber")
+    @JsonBackReference
     private List<Subscription> subscriptions;
 
     @OneToMany(mappedBy = "subscribedTo")
+    @JsonBackReference
     private List<Subscription> subscribers;
 
     @Column(name = "about_me", columnDefinition="TEXT")
