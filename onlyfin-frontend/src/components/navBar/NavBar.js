@@ -4,6 +4,10 @@ import homeIcon from "../../assets/icons/homeicon.png"
 import studioIcon from "../../assets/icons/studioIcon.png"
 import Avatar from "../../assets/images/avatar.png";
 
+/*
+Make logout function (POST / logout)
+ */
+
 export default function NavBar() {
     return (
         <div className="navbar-container">

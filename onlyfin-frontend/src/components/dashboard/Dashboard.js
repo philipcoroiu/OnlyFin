@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 /*import { SearchBox } from 'react-search-box';*/
@@ -15,6 +15,8 @@ export default function Dashboard() {
     const [userId, setUserId] = useState();
     const userName = null;
 
+    const navigate = useNavigate();
+
     useEffect(() => {
 
         axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
@@ -24,7 +26,11 @@ export default function Dashboard() {
                 setDashboard(response.data);
                 setIsLoading(false);
             });
-        })
+        }).catch (error => {
+            console.error('Error fetching data:', error);
+            navigate("/Login")
+        });
+
     }, []);
 
     const handleStockTabClick = (index) => {

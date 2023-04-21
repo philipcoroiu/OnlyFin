@@ -12,6 +12,7 @@ export default function PersonalPage() {
 
     const navigate = useNavigate();
 
+    document.title =`${username}`
 
     useEffect(() => {
 

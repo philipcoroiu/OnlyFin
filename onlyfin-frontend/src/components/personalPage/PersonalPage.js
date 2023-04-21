@@ -10,6 +10,7 @@ export default function PersonalPage() {
     const [userData, setUserData] = React.useState(null);
     const [error, setError] = React.useState(null)
 
+    document.title =`${username}`
 
     useEffect(() => {
 
