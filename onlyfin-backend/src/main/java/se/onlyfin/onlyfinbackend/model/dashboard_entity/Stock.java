@@ -25,7 +25,7 @@ public class Stock {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stock_ref_id", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Stock_ref stock_ref_id;
+    private StockRef stock_ref_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dashboard_id")
@@ -42,7 +42,7 @@ public class Stock {
         return id;
     }
 
-    public Stock_ref getStock_ref_id() {
+    public StockRef getStock_ref_id() {
         return stock_ref_id;
     }
 
@@ -54,7 +54,7 @@ public class Stock {
         this.id = id;
     }
 
-    public void setStock_ref_id(Stock_ref stock_ref_id) {
+    public void setStock_ref_id(StockRef stock_ref_id) {
         this.stock_ref_id = stock_ref_id;
     }
 

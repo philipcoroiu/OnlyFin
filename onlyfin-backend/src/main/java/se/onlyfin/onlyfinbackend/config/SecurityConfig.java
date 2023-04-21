@@ -58,7 +58,8 @@ public class SecurityConfig {
                                 "/principal-username",
                                 "/principal-id",
                                 "/feed/**",
-                                "/fetch-current-user-subscriptions"
+                                "/fetch-current-user-subscriptions",
+                                "/stonks/**"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -67,7 +68,8 @@ public class SecurityConfig {
                                 "/register",
                                 "/plz",
                                 "/login",
-                                "/assets/**")
+                                "/assets/**"
+                        )
                         .permitAll()
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
