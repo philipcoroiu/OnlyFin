@@ -30,11 +30,13 @@ export default function SearchPage() {
 
                 setSubscribers(response2.data)
 
+                console.log("Subcribers")
+                console.log(response2.data)
+
                 //console.log('All analysts:', response.data);
                 setSearchData(response.data);
 
-                console.log("Subcribers")
-                console.log(response2.data)
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -42,6 +44,25 @@ export default function SearchPage() {
 
         fetchData();
     }, []);
+
+    async function updateSubscribersList() {
+        try {
+            const response = await axios.get("http://localhost:8080/fetch-current-user-subscriptions",
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                });
+
+            console.log("Subcribers")
+            console.log(response.data)
+
+            setSubscribers(response.data)
+        } catch(error) {
+            console.log("updateSubscribersList" + error)
+        }
+    }
 
 
     const getAllAnalysts = () => {
@@ -81,7 +102,7 @@ export default function SearchPage() {
             )
             .then(response => {
 
-                console.log('API response:', response.data[0].username);
+                //console.log('API response:', response.data[0].username);
                 setSearchData(response.data)
 
             })
@@ -93,10 +114,11 @@ export default function SearchPage() {
     };
 
     const isSubscribed = (username) => {
-        //console.log("userId: " + userID)
 
         if(subscribers.some((user) => user.username === username)) {
-            console.log("subscriber username: " + username)
+            console.log(`You are subscribed to ${username}`)
+        } else {
+            console.log(`You are NOT subscribed to ${username}`)
         }
 
         return subscribers && subscribers.some((user) => user.username === username)
@@ -108,6 +130,7 @@ export default function SearchPage() {
         } else {
             onSubscribe(username)
         }
+        //window.location.reload();
     }
 
     const onSubscribe = async (username) => {
@@ -166,8 +189,14 @@ export default function SearchPage() {
                 <div>
                     {searchData.map(data => (
                         <div>
-                            <Profile key={data.id} name={data.username}></Profile>
-                            <button onClick={() => handleSubscription(data.username)} >{isSubscribed(data.username) ? "Unsubscribe" : "Subscribe"}</button>
+                            <Profile
+                                key={data.id}
+                                name={data.username}
+                                onClick={() => handleSubscription(data.username)}
+                                updateSubscribersList={updateSubscribersList}
+                                isSubscribed={isSubscribed}>
+                            </Profile>
+                            {/*<button {isSubscribed(data.username) ? "Unsubscribe" : "Subscribe"}</button>*/}
                         </div>
 
                     ))}
