@@ -124,4 +124,41 @@ public class SearchController {
         return ResponseEntity.ok().body(profileListWithSubInfo);
     }
 
+    /**
+     * This method is responsible for returning a list of all analysts.
+     * This method also includes information about whether the logged-in user is subscribed to a certain analyst.
+     *
+     * @param principal the logged-in user.
+     * @return a list of all analysts.
+     */
+    @GetMapping("/search-all-analysts-include-sub-info")
+    public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> fetchAllAnalystsWithSubsIncluded(Principal principal) {
+        List<User> userList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
+        if (userList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<ProfileDTO> searchResults = new ArrayList<>();
+        userList.forEach((currentUser) ->
+                searchResults.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+
+        List<ProfileDTO> loggedInUserSubscriptions =
+                subscriptionController.fetchCurrentUserSubscriptions(principal).getBody();
+        if (loggedInUserSubscriptions == null) {
+            List<ProfileWithSubInfoForLoggedInUserDTO> profileListWithSubscribingFalseInfo = new ArrayList<>();
+
+            searchResults.forEach((currentResult) ->
+                    profileListWithSubscribingFalseInfo.add(
+                            new ProfileWithSubInfoForLoggedInUserDTO(currentResult, false)));
+
+            return ResponseEntity.ok().body(profileListWithSubscribingFalseInfo);
+        }
+
+        List<ProfileWithSubInfoForLoggedInUserDTO> profileListWithSubInfo = new ArrayList<>();
+        searchResults.forEach((currentResult) -> profileListWithSubInfo.add(new ProfileWithSubInfoForLoggedInUserDTO(
+                currentResult, loggedInUserSubscriptions.contains(currentResult))));
+
+        return ResponseEntity.ok().body(profileListWithSubInfo);
+    }
+
 }
