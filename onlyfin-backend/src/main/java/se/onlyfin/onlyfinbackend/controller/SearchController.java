@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
+import se.onlyfin.onlyfinbackend.DTO.ProfileWithSubInfoForLoggedInUserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,12 @@ import java.util.Optional;
 @RestController
 public class SearchController {
     private final UserRepository userRepository;
+    private final SubscriptionController subscriptionController;
 
     @Autowired
-    public SearchController(UserRepository userRepository) {
+    public SearchController(UserRepository userRepository, SubscriptionController subscriptionController) {
         this.userRepository = userRepository;
+        this.subscriptionController = subscriptionController;
     }
 
     /**
@@ -80,6 +84,44 @@ public class SearchController {
                 profileDTOListToSend.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
 
         return ResponseEntity.ok().body(profileDTOListToSend);
+    }
+
+    /**
+     * This method is responsible for returning a list of analysts that match the given search string.
+     * This method also includes information about whether the logged-in user is subscribed to a certain analyst.
+     *
+     * @param search    the search string to be used to find analysts.
+     * @param principal the logged-in user.
+     * @return a list of analysts that match the search string.
+     */
+    @GetMapping("/search-analyst-include-sub-info")
+    public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> searchForAnalystsWithSubsIncluded(@RequestParam String search, Principal principal) {
+        List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
+        if (userList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<ProfileDTO> searchResults = new ArrayList<>();
+        userList.forEach((currentUser) ->
+                searchResults.add(new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+
+        List<ProfileDTO> loggedInUserSubscriptions =
+                subscriptionController.fetchCurrentUserSubscriptions(principal).getBody();
+        if (loggedInUserSubscriptions == null) {
+            List<ProfileWithSubInfoForLoggedInUserDTO> profileListWithSubscribingFalseInfo = new ArrayList<>();
+
+            searchResults.forEach((currentResult) ->
+                    profileListWithSubscribingFalseInfo.add(
+                            new ProfileWithSubInfoForLoggedInUserDTO(currentResult, false)));
+
+            return ResponseEntity.ok().body(profileListWithSubscribingFalseInfo);
+        }
+
+        List<ProfileWithSubInfoForLoggedInUserDTO> profileListWithSubInfo = new ArrayList<>();
+        searchResults.forEach((currentResult) -> profileListWithSubInfo.add(new ProfileWithSubInfoForLoggedInUserDTO(
+                currentResult, loggedInUserSubscriptions.contains(currentResult))));
+
+        return ResponseEntity.ok().body(profileListWithSubInfo);
     }
 
 }
