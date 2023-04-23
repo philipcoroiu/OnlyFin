@@ -4,11 +4,9 @@ import {Link} from "react-router-dom";
 
 export default function Profile(props) {
 
-    const [isSubscribed, setIsSubscribed] = React.useState("");
+    const [isSubscribed, setIsSubscribed] = React.useState(props.isSubscribed(props.name) ? "Unsubscribe" : "Subscribe");
 
-    useEffect(() => {
-        setIsSubscribed(props.isSubscribed(props.name) ? "Unsubscribe" : "Subscribe")
-    }, [props])
+
 
     function handleOnClick() {
         props.onClick();
@@ -19,8 +17,7 @@ export default function Profile(props) {
             setIsSubscribed("Subscribe")
         }
 
-        props.updateSubscribersList();
-        props.updateSubscribersList();
+
 
     }
 
@@ -31,7 +28,7 @@ export default function Profile(props) {
             <Link to={`${props.name}`}>
                 <h2>{props.name}</h2>
             </Link>
-            <button onClick={handleOnClick}>{isSubscribed}</button>
+            {/*<button onClick={handleOnClick}>{isSubscribed}</button>*/}
         </div>
     )
 }

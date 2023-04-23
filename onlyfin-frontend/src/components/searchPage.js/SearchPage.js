@@ -12,7 +12,7 @@ export default function SearchPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/search-all-analysts`,
+                const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -30,10 +30,10 @@ export default function SearchPage() {
 
                 setSubscribers(response2.data)
 
-                console.log("Subcribers")
-                console.log(response2.data)
+                //console.log("Subcribers")
+                //console.log(response2.data)
 
-                //console.log('All analysts:', response.data);
+                console.log('All analysts:');
                 setSearchData(response.data);
 
 
@@ -127,10 +127,13 @@ export default function SearchPage() {
     function handleSubscription(username) {
         if(isSubscribed(username)) {
             onUnsubscribe(username)
+            updateSubscribersList();
         } else {
             onSubscribe(username)
+            updateSubscribersList();
         }
         //window.location.reload();
+
     }
 
     const onSubscribe = async (username) => {
@@ -146,13 +149,6 @@ export default function SearchPage() {
                 withCredentials: true,
             }
         )
-            .then(response => {
-                console.log('Subscription successful');
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.error('API error:', error);
-            });
     };
 
     const onUnsubscribe = async (username) => {
@@ -167,13 +163,6 @@ export default function SearchPage() {
                 withCredentials: true
             }
         )
-            .then(response => {
-                console.log('Unsubscription successful');
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.error('API error:', error);
-            });
     };
 
 
@@ -196,7 +185,7 @@ export default function SearchPage() {
                                 updateSubscribersList={updateSubscribersList}
                                 isSubscribed={isSubscribed}>
                             </Profile>
-                            {/*<button {isSubscribed(data.username) ? "Unsubscribe" : "Subscribe"}</button>*/}
+                            <button onClick={() => handleSubscription(data.username)}> {isSubscribed(data.username) ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
 
                     ))}

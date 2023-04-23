@@ -41,6 +41,8 @@ export default function PersonalPage() {
     }, [username]);
 
 
+
+
     return (
         <div>
             {error ? <p>{error}</p> : (
