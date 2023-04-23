@@ -16,5 +16,5 @@ import java.time.LocalDateTime;
  * @param postDate the date that the content was posted
  * @param updatedAt the date that the content was last updated
  */
-public record FeedCardDTO(ProfileDTO posterOfContent, Stock stock, Category category, JsonNode content, LocalDateTime postDate, LocalDateTime updatedAt) {
+public record FeedCardDTO(ProfileDTO posterOfContent, StockDTO stock, CategoryDTO category, JsonNode content, LocalDateTime postDate, LocalDateTime updatedAt) {
 }

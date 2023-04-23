@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.onlyfin.onlyfinbackend.DTO.CategoryDTO;
 import se.onlyfin.onlyfinbackend.DTO.FeedCardDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
+import se.onlyfin.onlyfinbackend.DTO.StockDTO;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
@@ -64,26 +66,26 @@ public class FeedController {
         }
 
         List<FeedCardDTO> feedCardDTOS = new ArrayList<>();
-        for (User currentAnalyst : dashboardOwnershipMap.keySet()) {
-            //dashboard of currentAnalyst
-            Dashboard currentDashboard = dashboardOwnershipMap.get(currentAnalyst);
+        for (User currentAnalystUser : dashboardOwnershipMap.keySet()) {
+            //dashboard of currentAnalystUser
+            Dashboard currentDashboard = dashboardOwnershipMap.get(currentAnalystUser);
             //check that the current analyst has a dashboard because that's apparently not always the case...
             if (currentDashboard != null) {
-                //profile representation of currentAnalyst
-                ProfileDTO profileDTOForCurrentDashboard = new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId());
-                //stocks that currentAnalyst covers
+                //profile representation of currentAnalystUser
+                ProfileDTO currentAnalystProfileDTO = new ProfileDTO(currentAnalystUser.getUsername(), currentAnalystUser.getId());
+                //stocks that currentAnalystUser covers
                 List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
-                //go through stocks that currentAnalyst covers
+                //go through stocks that currentAnalystUser covers
                 for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
-                    //categories under current stock that currentAnalyst covers
+                    //categories under current stock that currentAnalystUser covers
                     for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
                         //current module under the current stock category
                         for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
                             JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
                             feedCardDTOS.add(new FeedCardDTO(
-                                    profileDTOForCurrentDashboard,
-                                    currentStockThatCurrentAnalystCovers,
-                                    categoryUnderCurrentStockThatCurrentAnalystCovers,
+                                    currentAnalystProfileDTO,
+                                    new StockDTO(currentStockThatCurrentAnalystCovers.getName(), currentStockThatCurrentAnalystCovers.getId()),
+                                    new CategoryDTO(categoryUnderCurrentStockThatCurrentAnalystCovers.getName(), categoryUnderCurrentStockThatCurrentAnalystCovers.getId()),
                                     content,
                                     LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(), ZoneId.systemDefault()),
                                     LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(), ZoneId.systemDefault())));
@@ -128,27 +130,27 @@ public class FeedController {
         }
 
         List<FeedCardDTO> feedCardDTOS = new ArrayList<>();
-        for (User currentAnalyst : dashboardOwnershipMap.keySet()) {
-            //dashboard of currentAnalyst
-            Dashboard currentDashboard = dashboardOwnershipMap.get(currentAnalyst);
+        for (User currentAnalystUser : dashboardOwnershipMap.keySet()) {
+            //dashboard of currentAnalystUser
+            Dashboard currentDashboard = dashboardOwnershipMap.get(currentAnalystUser);
             //check that the current analyst has a dashboard because that's apparently not always the case...
             if (currentDashboard != null) {
-                //profile representation of currentAnalyst
-                ProfileDTO profileDTOForCurrentDashboard = new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId());
-                //stocks that currentAnalyst covers
+                //profile representation of currentAnalystUser
+                ProfileDTO currentAnalystProfileDTO = new ProfileDTO(currentAnalystUser.getUsername(), currentAnalystUser.getId());
+                //stocks that currentAnalystUser covers
                 List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
-                //go through stocks that currentAnalyst covers
+                //go through stocks that currentAnalystUser covers
                 for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
-                    //categories under current stock that currentAnalyst covers
+                    //categories under current stock that currentAnalystUser covers
                     for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
                         //current module under the current stock category
                         for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
                             if (moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate().isAfter(Instant.now().minus(7, ChronoUnit.DAYS))) {
                                 JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
                                 feedCardDTOS.add(new FeedCardDTO(
-                                        profileDTOForCurrentDashboard,
-                                        currentStockThatCurrentAnalystCovers,
-                                        categoryUnderCurrentStockThatCurrentAnalystCovers,
+                                        currentAnalystProfileDTO,
+                                        new StockDTO(currentStockThatCurrentAnalystCovers.getName(), currentStockThatCurrentAnalystCovers.getId()),
+                                        new CategoryDTO(categoryUnderCurrentStockThatCurrentAnalystCovers.getName(), categoryUnderCurrentStockThatCurrentAnalystCovers.getId()),
                                         content,
                                         LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(), ZoneId.systemDefault()),
                                         LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(), ZoneId.systemDefault())));
