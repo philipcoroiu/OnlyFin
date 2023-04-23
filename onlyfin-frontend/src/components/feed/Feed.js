@@ -21,7 +21,7 @@ export default function Feed() {
                         withCredentials: true,
                     });
 
-                console.log(response.data)
+                console.log(response)
 
                 setFeedData(response.data)
 
@@ -46,7 +46,7 @@ export default function Feed() {
                             posterOfContent={data.posterOfContent.username}
                             chart={data.content}
                             postDate={data.postDate}
-                            stock={data.stock.stock_ref_id.name}
+                            stock={data.stock.name}
                         />
                     </div>
 
