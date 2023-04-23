@@ -85,15 +85,15 @@ export default function SearchPage() {
     };
 
 
-    function handleSubscription(username, subscribed) {
-        if(subscribed) {
+    async function handleSubscription(username, subscribed) {
+        if (subscribed) {
             onUnsubscribe(username)
         } else {
             onSubscribe(username)
         }
         //window.location.reload();
-        updateSearchData();
-        updateSearchData();
+        await updateSearchData();
+        await updateSearchData();
     }
 
     async function updateSearchData() {
@@ -107,37 +107,47 @@ export default function SearchPage() {
                 });
             setSearchData(response.data);
         } catch (error) {
-
+            console.log(error)
         }
     }
 
     const onSubscribe = async (username) => {
-        console.log('Subscribing to:', username);
 
-        await axios.post(
-            `http://localhost:8080/subscribe?username=${username}`,
-            {},
-            {
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                withCredentials: true,
-            }
-        )
+        try {
+            console.log('Subscribing to:', username);
+
+            await axios.post(
+                `http://localhost:8080/subscribe?username=${username}`,
+                {},
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                }
+            )
+        } catch(error) {
+            console.log(error)
+        }
+
     };
 
     const onUnsubscribe = async (username) => {
-        console.log('Unsubscribing to:', username);
+        try {
+            console.log('Unsubscribing to:', username);
 
-        await axios.delete(
-            `http://localhost:8080/unsubscribe?username=${username}`,
-            {
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                withCredentials: true
-            }
-        )
+            await axios.delete(
+                `http://localhost:8080/unsubscribe?username=${username}`,
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            )
+        } catch(error) {
+            console.log(error)
+        }
     };
 
 
@@ -159,7 +169,7 @@ export default function SearchPage() {
                                 onClick={() => handleSubscription(data.profile.username, data.subscribed)}
                             >
                             </Profile>
-                            <button onClick={() => handleSubscription(data.profile.username, data.subscribed)}> {data.subscribed ? "Unsubscribe" : "Subscribe"}</button>
+                            <button key={data.profile.id + 1} onClick={() => handleSubscription(data.profile.username, data.subscribed)}> {data.subscribed ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
 
                     ))}

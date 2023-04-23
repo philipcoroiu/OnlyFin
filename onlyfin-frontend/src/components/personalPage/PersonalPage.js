@@ -2,12 +2,11 @@ import React, {useEffect} from "react"
 import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import UserNotFound from "./UserNotFound"
 
 export default function PersonalPage() {
 
     const { username } = useParams();
-    const [userData, setUserData] = React.useState(null);
+    const [userData, setUserData] = React.useState();
     const [error, setError] = React.useState(null)
 
 
@@ -15,7 +14,7 @@ export default function PersonalPage() {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/fetch-about-me?username=${username}`,
+                const response = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -40,7 +39,76 @@ export default function PersonalPage() {
         fetchData();
     }, [username]);
 
+    function handleClick() {
+        if(userData.subscribed) {
+            onUnsubscribe();
+        } else {
+            onSubscribe()
+        }
+        updateUserData();
+        updateUserData();
+    }
 
+    const onSubscribe = async () => {
+
+        try {
+            console.log('Subscribing to:', username);
+
+            await axios.post(
+                `http://localhost:8080/subscribe?username=${username}`,
+                {},
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                }
+            )
+        } catch(error) {
+            console.log(error)
+        }
+    };
+
+    const onUnsubscribe = async () => {
+        try {
+            console.log('Unsubscribing to:', username);
+
+            await axios.delete(
+                `http://localhost:8080/unsubscribe?username=${username}`,
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            )
+        } catch(error) {
+            console.log(error)
+        }
+    };
+
+    async function updateUserData() {
+        try {
+            const response = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                });
+
+            console.log('API response:', response.data);
+            setUserData(response.data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    if(!userData) {
+        return (
+            <div>Loading</div>
+        )
+    }
 
 
     return (
@@ -49,8 +117,8 @@ export default function PersonalPage() {
                 <div>
                     <img src={Avatar} width="100px"/>
                     <h2>{username}</h2>
-                    <p>{userData}</p>
-                    <button>Subscribe</button>
+                    <p>{userData.aboutMe}</p>
+                    <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
                 </div>
             )}
         </div>
