@@ -44,7 +44,7 @@ export default function Feed() {
                     <div>
                         <FeedModule
                             posterOfContent={data.posterOfContent.username}
-                            chart={data.content.chart}
+                            chart={data.content}
                             postDate={data.postDate}
                             stock={data.stock.stock_ref_id.name}
                         />
