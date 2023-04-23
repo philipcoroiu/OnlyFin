@@ -25,10 +25,10 @@ public class ModuleEntity {
     @Column(name = "module_type")
     private String module_type;
 
-    @Column(name = "post_date", insertable = false)
+    @Column(name = "post_date", updatable = false, insertable = false)
     private Instant postDate;
 
-    @Column(name = "updated_date", insertable = false)
+    @Column(name = "updated_date", updatable = false, insertable = false)
     private Instant updatedDate;
 
     public int getId() {
