@@ -6,7 +6,6 @@ import Profile from "./Profile";
 export default function SearchPage() {
 
     const [searchData, setSearchData] = React.useState(null);
-    const [subscribers, setSubscribers] = React.useState([]);
 
 
     useEffect(() => {
@@ -20,21 +19,12 @@ export default function SearchPage() {
                         withCredentials: true,
                     });
 
-                const response2 = await axios.get("http://localhost:8080/fetch-current-user-subscriptions",
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        },
-                        withCredentials: true,
-                    });
-
-                setSubscribers(response2.data)
-
-                //console.log("Subcribers")
-                //console.log(response2.data)
-
-                console.log('All analysts:');
+                console.log('All analysts: ' , response.data);
                 setSearchData(response.data);
+
+                response.data.map(data => {
+                    console.log(data.subscribed)
+                })
 
 
             } catch (error) {
@@ -45,28 +35,9 @@ export default function SearchPage() {
         fetchData();
     }, []);
 
-    async function updateSubscribersList() {
-        try {
-            const response = await axios.get("http://localhost:8080/fetch-current-user-subscriptions",
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true,
-                });
-
-            console.log("Subcribers")
-            console.log(response.data)
-
-            setSubscribers(response.data)
-        } catch(error) {
-            console.log("updateSubscribersList" + error)
-        }
-    }
-
 
     const getAllAnalysts = () => {
-        axios.get(`http://localhost:8080/search-all-analysts`,
+        axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -91,7 +62,7 @@ export default function SearchPage() {
     const onSearch = (searchTerm) => {
         console.log('Performing search with searchTerm:', searchTerm);
 
-        axios.get(`http://localhost:8080/search-analyst?search=${searchTerm}`,
+        axios.get(`http://localhost:8080/search-analyst-include-sub-info?search=${searchTerm}`,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -113,27 +84,31 @@ export default function SearchPage() {
             });
     };
 
-    const isSubscribed = (username) => {
 
-        if(subscribers.some((user) => user.username === username)) {
-            console.log(`You are subscribed to ${username}`)
-        } else {
-            console.log(`You are NOT subscribed to ${username}`)
-        }
-
-        return subscribers && subscribers.some((user) => user.username === username)
-    }
-
-    function handleSubscription(username) {
-        if(isSubscribed(username)) {
+    function handleSubscription(username, subscribed) {
+        if(subscribed) {
             onUnsubscribe(username)
-            updateSubscribersList();
         } else {
             onSubscribe(username)
-            updateSubscribersList();
         }
         //window.location.reload();
+        updateSearchData();
+        updateSearchData();
+    }
 
+    async function updateSearchData() {
+        try {
+            const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                });
+            setSearchData(response.data);
+        } catch (error) {
+
+        }
     }
 
     const onSubscribe = async (username) => {
@@ -179,24 +154,18 @@ export default function SearchPage() {
                     {searchData.map(data => (
                         <div>
                             <Profile
-                                key={data.id}
-                                name={data.username}
-                                onClick={() => handleSubscription(data.username)}
-                                updateSubscribersList={updateSubscribersList}
-                                isSubscribed={isSubscribed}>
+                                key={data.profile.id}
+                                name={data.profile.username}
+                                onClick={() => handleSubscription(data.profile.username, data.subscribed)}
+                            >
                             </Profile>
-                            <button onClick={() => handleSubscription(data.username)}> {isSubscribed(data.username) ? "Unsubscribe" : "Subscribe"}</button>
+                            <button onClick={() => handleSubscription(data.profile.username, data.subscribed)}> {data.subscribed ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
 
                     ))}
                 </div>
             )}
-
-
-
             <button onClick={getAllAnalysts}>Get all analysts</button>
-
-            {}
         </div>
 
     )
