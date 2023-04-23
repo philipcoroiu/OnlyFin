@@ -6,7 +6,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "module")
@@ -26,10 +25,10 @@ public class ModuleEntity {
     @Column(name = "module_type")
     private String module_type;
 
-    @Column(name = "post_date")
+    @Column(name = "post_date", insertable = false)
     private Instant postDate;
 
-    @Column(name = "updated_date")
+    @Column(name = "updated_date", insertable = false)
     private Instant updatedDate;
 
     public int getId() {
