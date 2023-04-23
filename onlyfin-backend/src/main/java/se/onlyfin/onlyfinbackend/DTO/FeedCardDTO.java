@@ -2,8 +2,6 @@ package se.onlyfin.onlyfinbackend.DTO;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.time.LocalDateTime;
-
 /**
  * DTO for a card in the feed.
  *
@@ -15,5 +13,5 @@ import java.time.LocalDateTime;
  * @param updatedAt       the date that the content was last updated
  */
 public record FeedCardDTO(ProfileDTO posterOfContent, StockDTO stock, CategoryDTO category, JsonNode content,
-                          LocalDateTime postDate, LocalDateTime updatedAt) {
+                          String postDate, String updatedAt) {
 }
