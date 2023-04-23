@@ -29,7 +29,7 @@ export default function Home() {
             </nav>
             <div className="welcome--hero">
                 <h1>Welcome to <span className="welcome--hero--fin">OnlyFin</span></h1>
-                <h2>Create your own analys...</h2>
+                <h2>Create your own analysis...</h2>
                 <img className="welcome--hero--image" src={studioPic}/>
                 <h2>...and share it with people around the world on your dashboard</h2>
                 <img className="welcome--hero--image" src={mallDashboard}/>

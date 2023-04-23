@@ -53,7 +53,7 @@ public class FeedController {
 
         //check that user has subscriptions
         if (userToFetchFeedFor.getSubscriptions().size() < 1) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.noContent().build();
         }
 
         //grab their subscriptions
@@ -143,7 +143,7 @@ public class FeedController {
 
         //check that user has subscriptions
         if (userToFetchFeedFor.getSubscriptions().size() < 1) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.noContent().build();
         }
 
         //grab their subscriptions
