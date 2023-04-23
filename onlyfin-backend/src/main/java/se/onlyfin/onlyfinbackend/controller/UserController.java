@@ -2,11 +2,13 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.onlyfin.onlyfinbackend.model.User;
+import se.onlyfin.onlyfinbackend.DTO.AboutMeDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
+import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
@@ -19,10 +21,12 @@ import java.util.Optional;
 @Controller
 public class UserController {
     private final UserRepository userRepository;
+    private final SubscriptionController subscriptionController;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, SubscriptionController subscriptionController) {
         this.userRepository = userRepository;
+        this.subscriptionController = subscriptionController;
     }
 
     /**
@@ -157,13 +161,34 @@ public class UserController {
      */
     @GetMapping("/fetch-about-me")
     public ResponseEntity<?> fetchAboutMeFor(@RequestParam String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isEmpty()) {
+        Optional<User> userOptionalTargetUser = userRepository.findByUsername(username);
+        if (userOptionalTargetUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        User userToGetAboutMeFrom = userOptional.get();
+        User userToGetAboutMeFrom = userOptionalTargetUser.get();
         return ResponseEntity.ok().body(userToGetAboutMeFrom.getAboutMe());
+    }
+
+    /**
+     * Returns the "about me" text for a specific user with sub info included
+     *
+     * @param username the username of the target user
+     * @return "about me" text & sub info
+     */
+    @GetMapping("/fetch-about-me-with-sub-info")
+    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+
+        Optional<User> userOptionalTargetUser = userRepository.findByUsername(username);
+        if (userOptionalTargetUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        User userToGetAboutMeFrom = userOptionalTargetUser.get();
+
+        boolean subscribed = subscriptionController.isUserSubscribedToThisUser(fetchingUser, userToGetAboutMeFrom);
+
+        return ResponseEntity.ok().body(new AboutMeDTO(userToGetAboutMeFrom.getAboutMe(), subscribed));
     }
 
     /**
