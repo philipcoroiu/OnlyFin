@@ -39,14 +39,13 @@ export default function PersonalPage() {
         fetchData();
     }, [username]);
 
-    function handleClick() {
+    async function handleClick() {
         if(userData.subscribed) {
-            onUnsubscribe();
+            await onUnsubscribe();
         } else {
-            onSubscribe()
+            await onSubscribe()
         }
-        updateUserData();
-        updateUserData();
+        await updateUserData();
     }
 
     const onSubscribe = async () => {

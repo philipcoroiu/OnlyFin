@@ -87,12 +87,10 @@ export default function SearchPage() {
 
     async function handleSubscription(username, subscribed) {
         if (subscribed) {
-            onUnsubscribe(username)
+            await onUnsubscribe(username)
         } else {
-            onSubscribe(username)
+            await onSubscribe(username)
         }
-        //window.location.reload();
-        await updateSearchData();
         await updateSearchData();
     }
 
