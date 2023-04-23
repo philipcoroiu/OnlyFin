@@ -65,5 +65,14 @@ public class Stock {
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
+
+    public String getName() {
+        return stock_ref_id.getName();
+    }
+
+    public int getStockRefId() {
+        return stock_ref_id.getId();
+    }
+
 }
 

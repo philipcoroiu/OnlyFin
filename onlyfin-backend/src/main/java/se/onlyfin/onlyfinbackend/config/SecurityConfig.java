@@ -61,7 +61,8 @@ public class SecurityConfig {
                                 "/fetch-current-user-subscriptions",
                                 "/stonks/**",
                                 "/search-analyst-include-sub-info",
-                                "/search-all-analysts-include-sub-info"
+                                "/search-all-analysts-include-sub-info",
+                                "/fetch-about-me-with-sub-info"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

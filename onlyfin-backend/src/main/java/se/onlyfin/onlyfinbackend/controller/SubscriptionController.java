@@ -116,4 +116,8 @@ public class SubscriptionController {
         return ResponseEntity.ok().body(subscriptionsDTOList);
     }
 
+    public boolean isUserSubscribedToThisUser(User subscriber, User subscribedTo) {
+        return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
+    }
+
 }
