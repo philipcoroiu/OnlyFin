@@ -43,7 +43,7 @@ public class FeedController {
      */
     @GetMapping("/all-the-things")
     public ResponseEntity<List<FeedCardDTO>> fetchAllTheFeed(Principal principal) {
-        //check that user exists
+        //check that logged-in user exists
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -67,24 +67,27 @@ public class FeedController {
         for (User currentAnalyst : dashboardOwnershipMap.keySet()) {
             //dashboard of currentAnalyst
             Dashboard currentDashboard = dashboardOwnershipMap.get(currentAnalyst);
-            //profile representation of currentAnalyst
-            ProfileDTO profileDTOForCurrentDashboard = new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId());
-            //stocks that currentAnalyst covers
-            List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
-            //go through stocks that currentAnalyst covers
-            for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
-                //categories under current stock that currentAnalyst covers
-                for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
-                    //current module under the current stock category
-                    for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
-                        JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
-                        feedCardDTOS.add(new FeedCardDTO(
-                                profileDTOForCurrentDashboard,
-                                currentStockThatCurrentAnalystCovers,
-                                categoryUnderCurrentStockThatCurrentAnalystCovers,
-                                content,
-                                LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(), ZoneId.systemDefault()),
-                                LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(), ZoneId.systemDefault())));
+            //check that the current analyst has a dashboard because that's apparently not always the case...
+            if (currentDashboard != null) {
+                //profile representation of currentAnalyst
+                ProfileDTO profileDTOForCurrentDashboard = new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId());
+                //stocks that currentAnalyst covers
+                List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
+                //go through stocks that currentAnalyst covers
+                for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
+                    //categories under current stock that currentAnalyst covers
+                    for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
+                        //current module under the current stock category
+                        for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
+                            JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
+                            feedCardDTOS.add(new FeedCardDTO(
+                                    profileDTOForCurrentDashboard,
+                                    currentStockThatCurrentAnalystCovers,
+                                    categoryUnderCurrentStockThatCurrentAnalystCovers,
+                                    content,
+                                    LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(), ZoneId.systemDefault()),
+                                    LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(), ZoneId.systemDefault())));
+                        }
                     }
                 }
             }
@@ -104,7 +107,7 @@ public class FeedController {
      */
     @GetMapping("/week")
     public ResponseEntity<List<FeedCardDTO>> fetchWeeklyFeed(Principal principal) {
-        //check that user exists
+        //check that logged-in user exists
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -128,25 +131,28 @@ public class FeedController {
         for (User currentAnalyst : dashboardOwnershipMap.keySet()) {
             //dashboard of currentAnalyst
             Dashboard currentDashboard = dashboardOwnershipMap.get(currentAnalyst);
-            //profile representation of currentAnalyst
-            ProfileDTO profileDTOForCurrentDashboard = new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId());
-            //stocks that currentAnalyst covers
-            List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
-            //go through stocks that currentAnalyst covers
-            for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
-                //categories under current stock that currentAnalyst covers
-                for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
-                    //current module under the current stock category
-                    for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
-                        if (moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate().isAfter(Instant.now().minus(7, ChronoUnit.DAYS))) {
-                            JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
-                            feedCardDTOS.add(new FeedCardDTO(
-                                    profileDTOForCurrentDashboard,
-                                    currentStockThatCurrentAnalystCovers,
-                                    categoryUnderCurrentStockThatCurrentAnalystCovers,
-                                    content,
-                                    LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(), ZoneId.systemDefault()),
-                                    LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(), ZoneId.systemDefault())));
+            //check that the current analyst has a dashboard because that's apparently not always the case...
+            if (currentDashboard != null) {
+                //profile representation of currentAnalyst
+                ProfileDTO profileDTOForCurrentDashboard = new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId());
+                //stocks that currentAnalyst covers
+                List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
+                //go through stocks that currentAnalyst covers
+                for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
+                    //categories under current stock that currentAnalyst covers
+                    for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
+                        //current module under the current stock category
+                        for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
+                            if (moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate().isAfter(Instant.now().minus(7, ChronoUnit.DAYS))) {
+                                JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
+                                feedCardDTOS.add(new FeedCardDTO(
+                                        profileDTOForCurrentDashboard,
+                                        currentStockThatCurrentAnalystCovers,
+                                        categoryUnderCurrentStockThatCurrentAnalystCovers,
+                                        content,
+                                        LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(), ZoneId.systemDefault()),
+                                        LocalDateTime.ofInstant(moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(), ZoneId.systemDefault())));
+                            }
                         }
                     }
                 }
