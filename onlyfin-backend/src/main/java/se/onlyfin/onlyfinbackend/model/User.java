@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is responsible for modeling the user table in the database.
@@ -42,7 +43,7 @@ public class User {
     @JsonBackReference
     private List<Subscription> subscribers;
 
-    @Column(name = "about_me", columnDefinition="TEXT")
+    @Column(name = "about_me", columnDefinition = "TEXT")
     private String aboutMe = "Lorem ipsum";
 
     public String getUsername() {

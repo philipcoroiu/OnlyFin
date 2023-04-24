@@ -27,7 +27,7 @@ public class DashboardController {
 
     public ResponseEntity<Dashboard> getDashboard(@PathVariable String id) {
 
-        try{
+        try {
             int id_id = Integer.parseInt(id);
             Optional<Dashboard> optionalDashboard = dashboardRepository.findById(id_id);
             Dashboard dashboard = optionalDashboard.orElse(null);
@@ -36,7 +36,7 @@ public class DashboardController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(dashboard);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return ResponseEntity.badRequest().build();
@@ -78,6 +78,10 @@ public class DashboardController {
         }
 
         return latestInstant;
+    }
+
+    public Dashboard fetchDashboard(Integer userId) {
+        return dashboardRepository.findById(userId).orElse(null);
     }
 
 }
