@@ -2,7 +2,7 @@
     --container-width: 100px;
     --dashboard-module-border-radius: 7px;
 
-    --main-color: #EEEEEE ;
+    --main-color: #EEEEEE;
     --light-color: #ffffff;
     --dark-color: #306b43;
     --header-color: #DDDDDD;
@@ -35,23 +35,25 @@ Chart
 .highcharts-background {
     fill: var(--light-color);
 }
+
 /**
 Navbar
  */
 
-.navbar--img{
+.navbar--img {
     border-radius: 55px;
     height: 50px;
     width: 50px;
     margin-top: 25px;
     border: none;
 }
-.navbar--img--line{
+
+.navbar--img--line {
     border-bottom: 1px solid #b4b4b4;
     padding: 10px;
 }
 
-.navbar-container{
+.navbar-container {
     position: fixed;
     width: var(--container-width);
     display: flex;
@@ -273,7 +275,7 @@ Studio toolbar
     caret-color: #cbcbcb;
 }
 
-.studio--dataset--buttons{
+.studio--dataset--buttons {
     display: flex;
 }
 
@@ -435,7 +437,7 @@ Register
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #ffffff, #9569b9, #4d9de0);
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #ffffff, #9569b9, #4d9de0);
     background-size: 800% 800%;
     animation: gradient 60s ease infinite;
     height: 100vh;
@@ -456,7 +458,7 @@ Register
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
 }
 
-.register--title{
+.register--title {
     color: #ececec;
     font-size: 20px;
     text-align: center;
@@ -464,11 +466,11 @@ Register
 
 }
 
-.register--title > p{
+.register--title > p {
     color: #282c34;
 }
 
-.register--inputs--container{
+.register--inputs--container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -490,7 +492,7 @@ Register
     height: 30px;
 }
 
-.register--inputs--container > input::placeholder{
+.register--inputs--container > input::placeholder {
     color: #282c34;
 }
 
@@ -509,7 +511,7 @@ Register
     height: 30px;
 }
 
-.register--submit:hover{
+.register--submit:hover {
     cursor: pointer;
 }
 
@@ -517,11 +519,11 @@ Register
 Login
  */
 
-.login{
+.login {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 100vh;
@@ -552,7 +554,7 @@ Login
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
 }
 
-.login--title{
+.login--title {
     color: #ececec;
     font-size: 20px;
     text-align: center;
@@ -606,7 +608,7 @@ Login
     height: 30px;
 }
 
-.login--submit:hover{
+.login--submit:hover {
     cursor: pointer;
 }
 
@@ -614,7 +616,7 @@ Login
 Welcome
  */
 
-.welcome--navbar{
+.welcome--navbar {
     width: 100%;
     top: 0;
     display: flex;
@@ -628,24 +630,25 @@ Welcome
     background-color: #fff;
 }
 
-.welcome--navbar > ul{
+.welcome--navbar > ul {
     display: flex;
     justify-content: space-around;
     list-style: none;
 }
 
-.welcome--navbar > ul > li > a{
+.welcome--navbar > ul > li > a {
     text-decoration: none;
     color: #b4b4b4;
     font-weight: bold;
     font-size: 20px;
 }
 
-.welcome--navbar > ul > li{
+.welcome--navbar > ul > li {
     color: #b4b4b4;
     margin: 15px 85px;
 }
-.welcome--navbar > ul > li > a:hover{
+
+.welcome--navbar > ul > li > a:hover {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -654,16 +657,16 @@ Welcome
     transition: all 0.3s ease-in-out;
 }
 
-.welcome--navbar--title{
+.welcome--navbar--title {
     font-size: 30px;
     padding-left: 80px;
 }
 
-.welcome--navbar--title:hover{
+.welcome--navbar--title:hover {
     cursor: default;
 }
 
-.welcome--hero{
+.welcome--hero {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -671,12 +674,12 @@ Welcome
     margin-top: 120px;
 }
 
-.welcome--hero > h1{
+.welcome--hero > h1 {
     font-size: 50px;
     padding: 30px 30px 0px 30px;
 }
 
-.welcome--hero--fin{
+.welcome--hero--fin {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -684,11 +687,11 @@ Welcome
     animation: gradient 5s ease infinite;
 }
 
-.welcome--hero--image{
+.welcome--hero--image {
     width: 50%;
 }
 
-.welcome--hero--button{
+.welcome--hero--button {
     margin: 50px;
     padding: 50px;
     width: 400px;
@@ -698,7 +701,7 @@ Welcome
     background-color: transparent;
 }
 
-.welcome--hero--button:hover{
+.welcome--hero--button:hover {
     cursor: pointer;
     border-bottom: 1px solid;
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
@@ -715,26 +718,133 @@ Welcome
 Dashboard
  */
 
-.dashboard{
+.dashboard {
     background-color: #d5d5d5;
     height: 100vh;
 }
 
 .dashboard-content-wrapper {
-    display: flex;
     position: fixed;
-    top: 0;
-    left: 100px;
-    right: 0;
-    bottom: 0;
-    margin: 25px;
+    display: flex;
+    flex-direction: column;
+    top: 3%;
+    bottom: 3%;
+    left: 7%;
+    right: 1%;
     margin-left: 35px;
-    margin-right: 25px;
     border-radius: 15px;
     background-color: rgb(245, 245, 245);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
+    overflow: scroll;
 }
 
+.dashboard--header {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+    width: 1290px;
+    height: 96px;
+    top: 2%;
+    border-radius: 15px 15px 0px 0px;
+    background-color: rgb(245, 245, 245);
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
+}
+
+.dashboard--stocks {
+}
+
+
+.dashboard-stock-tab-buttons {
+
+}
+
+.dashboard-stock-tab-buttons > button {
+    padding: 8px 20px;
+
+    background-color: #EEEEEEFF;
+    color: #282c34;
+    margin: 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    border: 1px dashed #61dafb;
+}
+
+.dashboard-stock-tab-buttons > button:hover{
+    border: 1px dotted #61dafb
+}
+
+.dashboard-stock-tab-buttons > button.active {
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 25s ease infinite;
+    color: #282c34;
+    border: 2px solid var(--main-color)
+}
+
+.dashboard-category-tab-buttons {
+    display: flex;
+}
+
+.dashboard-category-tab-buttons > button {
+    padding: 8px 20px;
+    border-radius: 25px;
+    background-color: var(--main-color);
+    color: #282c34;
+    margin: 0px 10px 5px 10px;
+
+    font-size: 12px;
+    border: 1px dashed #61dafb;
+}
+
+.dashboard-category-tab-buttons > button:hover{
+    border: 1px dotted #61dafb
+}
+
+.dashboard-category-tab-buttons button.active {
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 25s ease infinite;
+    color: #282c34;
+    border: 2px solid var(--main-color)
+}
+
+.dashboard-profile-button{
+    margin: 40px;
+
+    width: 65px;
+    height: 65px;
+    border-radius: 50px;
+
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 25s ease infinite;
+    border: 2px solid #61dafb;
+}
+
+.dashboard-category-tab-content{
+    align-self: center;
+    overflow-y: auto;
+    margin-top: 90px;
+    margin-left: 90px;
+    width: 99%;
+}
+
+.dashboard-category-tab-content::-webkit-scrollbar {
+    display: none;
+}
+
+.dashboard-module-container {
+    display: inline-grid;
+    margin: 15px;
+    background-color: #FFFFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+/*
 .dashboard-button-underlay{
     position: fixed;
     height: 115px;
@@ -743,64 +853,21 @@ Dashboard
     left: 100px;
     border-top-right-radius: 0px;
     background-color: rgb(245, 245, 245);
-    z-index: 2;
 }
 
-.dashboard-stock-tab-buttons {
-    display: flex;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    position: fixed;
-    z-index: 3;
-
+.dashboard-stock-tab-container{
+    width: 100%;
+    border: 1px solid red;
 }
+*/
 
-.dashboard-stock-tab-buttons button {
-    padding: 8px;
-    padding-right: 20px;
-    padding-left: 20px;
-    border-radius: 25px;
-    background-color: var(--main-color);
-    color: var(--dark-color);
-    margin-right: 10px;
-    font-size: 17px;
-    border: 2px solid var(--dark-color);
+/*
 
-}
 
-.dashboard-stock-tab-buttons button.active {
-    background-color: var(--dark-color);
-    color: var(--main-color);
-    border: 2px solid var(--main-color)
-}
 
-.dashboard-category-tab-buttons {
-    display: flex;
-    margin-bottom: 10px;
-    margin-left: 30px;
-    position: fixed;
-    margin-top: -55px;
-    z-index: 3;
-}
 
-.dashboard-category-tab-buttons button {
-    padding: 8px;
-    padding-right: 20px;
-    padding-left: 20px;
-    border-radius: 25px;
-    background-color: var(--main-color);
-    color: var(--dark-color);
-    margin-right: 10px;
-    font-size: 14px;
-    border: 2px solid var(--dark-color);
-}
 
-.dashboard-category-tab-buttons button.active {
-    background-color: var(--dark-color);
-    color: var(--main-color);
-    border: 2px solid var(--main-color);
-}
+
 
 .dashboard-category-tab-content .module-container {
     display: none;
@@ -810,36 +877,13 @@ Dashboard
     display: block;
 }
 
-.dashboard-category-tab-content{
-    align-self: center;
-    overflow-y: auto;
-    margin-top: 125px;
-    margin-left: 10px;
 
 
-}
-
-.dashboard-stock-tab-container{
-    width: 100%;
-    overflow: scroll;
-}
-
-.dashboard-category-tab-container{
-    border: 0px solid #232323;
-}
 
 .dashboard-stock-tab-container::-webkit-scrollbar {
     display: none;
 }
 
-.dashboard-module-container {
-    padding: 0px;
-    display: inline-grid;
-    margin: 15px;
-    background-color: var(--light-color);
-    border-radius: var(--dashboard-module-border-radius);
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
-}
 
 .dashboard-profile-button{
     position: absolute;
@@ -862,24 +906,25 @@ Dashboard
     transform: translate(-50%, -50%);
 
 }
-
+*/
 /**
 Profile page
  */
 
-.mypage{
+.mypage {
     display: flex;
     flex-direction: column;
 }
 
-.mypage--background{
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+.mypage--background {
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 30vh;
     position: relative;
     z-index: -1;
 }
+
 .mypage--img {
     width: 15%;
     position: absolute;
@@ -890,7 +935,7 @@ Profile page
     border-radius: 150px;
 }
 
-.mypage--text--container{
+.mypage--text--container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -899,13 +944,14 @@ Profile page
 }
 
 
-.mypage--bio--container{
+.mypage--bio--container {
     width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .mypage--bio--container > button {
     width: 20%;
     margin: 10px;
@@ -915,7 +961,7 @@ Profile page
     font-size: 15px;
 }
 
-.mypage--bio--container > button:hover{
+.mypage--bio--container > button:hover {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -924,7 +970,7 @@ Profile page
     transition: all 0.5s ease-in-out;
 }
 
-.mypage--bio{
+.mypage--bio {
     appearance: none;
     border: none;
     border-bottom: 1px solid #b4b4b4;
