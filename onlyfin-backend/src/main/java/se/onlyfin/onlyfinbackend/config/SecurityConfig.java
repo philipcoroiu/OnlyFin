@@ -62,7 +62,9 @@ public class SecurityConfig {
                                 "/stonks/**",
                                 "/search-analyst-include-sub-info",
                                 "/search-all-analysts-include-sub-info",
-                                "/fetch-about-me-with-sub-info"
+                                "/fetch-about-me-with-sub-info",
+                                "/user-subscription-list-sorted-by-postdate",
+                                "/user-subscription-list-sorted-by-update-date"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

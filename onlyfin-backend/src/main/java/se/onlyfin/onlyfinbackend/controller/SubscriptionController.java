@@ -11,10 +11,8 @@ import se.onlyfin.onlyfinbackend.repository.SubscriptionRepository;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * This class is responsible for handling requests related to subscriptions.
@@ -24,18 +22,21 @@ import java.util.Optional;
 public class SubscriptionController {
     private final UserRepository userRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final DashboardController dashboardController;
 
     @Autowired
-    public SubscriptionController(UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
+    public SubscriptionController(UserRepository userRepository, SubscriptionRepository subscriptionRepository,
+                                  DashboardController dashboardController) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.dashboardController = dashboardController;
     }
 
     /**
      * Adds a subscription from the logged-in user to the user with the given ID.
      *
-     * @param principal     the logged-in user
-     * @param username the username of the user to subscribe to
+     * @param principal the logged-in user
+     * @param username  the username of the user to subscribe to
      * @return response entity with the username of the subscribed-to user if successful
      */
     @PostMapping("/subscribe")
@@ -68,8 +69,8 @@ public class SubscriptionController {
     /**
      * Removes specified subscription from the logged-in user.
      *
-     * @param principal      the logged-in user
-     * @param username the username of the user to unsubscribe from
+     * @param principal the logged-in user
+     * @param username  the username of the user to unsubscribe from
      * @return response entity with the username of the unsubscribed-from user if successful
      */
     @DeleteMapping("/unsubscribe")
@@ -118,6 +119,78 @@ public class SubscriptionController {
 
     public boolean isUserSubscribedToThisUser(User subscriber, User subscribedTo) {
         return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
+    }
+
+    /**
+     * Generates a subscription list sorted by the latest post date of all the analyst posts
+     *
+     * @param principal the logged-in user
+     * @return postdate-sorted analyst profile list
+     */
+    @GetMapping("/user-subscription-list-sorted-by-postdate")
+    public ResponseEntity<List<ProfileDTO>> generateUserSubscriptionListByPostDate(Principal principal) {
+        User userToFetchSubListFor = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found!"));
+
+        List<Subscription> subscriptionList =
+                new ArrayList<>(subscriptionRepository.findBySubscriber(userToFetchSubListFor));
+        if (subscriptionList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<User> subscribedToAnalysts = new ArrayList<>();
+        for (Subscription currentSubscription : subscriptionList) {
+            subscribedToAnalysts.add(currentSubscription.getSubscribedTo());
+        }
+
+        //we want the latest poster at the top, therefore, reverse order is used(default is ascending order)
+        TreeMap<Instant, User> analystsLastPostTime = new TreeMap<>(Collections.reverseOrder());
+        for (User currentAnalyst : subscribedToAnalysts) {
+            analystsLastPostTime.put(dashboardController.fetchAnalystsLastPostTime(currentAnalyst), currentAnalyst);
+        }
+        List<User> sortedUserList = new ArrayList<>(analystsLastPostTime.values());
+
+        List<ProfileDTO> profileDTOList = new ArrayList<>();
+        sortedUserList.forEach((currentUser) -> profileDTOList.add(
+                new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+
+        return ResponseEntity.ok().body(profileDTOList);
+    }
+
+    /**
+     * Generates a subscription list sorted by the latest update date of all the analyst posts
+     *
+     * @param principal the logged-in user
+     * @return updated-date-sorted analyst profile list
+     */
+    @GetMapping("/user-subscription-list-sorted-by-update-date")
+    public ResponseEntity<List<ProfileDTO>> generateUserSubscriptionListByUpdateDate(Principal principal) {
+        User userToFetchSubListFor = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found!"));
+
+        List<Subscription> subscriptionList =
+                new ArrayList<>(subscriptionRepository.findBySubscriber(userToFetchSubListFor));
+        if (subscriptionList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<User> subscribedToAnalysts = new ArrayList<>();
+        for (Subscription currentSubscription : subscriptionList) {
+            subscribedToAnalysts.add(currentSubscription.getSubscribedTo());
+        }
+
+        //we want the latest poster at the top, therefore, reverse order is used(default is ascending order)
+        TreeMap<Instant, User> analystsLastPostTime = new TreeMap<>(Collections.reverseOrder());
+        for (User currentAnalyst : subscribedToAnalysts) {
+            analystsLastPostTime.put(dashboardController.fetchAnalystsLastUpdateTime(currentAnalyst), currentAnalyst);
+        }
+        List<User> sortedUserList = new ArrayList<>(analystsLastPostTime.values());
+
+        List<ProfileDTO> profileDTOList = new ArrayList<>();
+        sortedUserList.forEach((currentUser) -> profileDTOList.add(
+                new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+
+        return ResponseEntity.ok().body(profileDTOList);
     }
 
 }
