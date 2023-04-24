@@ -2,7 +2,7 @@
     --container-width: 100px;
     --dashboard-module-border-radius: 7px;
 
-    --main-color: #EEEEEE;
+    --main-color: #ffffff;
     --light-color: #ffffff;
     --dark-color: #306b43;
     --header-color: #DDDDDD;
@@ -41,11 +41,16 @@ Navbar
  */
 
 .navbar--img {
-    border-radius: 55px;
     height: 50px;
     width: 50px;
-    margin-top: 25px;
+    margin: 15px 0px;
     border: none;
+}
+
+.navbar--icon{
+    width: 50px;
+    height: 50px;
+    margin-top: 65px;
 }
 
 .navbar--img--line {
@@ -63,14 +68,8 @@ Navbar
     margin-top: 25px;
     margin-left: 15px;
     border-radius: 15px;
-    background-color: rgb(245, 245, 245);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
-}
-
-.navbar-container img {
-    margin-top: 25px;
-    border-radius: 55px;
-    right: 25px;
+    backdrop-filter: blur(10px);
 }
 
 /**
@@ -523,9 +522,6 @@ Login
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
-    background-size: 700% 700%;
-    animation: gradient 60s ease infinite;
     height: 100vh;
 }
 
@@ -548,18 +544,18 @@ Login
     width: 500px;
     padding: 50px;
     border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.16);
     backdrop-filter: blur(50px);
     opacity: 0.8;
-    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+    box-shadow: 0px 0px 10px #bebebe;
 }
 
-.login--title {
-    color: #ececec;
-    font-size: 20px;
-    text-align: center;
-    color: #282c34;
-
+.login--titel > h1{
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    background-clip: text;
+    animation: gradient 15s ease infinite;
+    color: transparent;
+    font-size: 40px;
 }
 
 .login--inputs {
@@ -571,10 +567,9 @@ Login
 .login--inputs > input {
     margin: 20px;
     border: none;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.41);
+    border-radius: 10px;
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 7px #727272;
+    box-shadow: 0px 0px 7px #bbbbbb;
     opacity: 0.8;
     outline: none;
     font-size: 17px;
@@ -599,7 +594,7 @@ Login
     border-radius: 30px;
     background-color: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 15px #626262;
+    box-shadow: 0px 0px 5px #969696;
     opacity: 0.8;
     outline: none;
     text-align: center;
@@ -719,7 +714,6 @@ Dashboard
  */
 
 .dashboard {
-    background-color: #d5d5d5;
     height: 100vh;
 }
 
@@ -732,8 +726,7 @@ Dashboard
     left: 7%;
     right: 1%;
     margin-left: 35px;
-    border-radius: 15px;
-    background-color: rgb(245, 245, 245);
+    border-radius: 18px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
     overflow: scroll;
 }
@@ -748,9 +741,9 @@ Dashboard
     height: 96px;
     top: 2%;
     border-radius: 15px 15px 0px 0px;
-    background-color: rgb(245, 245, 245);
     border-bottom: 1px solid;
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
+    box-shadow: 0px 0px 8px #989898;
 }
 
 .dashboard--stocks {
@@ -763,25 +756,27 @@ Dashboard
 
 .dashboard-stock-tab-buttons > button {
     padding: 8px 20px;
-
-    background-color: #EEEEEEFF;
+    border: none;
+    background-color: #ffffff;
     color: #282c34;
-    margin: 10px;
+    margin: 10px 5px 5px 10px;
     font-size: 15px;
-    border-radius: 20px;
-    border: 1px dashed #61dafb;
+    border-radius: 10px;
+    border-bottom: 1px solid #cbcbcb;
 }
 
 .dashboard-stock-tab-buttons > button:hover{
-    border: 1px dotted #61dafb
+    border-bottom: 1px solid #61dafb
 }
 
 .dashboard-stock-tab-buttons > button.active {
     background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400px 400px;
+    background-clip: text;
     animation: gradient 25s ease infinite;
-    color: #282c34;
-    border: 2px solid var(--main-color)
+    color: transparent;
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
 }
 
 .dashboard-category-tab-buttons {
@@ -790,25 +785,28 @@ Dashboard
 
 .dashboard-category-tab-buttons > button {
     padding: 8px 20px;
-    border-radius: 25px;
+    border: none;
+    border-radius: 5px;
     background-color: var(--main-color);
     color: #282c34;
-    margin: 0px 10px 5px 10px;
+    margin: 0px 10px 15px 10px;
 
     font-size: 12px;
-    border: 1px dashed #61dafb;
+    border-bottom: 1px solid #cbcbcb;
 }
 
 .dashboard-category-tab-buttons > button:hover{
-    border: 1px dotted #61dafb
+    border-bottom: 1px solid #61dafb;
 }
 
-.dashboard-category-tab-buttons button.active {
+.dashboard-category-tab-buttons > button.active {
     background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400px 400px;
+    background-clip: text;
     animation: gradient 25s ease infinite;
-    color: #282c34;
-    border: 2px solid var(--main-color)
+    color: transparent;
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
 }
 
 .dashboard-profile-button{
@@ -821,14 +819,15 @@ Dashboard
     background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400px 400px;
     animation: gradient 25s ease infinite;
-    border: 2px solid #61dafb;
+    border: none;
 }
 
 .dashboard-category-tab-content{
     align-self: center;
     overflow-y: auto;
     margin-top: 90px;
-    margin-left: 90px;
+    margin-left: 15px;
+    padding-top: 10px;
     width: 99%;
 }
 
@@ -837,11 +836,26 @@ Dashboard
 }
 
 .dashboard-module-container {
+    width: 390px;
     display: inline-grid;
     margin: 15px;
     background-color: #FFFFFFFF;
     border-radius: 15px;
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.dashboard-is-loading{
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 100px 100px;
+    background-clip: text;
+    color: transparent;
+    font-size: 50px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /*
@@ -895,16 +909,6 @@ Dashboard
     background-color: var(--dark-color);
     border: none;
     z-index: 3;
-}
-
-.dashboard-is-loading{
-    color: var(--dark-color);
-    font-size: 24px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
 }
 */
 /**
