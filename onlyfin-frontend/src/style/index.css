@@ -844,6 +844,9 @@ Dashboard
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
+.dashboard--chart{
+    width: 370px;
+}
 
 .dashboard-is-loading{
     background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);

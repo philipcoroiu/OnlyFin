@@ -79,8 +79,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <Link to="/profile_page">
-                        <button className="dashboard-profile-button">
-                        </button>
+                        <button className="dashboard-profile-button"></button>
                     </Link>
                 </div>
                 <div className="dashboard-category-tab-content">
@@ -91,13 +90,14 @@ export default function Dashboard() {
                                 index === activeCategoryTab ? "active" : ""
                             }`}
                         >
+                            <h1>{index}</h1>
                             {category.moduleEntities.map((moduleEntity) => (
                                 <div key={moduleEntity.id} className="dashboard-module-container">
-                                                <pre>
-                                                    <HighchartsReact
-                                                        highcharts={Highcharts}
-                                                        options={moduleEntity.content}/>
-                                                </pre>
+                                         <HighchartsReact
+                                             highcharts={Highcharts}
+                                             options={moduleEntity.content}
+                                             className="dashboard--chart"
+                                         />
                                 </div>
                             ))}
                         </div>
