@@ -2,6 +2,7 @@ import React, {useEffect} from "react"
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import Profile from "./Profile";
+import NavBar from "../navBar/NavBar";
 
 export default function SearchPage() {
 
@@ -152,22 +153,28 @@ export default function SearchPage() {
 
 
     return(
-        <div>
-            <SearchBar onSearch={onSearch}/>
+        <div className="search--body">
+            <NavBar/>
+            <div className="search--header">
+                <h1>Discover analysts</h1>
+            </div>
+            <SearchBar onSearch={onSearch} classname="search--search"/>
 
             {searchData === null ? (
                 <div>Failed to get search result</div>
             ) : (
-                <div>
+                <div
+                    className="search--profile--container"
+                >
                     {searchData.map(data => (
-                        <div>
+                        <div className="search--profile--tab">
                             <Profile
                                 key={data.profile.id}
                                 name={data.profile.username}
-                                onClick={() => handleSubscription(data.profile.username, data.subscribed)}
+                                function={() => handleSubscription(data.profile.username, data.subscribed)}
+                                isSubscribed = {data.subscribed}
                             >
                             </Profile>
-                            <button key={data.profile.id + 1} onClick={() => handleSubscription(data.profile.username, data.subscribed)}> {data.subscribed ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
 
                     ))}

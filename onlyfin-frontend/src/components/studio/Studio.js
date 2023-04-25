@@ -34,7 +34,7 @@ export default function Studio() {
         },
         xAxis: {
             title: {
-                text: "Hej",
+                text: "",
                 style: {
                     color: "#1A1616"
                 }

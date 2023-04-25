@@ -13,14 +13,14 @@ export default function SearchBar(props) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="search--form">
             <input
+                className="search--search"
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleChange}
             />
-            <button type="submit">Search</button>
         </form>
     );
 };

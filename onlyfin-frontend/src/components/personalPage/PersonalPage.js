@@ -2,10 +2,11 @@ import React, {useEffect} from "react"
 import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useParams} from "react-router-dom";
+import NavBar from "../navBar/NavBar";
 
 export default function PersonalPage() {
 
-    const { username } = useParams();
+    const {username} = useParams();
     const [userData, setUserData] = React.useState();
     const [error, setError] = React.useState(null)
 
@@ -41,7 +42,7 @@ export default function PersonalPage() {
     }, [username]);
 
     async function handleClick() {
-        if(userData.subscribed) {
+        if (userData.subscribed) {
             await onUnsubscribe();
         } else {
             await onSubscribe()
@@ -64,7 +65,7 @@ export default function PersonalPage() {
                     withCredentials: true,
                 }
             )
-        } catch(error) {
+        } catch (error) {
             console.log(error)
         }
     };
@@ -82,7 +83,7 @@ export default function PersonalPage() {
                     withCredentials: true
                 }
             )
-        } catch(error) {
+        } catch (error) {
             console.log(error)
         }
     };
@@ -104,7 +105,7 @@ export default function PersonalPage() {
         }
     }
 
-    if(!userData) {
+    if (!userData) {
         return (
             <div>Loading</div>
         )
@@ -114,11 +115,22 @@ export default function PersonalPage() {
     return (
         <div>
             {error ? <p>{error}</p> : (
-                <div>
-                    <img src={Avatar} width="100px"/>
-                    <h2>{username}</h2>
-                    <p>{userData.aboutMe}</p>
-                    <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
+                <div className="personalPage">
+                    <NavBar/>
+                    <div className="personalPage--background">
+                        <img
+                            src={Avatar}
+                            width="100px"
+                            className="mypage--img"
+                        />
+                    </div>
+                    <div className="mypage--text--container">
+                        <h2>{username}</h2>
+                        <div className="mypage--bio--container">
+                            <p>{userData.aboutMe}</p>
+                            <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
