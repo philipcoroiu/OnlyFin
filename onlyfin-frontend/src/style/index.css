@@ -40,6 +40,16 @@ Chart
 Navbar
  */
 
+.navbar--logout{
+    width: 50px;
+    height: 50px;
+    margin-top: 65px;
+    background-color: #ffffff;
+    border: none;
+    box-shadow: 0 0 10px #afafaf;
+    border-radius: 50px;
+}
+
 .navbar--img {
     height: 60px;
     width: 60px;
