@@ -1,9 +1,12 @@
 import React from "react"
 import {Link} from "react-router-dom";
-import homeIcon from "../../assets/icons/homeicon.png"
-import studioIcon from "../../assets/icons/studioIcon.png"
-import '../../style/navBar.css';
+import homeIcon from "../../assets/icons/home.png"
+import studioIcon from "../../assets/icons/studio.png"
 import Avatar from "../../assets/images/avatar.png";
+
+/*
+Make logout function (POST / logout)
+ */
 
 export default function NavBar() {
     return (
@@ -14,16 +17,16 @@ export default function NavBar() {
                 </span>
             </Link>
             <Link to="/Dashboard">
-                <img src={homeIcon} alt="Home" title="Home"/>
+                <img className="navbar--icon" src={homeIcon} alt="Home" title="Home"/>
             </Link>
             <Link to="/Studio">
-                <img src={studioIcon} alt="Studio" title="Studio"/>
+                <img className="navbar--icon" src={studioIcon} alt="Studio" title="Studio"/>
             </Link>
             <Link to="/studio">
-                <img src={homeIcon} alt="Studio"/>
+                <img className="navbar--icon" src={homeIcon} alt="Studio"/>
             </Link>
             <Link to="Studio2">
-                <img src={homeIcon} alt="Studio"/>
+                <img className="navbar--icon" src={homeIcon} alt="Studio"/>
             </Link>
         </div>
     )

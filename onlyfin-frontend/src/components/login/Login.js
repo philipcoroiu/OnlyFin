@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import axios from 'axios';
 
 export default function Login() {
+    document.title="Login"
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -30,7 +32,7 @@ export default function Login() {
                 }
             )
             .then(() => {
-                window.location.href = 'http://localhost:3000/Login/UserDebug';
+                window.location.href = 'http://localhost:3000/Dashboard';
             })
             .catch((error) => {
                 setError(error.response.data.error);

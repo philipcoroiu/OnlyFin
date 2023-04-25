@@ -1,9 +1,8 @@
 :root {
     --container-width: 100px;
-    --dashboard-margin: 25px;
     --dashboard-module-border-radius: 7px;
 
-    --main-color: #EEEEEE ;
+    --main-color: #ffffff;
     --light-color: #ffffff;
     --dark-color: #306b43;
     --header-color: #DDDDDD;
@@ -26,6 +25,7 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: rgba(232, 232, 232, 0.32);
 }
 
 /**
@@ -35,41 +35,42 @@ Chart
 .highcharts-background {
     fill: var(--light-color);
 }
+
 /**
 Navbar
  */
 
-.navbar--img{
-    border-radius: 55px;
-    height: 50px;
-    width: 50px;
-    margin-top: 25px;
+.navbar--img {
+    height: 60px;
+    width: 60px;
+    margin: 15px 0px;
     border: none;
 }
-.navbar--img--line{
+
+.navbar--icon{
+    width: 50px;
+    height: 50px;
+    margin-top: 65px;
+}
+
+.navbar--img--line {
     border-bottom: 1px solid #b4b4b4;
     padding: 10px;
 }
 
-.navbar-container{
+.navbar-container {
     position: fixed;
     width: var(--container-width);
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 15px;
-    height: 98%;
-    margin-top: 10px;
-    margin-left: 15px;
-    background-color: rgb(245, 245, 245);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
-}
-
-.navbar-container img {
+    height: 94%;
     margin-top: 25px;
-    border-radius: 55px;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
-    right: 25px;
+    margin-left: 15px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.66);
 }
 
 /**
@@ -274,7 +275,7 @@ Studio toolbar
     caret-color: #cbcbcb;
 }
 
-.studio--dataset--buttons{
+.studio--dataset--buttons {
     display: flex;
 }
 
@@ -436,9 +437,6 @@ Register
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #ffffff, #9569b9, #4d9de0);
-    background-size: 800% 800%;
-    animation: gradient 60s ease infinite;
     height: 100vh;
 }
 
@@ -446,30 +444,29 @@ Register
 .register--holder {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     width: 500px;
     padding: 50px;
     border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(50px);
-    opacity: 0.8;
-    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+    background-color: #ffffff;
+    box-shadow: 5px 5px 10px #bebebe;
 }
 
-.register--title{
-    color: #ececec;
-    font-size: 20px;
-    text-align: center;
+.register--title {
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    background-clip: text;
+    animation: gradient 15s ease infinite;
+    color: transparent;
+    font-size: 23px;
+}
+
+.register--title > p {
     color: #282c34;
-
+    font-size: 18px;
 }
 
-.register--title > p{
-    color: #282c34;
-}
-
-.register--inputs--container{
+.register--inputs--container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -477,12 +474,11 @@ Register
 }
 
 .register--inputs--container > input {
-    margin: 20px;
+    margin: 10px;
     border: none;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.41);
+    border-radius: 10px;
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 7px #727272;
+    box-shadow: 0px 0px 7px #bbbbbb;
     opacity: 0.8;
     outline: none;
     font-size: 17px;
@@ -491,7 +487,7 @@ Register
     height: 30px;
 }
 
-.register--inputs--container > input::placeholder{
+.register--inputs--container > input::placeholder {
     color: #282c34;
 }
 
@@ -499,9 +495,9 @@ Register
     margin: 20px;
     border: none;
     border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.59);
+    background-color: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 7px #727272;
+    box-shadow: 0px 0px 5px #969696;
     opacity: 0.8;
     outline: none;
     text-align: center;
@@ -510,7 +506,7 @@ Register
     height: 30px;
 }
 
-.register--submit:hover{
+.register--submit:hover {
     cursor: pointer;
 }
 
@@ -518,13 +514,10 @@ Register
 Login
  */
 
-.login{
+.login {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
-    background-size: 700% 700%;
-    animation: gradient 60s ease infinite;
     height: 100vh;
 }
 
@@ -547,18 +540,17 @@ Login
     width: 500px;
     padding: 50px;
     border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(50px);
-    opacity: 0.8;
-    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+    background-color: #ffffff;
+    box-shadow: 5px 5px 10px #bebebe;
 }
 
-.login--title{
-    color: #ececec;
-    font-size: 20px;
-    text-align: center;
-    color: #282c34;
-
+.login--titel > h1{
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    background-clip: text;
+    animation: gradient 15s ease infinite;
+    color: transparent;
+    font-size: 40px;
 }
 
 .login--inputs {
@@ -570,10 +562,9 @@ Login
 .login--inputs > input {
     margin: 20px;
     border: none;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.41);
+    border-radius: 10px;
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 7px #727272;
+    box-shadow: 0px 0px 7px #bbbbbb;
     opacity: 0.8;
     outline: none;
     font-size: 17px;
@@ -598,7 +589,7 @@ Login
     border-radius: 30px;
     background-color: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 15px #626262;
+    box-shadow: 0px 0px 5px #969696;
     opacity: 0.8;
     outline: none;
     text-align: center;
@@ -607,7 +598,7 @@ Login
     height: 30px;
 }
 
-.login--submit:hover{
+.login--submit:hover {
     cursor: pointer;
 }
 
@@ -615,7 +606,7 @@ Login
 Welcome
  */
 
-.welcome--navbar{
+.welcome--navbar {
     width: 100%;
     top: 0;
     display: flex;
@@ -629,24 +620,25 @@ Welcome
     background-color: #fff;
 }
 
-.welcome--navbar > ul{
+.welcome--navbar > ul {
     display: flex;
     justify-content: space-around;
     list-style: none;
 }
 
-.welcome--navbar > ul > li > a{
+.welcome--navbar > ul > li > a {
     text-decoration: none;
     color: #b4b4b4;
     font-weight: bold;
     font-size: 20px;
 }
 
-.welcome--navbar > ul > li{
+.welcome--navbar > ul > li {
     color: #b4b4b4;
     margin: 15px 85px;
 }
-.welcome--navbar > ul > li > a:hover{
+
+.welcome--navbar > ul > li > a:hover {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -655,16 +647,16 @@ Welcome
     transition: all 0.3s ease-in-out;
 }
 
-.welcome--navbar--title{
+.welcome--navbar--title {
     font-size: 30px;
     padding-left: 80px;
 }
 
-.welcome--navbar--title:hover{
+.welcome--navbar--title:hover {
     cursor: default;
 }
 
-.welcome--hero{
+.welcome--hero {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -672,12 +664,12 @@ Welcome
     margin-top: 120px;
 }
 
-.welcome--hero > h1{
+.welcome--hero > h1 {
     font-size: 50px;
     padding: 30px 30px 0px 30px;
 }
 
-.welcome--hero--fin{
+.welcome--hero--fin {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -685,11 +677,11 @@ Welcome
     animation: gradient 5s ease infinite;
 }
 
-.welcome--hero--image{
+.welcome--hero--image {
     width: 50%;
 }
 
-.welcome--hero--button{
+.welcome--hero--button {
     margin: 50px;
     padding: 50px;
     width: 400px;
@@ -699,7 +691,7 @@ Welcome
     background-color: transparent;
 }
 
-.welcome--hero--button:hover{
+.welcome--hero--button:hover {
     cursor: pointer;
     border-bottom: 1px solid;
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
@@ -716,6 +708,163 @@ Welcome
 Dashboard
  */
 
+
+/*
+.dashboard {
+    height: 100vh;
+}
+
+.dashboard-content-wrapper {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 3%;
+    bottom: 3%;
+    left: 7%;
+    right: 1%;
+    margin-left: 35px;
+    border-radius: 18px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
+    overflow: scroll;
+    background-color: #ffffff;
+}
+
+.dashboard--header {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+    width: 1290px;
+    height: 96px;
+    top: 2%;
+    border-radius: 15px 15px 0px 0px;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
+    box-shadow: 0px 0px 8px #989898;
+}
+
+.dashboard--stocks {
+}
+
+
+.dashboard-stock-tab-buttons {
+
+}
+
+.dashboard-stock-tab-buttons > button {
+    padding: 8px 20px;
+    border: none;
+    background-color: #ffffff;
+    color: #282c34;
+    margin: 10px 5px 5px 10px;
+    font-size: 15px;
+    border-radius: 10px;
+    border-bottom: 1px solid #cbcbcb;
+}
+
+.dashboard-stock-tab-buttons > button:hover{
+    border-bottom: 1px solid #61dafb
+}
+
+.dashboard-stock-tab-buttons > button.active {
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    background-clip: text;
+    animation: gradient 25s ease infinite;
+    color: transparent;
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
+}
+
+.dashboard-category-tab-buttons {
+    display: flex;
+}
+
+.dashboard-category-tab-buttons > button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--main-color);
+    color: #282c34;
+    margin: 0px 10px 15px 10px;
+
+    font-size: 12px;
+    border-bottom: 1px solid #cbcbcb;
+}
+
+.dashboard-category-tab-buttons > button:hover{
+    border-bottom: 1px solid #61dafb;
+}
+
+.dashboard-category-tab-buttons > button.active {
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    background-clip: text;
+    animation: gradient 25s ease infinite;
+    color: transparent;
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
+}
+
+.dashboard-profile-button{
+    margin: 40px;
+
+    width: 65px;
+    height: 65px;
+    border-radius: 50px;
+
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 25s ease infinite;
+    border: none;
+}
+
+.dashboard-category-tab-content{
+    align-self: center;
+    overflow-y: auto;
+    margin-top: 90px;
+    margin-left: 15px;
+    padding-top: 10px;
+    width: 99%;
+}
+
+.dashboard-category-tab-content::-webkit-scrollbar {
+    display: none;
+}
+
+.dashboard-module-container {
+    width: 390px;
+    display: inline-grid;
+    margin: 15px;
+    background-color: #FFFFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard--chart{
+    width: 370px;
+}
+
+.dashboard-is-loading{
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 100px 100px;
+    background-clip: text;
+    color: transparent;
+    font-size: 50px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+*/
+
+
+/* ändra inte i denna klassen har ändrat alla
+variabler så att det inte ska påverka något annat.
+behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
+
 .dashboard-content-wrapper {
     display: flex;
     position: fixed;
@@ -725,22 +874,24 @@ Dashboard
     bottom: 0;
     background-color: var(--main-color);
     margin: 25px;
-    margin-left: var(--dashboard-margin);
-    margin-right: var(--dashboard-margin);
-    box-shadow:  0 0 10px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 50px;
+    margin-right: 30px;
+    box-shadow:  0px 0px 10px rgba(0, 0, 0, 0.38);
+    border-radius: 20px;
 }
 
 .dashboard-button-underlay{
     position: fixed;
     height: 115px;
-    margin-right: var(--dashboard-margin);
-    margin-left: var(--dashboard-margin);
+    margin-right: 30px;
+    margin-left: 50px;
     right: 0;
     left: var(--container-width);
-    border-top-right-radius: 0px;
-    background-color: var(--header-color);
+    border-radius: 20px 20px 0 0;
+    background-color: #ffffff;
     z-index: 2;
-
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
 }
 
 .dashboard-stock-tab-buttons {
@@ -752,25 +903,30 @@ Dashboard
     z-index: 3;
 }
 
-.dashboard-stock-tab-buttons button {
-    padding: 8px;
-    padding-right: 20px;
-    padding-left: 20px;
-    border: none;
-    border-radius: 25px;
-    background-color: var(--main-color);
-    color: var(--dark-color);
-    margin-right: 10px;
-    font-family: Tahoma;
-    font-size: 17px;
-    border: 2px solid var(--dark-color);
 
+.dashboard-stock-tab-buttons > button {
+    padding: 8px 20px;
+    margin-right: 10px;
+    border: none;
+    background-color: #ffffff;
+    color: #282c34;
+    font-size: 15px;
+    border-radius: 10px;
+    border-bottom: 1px solid #cbcbcb;
 }
 
-.dashboard-stock-tab-buttons button.active {
-    background-color: var(--dark-color);
-    color: var(--main-color);
-    border: 2px solid var(--main-color)
+.dashboard-stock-tab-buttons > button:hover{
+    border-bottom: 1px solid #61dafb
+}
+
+.dashboard-stock-tab-buttons > button.active {
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    background-clip: text;
+    animation: gradient 25s ease infinite;
+    color: transparent;
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
 }
 
 .dashboard-category-tab-buttons {
@@ -782,24 +938,32 @@ Dashboard
     z-index: 3;
 }
 
-.dashboard-category-tab-buttons button {
-    padding: 8px;
-    padding-right: 20px;
-    padding-left: 20px;
+.dashboard-category-tab-buttons > button {
+    padding: 8px 20px;
     border: none;
-    border-radius: 25px;
+
+    border-radius: 5px;
     background-color: var(--main-color);
-    color: var(--dark-color);
-    margin-right: 10px;
-    font-family: Tahoma;
-    font-size: 14px;
-    border: 2px solid var(--dark-color);
+    color: #282c34;
+    margin: 0 10px 15px 10px;
+
+    font-size: 12px;
+    border-bottom: 1px solid #cbcbcb;
 }
 
-.dashboard-category-tab-buttons button.active {
-    background-color: var(--dark-color);
-    color: var(--main-color);
-    border: 2px solid var(--main-color);
+.dashboard-category-tab-buttons > button:hover{
+    border-bottom: 1px solid #61dafb;
+    transition: all 0.3s ease-in-out;
+}
+
+.dashboard-category-tab-buttons > button.active {
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    background-clip: text;
+    animation: gradient 25s ease infinite;
+    color: transparent;
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
 }
 
 .dashboard-category-tab-content .module-container {
@@ -814,7 +978,7 @@ Dashboard
     align-self: center;
     overflow-y: auto;
     margin-top: 125px;
-    margin-left: 10px;
+    margin-left: 40px;
 
 
 }
@@ -851,6 +1015,11 @@ Dashboard
     background-color: var(--dark-color);
     border: none;
     z-index: 3;
+
+
+    background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400px 400px;
+    animation: gradient 25s ease infinite;
 }
 
 .dashboard-is-loading{
@@ -864,23 +1033,26 @@ Dashboard
 
 }
 
+
+
 /**
 Profile page
  */
 
-.mypage{
+.mypage {
     display: flex;
     flex-direction: column;
 }
 
-.mypage--background{
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+.mypage--background {
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 30vh;
     position: relative;
     z-index: -1;
 }
+
 .mypage--img {
     width: 15%;
     position: absolute;
@@ -891,7 +1063,7 @@ Profile page
     border-radius: 150px;
 }
 
-.mypage--text--container{
+.mypage--text--container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -900,13 +1072,14 @@ Profile page
 }
 
 
-.mypage--bio--container{
+.mypage--bio--container {
     width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .mypage--bio--container > button {
     width: 20%;
     margin: 10px;
@@ -916,7 +1089,7 @@ Profile page
     font-size: 15px;
 }
 
-.mypage--bio--container > button:hover{
+.mypage--bio--container > button:hover {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -925,7 +1098,7 @@ Profile page
     transition: all 0.5s ease-in-out;
 }
 
-.mypage--bio{
+.mypage--bio {
     appearance: none;
     border: none;
     border-bottom: 1px solid #b4b4b4;
