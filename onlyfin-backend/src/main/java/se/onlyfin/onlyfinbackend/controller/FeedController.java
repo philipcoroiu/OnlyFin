@@ -69,7 +69,6 @@ public class FeedController {
                     currentSubscription
                             .getSubscribedTo()
                             .getId()
-                            .toString()
             ).getBody();
 
             dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
@@ -159,7 +158,6 @@ public class FeedController {
                     currentSubscription
                             .getSubscribedTo()
                             .getId()
-                            .toString()
             ).getBody();
 
             dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);

@@ -20,26 +20,21 @@ import java.util.Optional;
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class DashboardController {
 
-    @Autowired
     private DashboardRepository dashboardRepository;
 
+    public DashboardController(DashboardRepository dashboardRepository){
+        this.dashboardRepository = dashboardRepository;
+    }
+
     @GetMapping("/{id}")
-
-    public ResponseEntity<Dashboard> getDashboard(@PathVariable String id) {
-
-        try {
-            int id_id = Integer.parseInt(id);
-            Optional<Dashboard> optionalDashboard = dashboardRepository.findById(id_id);
-            Dashboard dashboard = optionalDashboard.orElse(null);
-            if (dashboard == null) {
-                System.out.println("is null");
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(dashboard);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+    public ResponseEntity<Dashboard> getDashboard(@PathVariable Integer id) {
+        Optional<Dashboard> optionalDashboard = dashboardRepository.findById(id);
+        Dashboard dashboard = optionalDashboard.orElse(null);
+        if (dashboard == null) {
+            System.out.println("is null");
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(dashboard);
     }
 
     public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {

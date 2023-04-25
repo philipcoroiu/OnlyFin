@@ -7,7 +7,11 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
-import se.onlyfin.onlyfinbackend.repository.*;
+import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
+import se.onlyfin.onlyfinbackend.repository.CategoryRepository;
+import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
+import se.onlyfin.onlyfinbackend.repository.StockRepository;
+
 
 import java.util.Optional;
 
@@ -21,7 +25,11 @@ public class StudioController {
     private final ModuleRepository moduleRepository;
     private final DashboardRepository dashboardRepository;
 
-    public StudioController(StockRepository stockRepository, CategoryRepository categoryRepository, ModuleRepository moduleRepository, DashboardRepository dashboardRepository) {
+    public StudioController(StockRepository stockRepository,
+                            CategoryRepository categoryRepository,
+                            ModuleRepository moduleRepository,
+                            DashboardRepository dashboardRepository)
+    {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
@@ -30,42 +38,29 @@ public class StudioController {
 
     @PostMapping("/createStock")
     public String createStock(@RequestBody Stock stock){
-
-        try{
             stockRepository.save(stock);
             return "stock added successfully";
-        } catch (Exception e){ System.out.println(e.getMessage());}
-
-        return "could not add stock";
     }
 
     @DeleteMapping("/deleteStock/{id}")
     public String deleteStock(@PathVariable String id) {
 
-        try {
-            int intId = Integer.parseInt(id);
-            if(!stockRepository.existsById(intId)) {
-                return "There is no stock with that id";
-            }
-            stockRepository.deleteById(intId);
-            return "Removed stock successfully";
-        } catch (Exception e) {
-            System.out.println(e);
+        int intId = Integer.parseInt(id);
+        if(!stockRepository.existsById(intId)) {
+            return "There is no stock with that id";
         }
-        return "Could not remove stock";
+        stockRepository.deleteById(intId);
+        return "Removed stock successfully";
     }
 
     @PostMapping("/createCategory")
     public ResponseEntity<?> createCategory(@RequestBody Category category){
 
-        try{
-            if(!stockRepository.existsById(category.getStock_id())) return ResponseEntity.badRequest().body("there is no stock for that id");
-
-            categoryRepository.save(category);
-            return ResponseEntity.ok(categoryRepository.getReferenceById(category.getId()));
-        } catch (Exception e){ System.out.println(e.getMessage());}
-
-        return ResponseEntity.badRequest().body("could not add category");
+        if(!stockRepository.existsById(category.getStock_id())){
+            return ResponseEntity.badRequest().body("there is no stock for that id");
+        }
+        categoryRepository.save(category);
+        return ResponseEntity.ok(categoryRepository.getReferenceById(category.getId()));
     }
 
     @DeleteMapping("/deleteCategory/{id}")
@@ -101,30 +96,21 @@ public class StudioController {
     @PostMapping("/createModule")
     public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave){
 
-        try{
-            if(!categoryRepository.existsById(moduleToSave.getCategory_id())) return ResponseEntity.badRequest().body("there is no category for that id");
-
-            moduleRepository.save(moduleToSave);
-            return ResponseEntity.ok(moduleRepository.getReferenceById(moduleToSave.getId()));
-        } catch (Exception e){ System.out.println(e.getMessage());}
-
-        return ResponseEntity.badRequest().body("could not add module");
+        if(!categoryRepository.existsById(moduleToSave.getCategory_id())){
+            return ResponseEntity.badRequest().body("there is no category for that id");
+        }
+        moduleRepository.save(moduleToSave);
+        return ResponseEntity.ok(moduleRepository.getReferenceById(moduleToSave.getId()));
     }
 
     @DeleteMapping("/deleteModule/{id}")
-    public String deleteModule(@PathVariable String id) {
+    public String deleteModule(@PathVariable Integer id) {
 
-        try {
-            int intId = Integer.parseInt(id);
-            if (!moduleRepository.existsById(intId)) {
-                return "There is no module with that id";
-            }
-            moduleRepository.deleteById(intId);
-            return "Removed module successfully";
-        } catch (Exception e) {
-            System.out.println(e);
+        if (!moduleRepository.existsById(id)) {
+            return "There is no module with that id";
         }
-        return "Could not module category";
+        moduleRepository.deleteById(id);
+        return "Removed module successfully";
     }
 
     @GetMapping("getStocksAndCategories/{id}")
