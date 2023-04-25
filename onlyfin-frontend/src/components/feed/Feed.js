@@ -1,7 +1,7 @@
 import React, {useEffect} from "react"
 import axios from "axios";
 import FeedModule from "./FeedModule"
-import Profile from "../searchPage.js/Profile";
+import SubscriptionBar from "../feed/SubscriptionBar"
 
 
 export default function Feed() {
@@ -50,8 +50,10 @@ export default function Feed() {
                         />
                     </div>
 
-
                 ))}
+                <div>
+                    <SubscriptionBar></SubscriptionBar>
+                </div>
             </div>
         )}</div>
     )
