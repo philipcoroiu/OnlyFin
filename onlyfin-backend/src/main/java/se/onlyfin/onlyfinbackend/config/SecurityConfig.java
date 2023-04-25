@@ -65,7 +65,8 @@ public class SecurityConfig {
                                 "/fetch-about-me-with-sub-info",
                                 "/user-subscription-list-sorted-by-postdate",
                                 "/user-subscription-list-sorted-by-update-date",
-                                "/algo/**"
+                                "/algo/**",
+                                "/find-analysts-that-cover-stock"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

@@ -7,6 +7,7 @@ import se.onlyfin.onlyfinbackend.repository.StockRefRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/stonks")
 @RestController
@@ -44,6 +45,14 @@ public class StockReferenceController {
         }
 
         return ResponseEntity.ok().body(searchResults);
+    }
+
+    public List<StockRef> fetchStockReferencesUsingName(String stockName) {
+        return new ArrayList<>(stockRefRepository.findTop7StockRefsByNameIgnoreCaseStartingWith(stockName));
+    }
+
+    public Optional<StockRef> fetchStockRefByName(String stockName) {
+        return stockRefRepository.findStockRefByName(stockName);
     }
 
 }

@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileWithSubInfoForLoggedInUserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.StockRef;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class is responsible for handling all requests related to searching for analysts.
@@ -25,11 +24,18 @@ import java.util.Optional;
 public class SearchController {
     private final UserRepository userRepository;
     private final SubscriptionController subscriptionController;
+    private final DashboardController dashboardController;
+    private final StockReferenceController stockReferenceController;
 
     @Autowired
-    public SearchController(UserRepository userRepository, SubscriptionController subscriptionController) {
+    public SearchController(UserRepository userRepository,
+                            SubscriptionController subscriptionController,
+                            DashboardController dashboardController,
+                            StockReferenceController stockReferenceController) {
         this.userRepository = userRepository;
         this.subscriptionController = subscriptionController;
+        this.dashboardController = dashboardController;
+        this.stockReferenceController = stockReferenceController;
     }
 
     /**
@@ -43,7 +49,7 @@ public class SearchController {
                 new UsernameNotFoundException("Username not found"));
 
         List<User> foundUsers = new ArrayList<>(userRepository.findByisAnalystIsTrue());
-        foundUsers.removeIf((currentUser -> currentUser.equals(fetchingUser)));
+        foundUsers.remove(fetchingUser);
 
         List<ProfileDTO> usersToReturnToClient = new ArrayList<>();
         foundUsers.forEach((currentUser ->
@@ -83,7 +89,7 @@ public class SearchController {
                 new UsernameNotFoundException("Username not found"));
 
         List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
-        userList.removeIf((currentUser -> currentUser.equals(fetchingUser)));
+        userList.remove(fetchingUser);
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -109,7 +115,7 @@ public class SearchController {
                 new UsernameNotFoundException("Username not found"));
 
         List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
-        userList.removeIf((currentUser) -> currentUser.equals(fetchingUser));
+        userList.remove(fetchingUser);
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -150,7 +156,7 @@ public class SearchController {
                 new UsernameNotFoundException("Username not found"));
 
         List<User> userList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
-        userList.removeIf((currentUser) -> currentUser.equals(fetchingUser));
+        userList.remove(fetchingUser);
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -176,6 +182,33 @@ public class SearchController {
                 currentResult, loggedInUserSubscriptions.contains(currentResult))));
 
         return ResponseEntity.ok().body(profileListWithSubInfo);
+    }
+
+    @GetMapping("/find-analysts-that-cover-stock")
+    public ResponseEntity<List<ProfileDTO>> findAnalystsThatCoverStock(Principal principal, @RequestParam String stockName) {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found"));
+
+        StockRef targetStock = stockReferenceController.fetchStockRefByName(stockName).orElseThrow();
+
+        ArrayList<User> analystList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
+        analystList.remove(fetchingUser);
+        if (analystList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        HashMap<StockRef, ArrayList<User>> coverageMap = dashboardController.fetchCoverageMap(analystList);
+        HashSet<ProfileDTO> analystsCoveringTargetStocks = new HashSet<>();
+        if (coverageMap.containsKey(targetStock)) {
+            coverageMap.get(targetStock).forEach((currentAnalyst) -> analystsCoveringTargetStocks.add(
+                    new ProfileDTO(currentAnalyst.getUsername(), currentAnalyst.getId())));
+        }
+
+        if (analystsCoveringTargetStocks.isEmpty()) {
+            ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(analystsCoveringTargetStocks.stream().toList());
     }
 
 }

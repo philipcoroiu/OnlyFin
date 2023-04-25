@@ -1,17 +1,15 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.model.User;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +20,7 @@ public class DashboardController {
 
     private DashboardRepository dashboardRepository;
 
-    public DashboardController(DashboardRepository dashboardRepository){
+    public DashboardController(DashboardRepository dashboardRepository) {
         this.dashboardRepository = dashboardRepository;
     }
 
@@ -77,6 +75,32 @@ public class DashboardController {
 
     public Dashboard fetchDashboard(Integer userId) {
         return dashboardRepository.findById(userId).orElse(null);
+    }
+
+    public HashMap<StockRef, ArrayList<User>> fetchCoverageMap(List<User> analysts) {
+        HashMap<StockRef, ArrayList<User>> coverageMap = new HashMap<>();
+
+        ArrayList<User> analystList = new ArrayList<>(analysts);
+
+        if (analystList.isEmpty()) {
+            return coverageMap;
+        }
+
+        for (User currentAnalyst : analystList) {
+            Dashboard currentDashboard = fetchDashboard(currentAnalyst.getId());
+            if (currentDashboard != null) {
+                for (Stock currentStock : currentDashboard.getStocks()) {
+                    StockRef currentStockRef = currentStock.getStock_ref_id();
+                    if (!coverageMap.containsKey(currentStockRef)) {
+                        coverageMap.put(currentStockRef, new ArrayList<>());
+                    }
+                    coverageMap.get(currentStockRef).add(currentAnalyst);
+                }
+            }
+        }
+
+        return coverageMap;
+
     }
 
 }

@@ -41,7 +41,7 @@ public class UserSuggestionAlgorith {
      * @return No-content if no suggestions can be made or List if suggestions can be made
      */
     @GetMapping("/by-stocks-covered-weighed-by-post-amount")
-    public ResponseEntity<List<UserRecommendationDTO>> suggestUsersBasedOnCommonStock(Principal principal) {
+    public ResponseEntity<List<UserRecommendationDTO>> suggestAnalystsBasedOnCommonStock(Principal principal) {
         //fetch logged-in user
         User userFetchingRecommendedList = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("Username not found"));
@@ -59,7 +59,7 @@ public class UserSuggestionAlgorith {
         //create a list of not subscribed-to analysts
         List<User> notSubscribedToAnalystsList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
         notSubscribedToAnalystsList.removeIf(subscribedToAnalysts::contains);
-        notSubscribedToAnalystsList.removeIf((currentAnalyst) -> currentAnalyst.equals(userFetchingRecommendedList));
+        notSubscribedToAnalystsList.remove(userFetchingRecommendedList);
         if (notSubscribedToAnalystsList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
