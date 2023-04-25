@@ -1039,12 +1039,12 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 Profile page
  */
 
-.mypage {
+.mypage, .personalPage {
     display: flex;
     flex-direction: column;
 }
 
-.mypage--background {
+.mypage--background, .personalPage--background {
     background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
@@ -1084,18 +1084,20 @@ Profile page
     width: 20%;
     margin: 10px;
     border: none;
-    border-radius: 15px;
     background: none;
-    font-size: 15px;
+    border-radius: 30px;
+    background-color: rgba(217, 217, 217, 0.34);
+    font-size: 13px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 4px #d2d2d2;
+    transition: all 0.1s ease-in-out;
 }
 
 .mypage--bio--container > button:hover {
-    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    background-size: 400% 400%;
-    background-clip: text;
-    color: transparent;
-    animation: gradient 5s ease infinite;
-    transition: all 0.5s ease-in-out;
+    background-color: rgba(138, 138, 138, 0.34);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
 }
 
 .mypage--bio {
@@ -1108,7 +1110,6 @@ Profile page
     height: 80px;
     font-size: 15px;
 }
-
 /**
 Search Page
  */
