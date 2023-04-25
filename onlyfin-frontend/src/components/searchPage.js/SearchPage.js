@@ -156,7 +156,7 @@ export default function SearchPage() {
         <div className="search--body">
             <NavBar/>
             <div className="search--header">
-                <h1>OnlyFin</h1>
+                <h1>Discover analysts</h1>
             </div>
             <SearchBar onSearch={onSearch} classname="search--search"/>
 
@@ -171,10 +171,10 @@ export default function SearchPage() {
                             <Profile
                                 key={data.profile.id}
                                 name={data.profile.username}
-                                onClick={() => handleSubscription(data.profile.username, data.subscribed)}
+                                function={() => handleSubscription(data.profile.username, data.subscribed)}
+                                isSubscribed = {data.subscribed}
                             >
                             </Profile>
-                            <button key={data.profile.id + 1} onClick={() => handleSubscription(data.profile.username, data.subscribed)}> {data.subscribed ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
 
                     ))}

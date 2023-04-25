@@ -3,7 +3,7 @@
     --dashboard-margin: 25px;
     --dashboard-module-border-radius: 7px;
 
-    --main-color: #EEEEEE ;
+    --main-color: #EEEEEE;
     --light-color: #ffffff;
     --dark-color: #306b43;
     --header-color: #DDDDDD;
@@ -35,23 +35,25 @@ Chart
 .highcharts-background {
     fill: var(--light-color);
 }
+
 /**
 Navbar
  */
 
-.navbar--img{
+.navbar--img {
     border-radius: 55px;
     height: 50px;
     width: 50px;
     margin-top: 25px;
     border: none;
 }
-.navbar--img--line{
+
+.navbar--img--line {
     border-bottom: 1px solid #b4b4b4;
     padding: 10px;
 }
 
-.navbar-container{
+.navbar-container {
     position: fixed;
     width: var(--container-width);
     display: flex;
@@ -274,7 +276,7 @@ Studio toolbar
     caret-color: #cbcbcb;
 }
 
-.studio--dataset--buttons{
+.studio--dataset--buttons {
     display: flex;
 }
 
@@ -436,7 +438,7 @@ Register
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #ffffff, #9569b9, #4d9de0);
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #ffffff, #9569b9, #4d9de0);
     background-size: 800% 800%;
     animation: gradient 60s ease infinite;
     height: 100vh;
@@ -457,7 +459,7 @@ Register
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
 }
 
-.register--title{
+.register--title {
     color: #ececec;
     font-size: 20px;
     text-align: center;
@@ -465,11 +467,11 @@ Register
 
 }
 
-.register--title > p{
+.register--title > p {
     color: #282c34;
 }
 
-.register--inputs--container{
+.register--inputs--container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -491,7 +493,7 @@ Register
     height: 30px;
 }
 
-.register--inputs--container > input::placeholder{
+.register--inputs--container > input::placeholder {
     color: #282c34;
 }
 
@@ -510,7 +512,7 @@ Register
     height: 30px;
 }
 
-.register--submit:hover{
+.register--submit:hover {
     cursor: pointer;
 }
 
@@ -518,11 +520,11 @@ Register
 Login
  */
 
-.login{
+.login {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 100vh;
@@ -553,7 +555,7 @@ Login
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
 }
 
-.login--title{
+.login--title {
     color: #ececec;
     font-size: 20px;
     text-align: center;
@@ -607,7 +609,7 @@ Login
     height: 30px;
 }
 
-.login--submit:hover{
+.login--submit:hover {
     cursor: pointer;
 }
 
@@ -615,7 +617,7 @@ Login
 Welcome
  */
 
-.welcome--navbar{
+.welcome--navbar {
     width: 100%;
     top: 0;
     display: flex;
@@ -629,24 +631,25 @@ Welcome
     background-color: #fff;
 }
 
-.welcome--navbar > ul{
+.welcome--navbar > ul {
     display: flex;
     justify-content: space-around;
     list-style: none;
 }
 
-.welcome--navbar > ul > li > a{
+.welcome--navbar > ul > li > a {
     text-decoration: none;
     color: #b4b4b4;
     font-weight: bold;
     font-size: 20px;
 }
 
-.welcome--navbar > ul > li{
+.welcome--navbar > ul > li {
     color: #b4b4b4;
     margin: 15px 85px;
 }
-.welcome--navbar > ul > li > a:hover{
+
+.welcome--navbar > ul > li > a:hover {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -655,16 +658,16 @@ Welcome
     transition: all 0.3s ease-in-out;
 }
 
-.welcome--navbar--title{
+.welcome--navbar--title {
     font-size: 30px;
     padding-left: 80px;
 }
 
-.welcome--navbar--title:hover{
+.welcome--navbar--title:hover {
     cursor: default;
 }
 
-.welcome--hero{
+.welcome--hero {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -672,12 +675,12 @@ Welcome
     margin-top: 120px;
 }
 
-.welcome--hero > h1{
+.welcome--hero > h1 {
     font-size: 50px;
     padding: 30px 30px 0px 30px;
 }
 
-.welcome--hero--fin{
+.welcome--hero--fin {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -685,11 +688,11 @@ Welcome
     animation: gradient 5s ease infinite;
 }
 
-.welcome--hero--image{
+.welcome--hero--image {
     width: 50%;
 }
 
-.welcome--hero--button{
+.welcome--hero--button {
     margin: 50px;
     padding: 50px;
     width: 400px;
@@ -699,7 +702,7 @@ Welcome
     background-color: transparent;
 }
 
-.welcome--hero--button:hover{
+.welcome--hero--button:hover {
     cursor: pointer;
     border-bottom: 1px solid;
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
@@ -727,10 +730,10 @@ Dashboard
     margin: 25px;
     margin-left: var(--dashboard-margin);
     margin-right: var(--dashboard-margin);
-    box-shadow:  0 0 10px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
 }
 
-.dashboard-button-underlay{
+.dashboard-button-underlay {
     position: fixed;
     height: 115px;
     margin-right: var(--dashboard-margin);
@@ -810,7 +813,7 @@ Dashboard
     display: block;
 }
 
-.dashboard-category-tab-content{
+.dashboard-category-tab-content {
     align-self: center;
     overflow-y: auto;
     margin-top: 125px;
@@ -819,12 +822,12 @@ Dashboard
 
 }
 
-.dashboard-stock-tab-container{
+.dashboard-stock-tab-container {
     width: 100%;
     overflow: scroll;
 }
 
-.dashboard-category-tab-container{
+.dashboard-category-tab-container {
     border: 0px solid #232323;
 }
 
@@ -841,7 +844,7 @@ Dashboard
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
-.dashboard-profile-button{
+.dashboard-profile-button {
     position: absolute;
     right: 17px;
     top: 17px;
@@ -853,7 +856,7 @@ Dashboard
     z-index: 3;
 }
 
-.dashboard-is-loading{
+.dashboard-is-loading {
     color: var(--dark-color);
     font-family: Tahoma;
     font-size: 24px;
@@ -868,19 +871,20 @@ Dashboard
 Profile page
  */
 
-.mypage{
+.mypage, .personalPage {
     display: flex;
     flex-direction: column;
 }
 
-.mypage--background{
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+.mypage--background, .personalPage--background {
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 30vh;
     position: relative;
     z-index: -1;
 }
+
 .mypage--img {
     width: 15%;
     position: absolute;
@@ -891,7 +895,7 @@ Profile page
     border-radius: 150px;
 }
 
-.mypage--text--container{
+.mypage--text--container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -900,32 +904,35 @@ Profile page
 }
 
 
-.mypage--bio--container{
+.mypage--bio--container {
     width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .mypage--bio--container > button {
     width: 20%;
     margin: 10px;
     border: none;
-    border-radius: 15px;
     background: none;
-    font-size: 15px;
+    border-radius: 30px;
+    background-color: rgba(217, 217, 217, 0.34);
+    font-size: 13px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 4px #d2d2d2;
+    transition: all 0.1s ease-in-out;
 }
 
-.mypage--bio--container > button:hover{
-    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    background-size: 400% 400%;
-    background-clip: text;
-    color: transparent;
-    animation: gradient 5s ease infinite;
-    transition: all 0.5s ease-in-out;
+.mypage--bio--container > button:hover {
+    background-color: rgba(138, 138, 138, 0.34);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
 }
 
-.mypage--bio{
+.mypage--bio {
     appearance: none;
     border: none;
     border-bottom: 1px solid #b4b4b4;
@@ -940,12 +947,12 @@ Profile page
 Search Page
  */
 
-.search--body{
+.search--body {
 
 }
 
-.search--header{
-    background: linear-gradient(45deg, #3bb273,#E1BC29, #e15554, #9569b9, #4d9de0);
+.search--header {
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 700% 700%;
     animation: gradient 60s ease infinite;
     height: 30vh;
@@ -956,13 +963,13 @@ Search Page
     align-items: center;
 }
 
-.search--header > h1{
+.search--header > h1 {
     font-weight: bold;
     font-size: 100px;
     color: #ffffff;
 }
 
-.search--form{
+.search--form {
     position: absolute;
     z-index: 1;
     left: 35%;
@@ -970,7 +977,7 @@ Search Page
     width: 30%;
 }
 
-.search--search{
+.search--search {
     width: 98%;
     outline: none;
     border: none;
@@ -981,17 +988,71 @@ Search Page
     box-shadow: 0px 5px 8px #b0b0b0;
 }
 
-.search--profile--container{
-    width: 50%;
-    margin: 0 auto;
-    display: flex;
+.search--profile--container {
+    width: 70%;
+    margin: 100px auto 0;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* creates two columns with equal width */
+    grid-gap: 60px;
+
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
 }
 
-.search--profile--tab{
-    display: inline-grid;
-    width: 400px;
+.search--profile--tab {
+    width: 290px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 3px 3px 10px #b6b6b6;
+    border-radius: 30px;
+}
+
+.searchpage--profile {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 98%;
+}
+
+.searchpage--profile--subscribtion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchpage--profile--subscribtion > a {
+    text-decoration: none;
+    color: #343a40;
+}
+
+.searchpage--profile--subscribtion > button{
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(217, 217, 217, 0.34);
+    font-size: 13px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 4px #d2d2d2;
+}
+
+.searchpage--profile--subscribtion > button:hover{
+    cursor: pointer;
+}
+
+.searchpage--profile--image{
+    width: 80px;
+}
+
+.searchpage--profile--subscribtion > a:hover {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
 }
