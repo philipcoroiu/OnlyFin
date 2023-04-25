@@ -1,12 +1,8 @@
-import React from "react"
+import React, {useEffect} from "react"
 import Avatar from "../../assets/images/avatar.png";
 import {Link} from "react-router-dom";
 
 export default function Profile(props) {
-
-    function handleSubscribe() {
-
-    }
 
     return(
         <div className="searchpage--profile">
@@ -14,8 +10,7 @@ export default function Profile(props) {
             <Link to={`${props.name}`}>
                 <h2>{props.name}</h2>
             </Link>
-            <button onClick={handleSubscribe}>Subscribe</button>
+            {/*<button onClick={handleOnClick}>{isSubscribed}</button>*/}
         </div>
-
     )
 }
