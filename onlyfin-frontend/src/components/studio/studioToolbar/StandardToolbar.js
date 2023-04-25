@@ -23,7 +23,7 @@ export default function StandardToolbar(props) {
                 setStockTree(response.data);
             })
         })
-    });
+    },[]);
 
 
     const handleChartNameChange = (name) => {
