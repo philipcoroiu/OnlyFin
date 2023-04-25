@@ -22,10 +22,10 @@ export default function NavBar() {
             <Link to="/Studio">
                 <img className="navbar--icon" src={studioIcon} alt="Studio" title="Studio"/>
             </Link>
-            <Link to="/studio">
-                <img className="navbar--icon" src={homeIcon} alt="Studio"/>
+            <Link to="/searchpage">
+                <img className="navbar--icon" src={homeIcon} alt="Search page"/>
             </Link>
-            <Link to="Studio2">
+            <Link to="/feed">
                 <img className="navbar--icon" src={homeIcon} alt="Studio"/>
             </Link>
         </div>

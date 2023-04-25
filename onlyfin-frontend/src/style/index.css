@@ -694,8 +694,6 @@ Welcome
 .welcome--hero--button:hover {
     cursor: pointer;
     border-bottom: 1px solid;
-    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    border-image-slice: 1;
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
@@ -1222,4 +1220,46 @@ Search Page
     color: transparent;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
+}
+
+/**
+Feed
+ */
+
+
+.feed--charts--container{
+}
+
+.feed--charts{
+    width: 600px;
+    margin: 0 auto;
+}
+
+.feed--new--charts{
+    margin: 20px;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #b6b6b6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.subBar{
+    position: fixed;
+    left: 75%;
+    top: 5%;
+
+
+    border-radius: 15px;
+    box-shadow: 0 0 10px #b7b7b7;
+    padding: 20px;
+    width: 300px;
+    float: left;
+    height: 86%;
+}
+
+.subBar > h3{
+    color: #919191;
 }

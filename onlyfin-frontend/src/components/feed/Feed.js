@@ -2,13 +2,14 @@ import React, {useEffect} from "react"
 import axios from "axios";
 import FeedModule from "./FeedModule"
 import SubscriptionBar from "../feed/SubscriptionBar"
+import NavBar from "../navBar/NavBar";
 
 
 export default function Feed() {
 
     const [feedData, setFeedData] = React.useState(null)
 
-    useEffect( () => {
+    useEffect(() => {
 
         const getData = async () => {
             try {
@@ -35,26 +36,30 @@ export default function Feed() {
     }, [])
 
 
-    return(
-        <div>{feedData === null ? (
-            <div>Loading</div>
-        ) : (
-            <div>
-                {feedData.map(data => (
-                    <div>
-                        <FeedModule
-                            posterOfContent={data.posterOfContent.username}
-                            chart={data.content}
-                            postDate={data.postDate}
-                            stock={data.stock.name}
-                        />
-                    </div>
+    return (
+        <div className="feed">
+            <NavBar/>
+            <div className="feed--charts--container">{feedData === null ? (
+                <div>Loading</div>
+            ) : (
+                <div className="feed--charts">
 
-                ))}
+                    {feedData.map(data => (
+                        <div className="feed--new--charts">
+                            <FeedModule
+                                posterOfContent={data.posterOfContent.username}
+                                chart={data.content}
+                                postDate={data.postDate}
+                                stock={data.stock.name}
+                            />
+                        </div>
+
+                    ))}
+                </div>)}
                 <div>
-                    <SubscriptionBar></SubscriptionBar>
+                    <SubscriptionBar/>
                 </div>
             </div>
-        )}</div>
+        </div>
     )
 }

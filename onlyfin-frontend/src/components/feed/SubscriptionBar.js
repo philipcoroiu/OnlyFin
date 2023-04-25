@@ -8,7 +8,7 @@ export default function SubscriptionBar() {
 
     const [subData, setSubData] = React.useState(null);
 
-    useEffect( () => {
+    useEffect(() => {
 
         const getData = async () => {
             try {
@@ -21,7 +21,7 @@ export default function SubscriptionBar() {
                         withCredentials: true,
                     });
 
-                console.log("Subscription bar data: ",response.data)
+                console.log("Subscription bar data: ", response.data)
 
                 setSubData(response.data)
 
@@ -34,26 +34,21 @@ export default function SubscriptionBar() {
 
     }, [])
 
-    return(
-        <div>{subData === null ? (
-            <div>Loading</div>
-        ) : (
-            <div style={{
-                backgroundColor: "#fff",
-                borderRadius: "4px",
-                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-                padding: "20px",
-                width: "300px",
-                float: "left",
-                marginRight: "20px"
-            }}>
-                {subData.map(data => (
-                    <div>
-                        <SubscriptionProfile username={data.username}/>
-                    </div>
+    return (
+        <div className="subBar">
+            <h3>Subscriptions</h3>
+            {subData === null ? (
+                <div>Loading</div>
+            ) : (
+                <div>
+                    {subData.map(data => (
+                        <div>
+                            <SubscriptionProfile username={data.username}/>
+                        </div>
 
-                ))}
-            </div>
-        )}</div>
+                    ))}
+                </div>
+            )}
+        </div>
     )
 }
