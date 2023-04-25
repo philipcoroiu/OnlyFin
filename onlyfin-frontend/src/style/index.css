@@ -25,7 +25,7 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
+    background-color: rgba(232, 232, 232, 0.32);
 }
 
 /**
@@ -70,6 +70,7 @@ Navbar
     border-radius: 15px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.66);
 }
 
 /**
@@ -436,9 +437,6 @@ Register
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #3bb273, #E1BC29, #ffffff, #9569b9, #4d9de0);
-    background-size: 800% 800%;
-    animation: gradient 60s ease infinite;
     height: 100vh;
 }
 
@@ -446,27 +444,26 @@ Register
 .register--holder {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     width: 500px;
     padding: 50px;
     border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(50px);
-    opacity: 0.8;
-    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.11);
+    background-color: #ffffff;
+    box-shadow: 5px 5px 10px #bebebe;
 }
 
 .register--title {
-    color: #ececec;
-    font-size: 20px;
-    text-align: center;
-    color: #282c34;
-
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    background-clip: text;
+    animation: gradient 15s ease infinite;
+    color: transparent;
+    font-size: 23px;
 }
 
 .register--title > p {
     color: #282c34;
+    font-size: 18px;
 }
 
 .register--inputs--container {
@@ -477,12 +474,11 @@ Register
 }
 
 .register--inputs--container > input {
-    margin: 20px;
+    margin: 10px;
     border: none;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.41);
+    border-radius: 10px;
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 7px #727272;
+    box-shadow: 0px 0px 7px #bbbbbb;
     opacity: 0.8;
     outline: none;
     font-size: 17px;
@@ -499,9 +495,9 @@ Register
     margin: 20px;
     border: none;
     border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.59);
+    background-color: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 7px #727272;
+    box-shadow: 0px 0px 5px #969696;
     opacity: 0.8;
     outline: none;
     text-align: center;
@@ -544,9 +540,8 @@ Login
     width: 500px;
     padding: 50px;
     border-radius: 30px;
-    backdrop-filter: blur(50px);
-    opacity: 0.8;
-    box-shadow: 0px 0px 10px #bebebe;
+    background-color: #ffffff;
+    box-shadow: 5px 5px 10px #bebebe;
 }
 
 .login--titel > h1{
