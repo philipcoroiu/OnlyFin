@@ -59,6 +59,7 @@ public class UserSuggestionAlgorith {
         //create a list of not subscribed-to analysts
         List<User> notSubscribedToAnalystsList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
         notSubscribedToAnalystsList.removeIf(subscribedToAnalysts::contains);
+        notSubscribedToAnalystsList.removeIf((currentAnalyst) -> currentAnalyst.equals(userFetchingRecommendedList));
         if (notSubscribedToAnalystsList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

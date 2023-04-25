@@ -2,6 +2,7 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,8 +38,12 @@ public class SearchController {
      * @return a list of all analysts in the database.
      */
     @GetMapping("/search-all-analysts")
-    public ResponseEntity<List<ProfileDTO>> findAllAnalysts() {
-        List<User> foundUsers = userRepository.findByisAnalystIsTrue();
+    public ResponseEntity<List<ProfileDTO>> findAllAnalysts(Principal principal) {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found"));
+
+        List<User> foundUsers = new ArrayList<>(userRepository.findByisAnalystIsTrue());
+        foundUsers.removeIf((currentUser -> currentUser.equals(fetchingUser)));
 
         List<ProfileDTO> usersToReturnToClient = new ArrayList<>();
         foundUsers.forEach((currentUser ->
@@ -73,8 +78,12 @@ public class SearchController {
      * @return a list of analysts that match the search string.
      */
     @GetMapping("/search-analyst")
-    public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search) {
+    public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search, Principal principal) {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found"));
+
         List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
+        userList.removeIf((currentUser -> currentUser.equals(fetchingUser)));
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -96,7 +105,11 @@ public class SearchController {
      */
     @GetMapping("/search-analyst-include-sub-info")
     public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> searchForAnalystsWithSubsIncluded(@RequestParam String search, Principal principal) {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found"));
+
         List<User> userList = new ArrayList<>(userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search));
+        userList.removeIf((currentUser) -> currentUser.equals(fetchingUser));
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -133,7 +146,11 @@ public class SearchController {
      */
     @GetMapping("/search-all-analysts-include-sub-info")
     public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> fetchAllAnalystsWithSubsIncluded(Principal principal) {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found"));
+
         List<User> userList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
+        userList.removeIf((currentUser) -> currentUser.equals(fetchingUser));
         if (userList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
