@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
+import se.onlyfin.onlyfinbackend.DTO.UserRecommendationDTO;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
@@ -40,7 +41,7 @@ public class UserSuggestionAlgorith {
      * @return No-content if no suggestions can be made or List if suggestions can be made
      */
     @GetMapping("/by-stocks-covered-weighed-by-post-amount")
-    public ResponseEntity<List<ProfileDTO>> suggestUsersBasedOnCommonStock(Principal principal) {
+    public ResponseEntity<List<UserRecommendationDTO>> suggestUsersBasedOnCommonStock(Principal principal) {
         //fetch logged-in user
         User userFetchingRecommendedList = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("Username not found"));
@@ -118,7 +119,7 @@ public class UserSuggestionAlgorith {
         //Begin at the top of the occurrence list and check if another analyst covers the most popular stock
         //add the most active poster of that stock then iterate until the end of the list,
         //as it is a set, no analyst will be included twice
-        Set<ProfileDTO> suggestionList = new HashSet<>();
+        Set<UserRecommendationDTO> suggestionList = new HashSet<>();
         for (StockRef currentStockRef : sortedStockOccurrencesForSubscribedAnalysts.keySet()) {
             //at least one analyst covers this stock
             if (matchList.containsKey(currentStockRef)) {
@@ -132,7 +133,9 @@ public class UserSuggestionAlgorith {
                     }
                 }
                 if (highestAmountOfPostsForThisStockRef != -1) {
-                    suggestionList.add(new ProfileDTO(winningUser.getUsername(), winningUser.getId()));
+                    suggestionList.add(new UserRecommendationDTO(
+                            currentStockRef,
+                            new ProfileDTO(winningUser.getUsername(), winningUser.getId())));
                 }
 
             }
