@@ -18,7 +18,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class DashboardController {
 
-    private DashboardRepository dashboardRepository;
+    private final DashboardRepository dashboardRepository;
 
     public DashboardController(DashboardRepository dashboardRepository) {
         this.dashboardRepository = dashboardRepository;

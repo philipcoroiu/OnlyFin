@@ -1,17 +1,17 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
+import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
-import se.onlyfin.onlyfinbackend.repository.CategoryRepository;
-import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
-import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
-import se.onlyfin.onlyfinbackend.repository.StockRepository;
+import se.onlyfin.onlyfinbackend.repository.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,15 +24,18 @@ public class StudioController {
     private final CategoryRepository categoryRepository;
     private final ModuleRepository moduleRepository;
     private final DashboardRepository dashboardRepository;
+    private final UserRepository userRepository;
 
     public StudioController(StockRepository stockRepository,
                             CategoryRepository categoryRepository,
                             ModuleRepository moduleRepository,
-                            DashboardRepository dashboardRepository) {
+                            DashboardRepository dashboardRepository,
+                            UserRepository userRepository) {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
         this.dashboardRepository = dashboardRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/createStock")
@@ -63,6 +66,7 @@ public class StudioController {
     }
 
     /**
+     * TODO: Should not allow add categories for someone else
      * Creates a new category under a stock specified by id
      *
      * @param stockId           id of the target stock
@@ -70,16 +74,24 @@ public class StudioController {
      * @return name of new category if successful
      */
     @PostMapping("/createCategoryUsingStockId")
-    public ResponseEntity<String> createCategoryUsingStockId(@RequestParam Integer stockId, @RequestParam String nameOfNewCategory) {
+    public ResponseEntity<String> createCategoryUsingStockId(@RequestParam Integer stockId, @RequestParam String nameOfNewCategory, Principal principal) {
         if (nameOfNewCategory.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
 
+        User loggedInUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found!"));
+
         Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
                 new NoSuchElementException("No such stock!"));
 
-        List<Category> currentCategories = targetStock.getCategories();
-        if (currentCategories == null) {
+        //check that user isn't accessing another user's stock
+        if (loggedInUser.getId() != targetStock.getDashboard_id()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Category> currentCategoriesUnderTargetStock = targetStock.getCategories();
+        if (currentCategoriesUnderTargetStock == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -87,7 +99,7 @@ public class StudioController {
         newCategory.setName(nameOfNewCategory);
         newCategory.setStock_id(targetStock);
 
-        currentCategories.add(newCategory);
+        currentCategoriesUnderTargetStock.add(newCategory);
         stockRepository.save(targetStock);
 
         return ResponseEntity.ok().body(newCategory.getName());
