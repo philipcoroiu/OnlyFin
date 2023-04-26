@@ -83,9 +83,10 @@ public class StudioController {
 
         Category newCategory = new Category();
         newCategory.setName(nameOfNewCategory);
-
         currentCategories.add(newCategory);
+
         targetStock.setCategories(currentCategories);
+        stockRepository.save(targetStock);
 
         return ResponseEntity.ok().body(newCategory.getName());
     }
