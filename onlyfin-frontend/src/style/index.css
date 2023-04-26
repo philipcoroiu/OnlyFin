@@ -3,7 +3,7 @@
     --dashboard-module-border-radius: 7px;
 
     --main-color: #ffffff;
-    --light-color: #ffffff;
+    --light-color: rgb(255, 255, 255);
     --dark-color: #306b43;
     --header-color: #DDDDDD;
     --backgrond-color: #3e3e41;
@@ -58,19 +58,28 @@ Navbar
     fill: #9569b9;
 }
 
-
-
-
 .navbar--icon{
-    width: 50px;
-    height: 50px;
-    margin-top: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin: 35px 0;
+    padding: 10px;
+    border-radius: 15px;
+    transition: all 0.1s ease-in-out;
 }
 
 .navbar--icon > box-icon {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     fill: #565656;
+}
+
+.navbar--icon:hover{
+    background-color: rgba(180, 180, 180, 0.35);
+    box-shadow: 1px 1px 10px #afafaf;
+    transition: all 0.1s ease-in-out;
 }
 
 .navbar--img--line {
@@ -79,9 +88,9 @@ Navbar
 }
 
 .navbar--img--line > box-icon{
-    height: 40px;
-    width: 40px;
-    margin: 15px 0px;
+    height: 30px;
+    width: 30px;
+    margin: 35px 0px;
     border: none;
     fill: #565656;
 }
@@ -104,6 +113,8 @@ Navbar
 /**
 Studio
  */
+
+
 
 .studio-message-container {
     position: fixed;
@@ -188,6 +199,10 @@ Studio chart
     margin: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.studio--chart > Chart{
+    width: 20px;
 }
 
 .studio--chart > button {

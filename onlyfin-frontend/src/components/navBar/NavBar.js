@@ -37,26 +37,26 @@ export default function NavBar() {
                         <box-icon name='user'/>
                 </span>
             </Link>
-            <Link to="/Dashboard">
+            <Link to="/feed">
                 <div className="navbar--icon">
                     <box-icon name='home'></box-icon>
                 </div>
-            </Link>
-            <Link to="/Studio">
-                <div className="navbar--icon">
-                    <box-icon name='add-to-queue'></box-icon>
-                </div>
+
             </Link>
             <Link to="/searchpage">
                 <div className="navbar--icon">
                     <box-icon name='search'></box-icon>
                 </div>
             </Link>
-            <Link to="/feed">
+            <Link to="/Dashboard">
                 <div className="navbar--icon">
                     <box-icon name='news'></box-icon>
                 </div>
-
+            </Link>
+            <Link to="/Studio">
+                <div className="navbar--icon">
+                    <box-icon name='add-to-queue'></box-icon>
+                </div>
             </Link>
             <div className="navbar--icon">
                 <box-icon name='exit' onClick={logout}></box-icon>

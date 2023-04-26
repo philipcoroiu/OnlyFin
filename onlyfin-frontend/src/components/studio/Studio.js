@@ -4,6 +4,7 @@ import {Link, NavLink} from "react-router-dom";
 import axios from "axios"
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
+import NavBar from "../navBar/NavBar";
 
 export default function Studio() {
     document.title = "Studio"
@@ -345,7 +346,8 @@ export default function Studio() {
     }
 
     return (
-        <>
+
+        <div className="studio">
             <div className="studio--navbar">
                 <h1>Studio</h1>
                 <Link to="/Dashboard">
@@ -398,6 +400,6 @@ export default function Studio() {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     )
 }
