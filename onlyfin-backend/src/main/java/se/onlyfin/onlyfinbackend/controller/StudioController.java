@@ -71,11 +71,11 @@ public class StudioController {
      * @return name of new category if successful
      */
     @PostMapping("/createCategoryUsingStockId")
-    public ResponseEntity<String> createCategoryUsingStockId(Integer stockId, String nameOfNewCategory) {
+    public ResponseEntity<String> createCategoryUsingStockId(@RequestParam Integer stockId, @RequestParam String nameOfNewCategory) {
         if (nameOfNewCategory.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
-
+        
         Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
                 new NoSuchElementException("No such stock!"));
 
