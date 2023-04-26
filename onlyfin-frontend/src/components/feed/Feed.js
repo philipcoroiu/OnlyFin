@@ -33,7 +33,7 @@ export default function Feed() {
 
         getData();
 
-    }, [feedData])
+    }, [])
 
 
     return (
