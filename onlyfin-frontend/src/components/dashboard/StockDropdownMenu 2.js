@@ -1,9 +1,9 @@
 import React, {useEffect, useRef} from "react"
 
-export default function CategoryDropdownMenu(props) {
+
+export default function StockDropdownMenu() {
 
     const [showMenu, setShowMenu] = React.useState(false);
-    const [inputValue, setInputValue] = React.useState();
     const dropdownRef = useRef(null);
 
     /**
@@ -28,32 +28,24 @@ export default function CategoryDropdownMenu(props) {
         setShowMenu(!showMenu);
     }
 
-
-    function handleRemoveCategory() {
-
-    }
-
     /**
-     * Handles what happens after the dropdown input is submitted
-     * @param event
+     * Function for handling click inside of dropdown menu
+     * @param item represents the button clicked
      */
-    function handleOnSubmit(event) {
-        event.preventDefault();
-        setShowMenu(false);
-
-
-
-        setInputValue("");
+    function handleMenuItemClick(item) {
+        if(item === "Item 1") {
+            console.log(item)
+        } else if(item === "Item 2") {
+            console.log(item)
+        }
     }
-
 
     return (
         <div ref={dropdownRef}>
             <button onClick={handleToggleMenu}>...</button>
-            {
-                showMenu &&
-                (
-                    <div style={{
+
+            {showMenu && (
+                    <ul style={{
 
                         // >>>> OBS – TA BORT DETTA VID DESIGN <<<<<
 
@@ -65,21 +57,13 @@ export default function CategoryDropdownMenu(props) {
 
                         // >>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
                     }}>
-
-                        <button onClick={props.addCategory}>Add Category</button>
-                        <button onClick={props.removeCategory}>Remove Category</button>
-
-                        <form onSubmit={handleOnSubmit}>
-                            <input
-                                type="text"
-                                placeholder="Category Name"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            />
-                        </form>
-                    </div>
+                        <button onClick={() => handleMenuItemClick('Item 1')}>Item 1</button>
+                        <button onClick={() => handleMenuItemClick('Item 2')}>Item 2</button>
+                        <button onClick={() => handleMenuItemClick('Item 3')}>Item 3</button>
+                    </ul>
                 )
             }
+
         </div>
     )
 }

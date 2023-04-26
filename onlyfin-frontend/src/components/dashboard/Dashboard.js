@@ -24,6 +24,7 @@ export default function Dashboard() {
             console.log(response.data)
             axios.get("http://localhost:8080/dashboard/" + response.data, {withCredentials: true}).then((response) => {
                 setDashboard(response.data);
+                console.log("response.data ",response.data);
                 setIsLoading(false);
             });
         })
@@ -37,6 +38,27 @@ export default function Dashboard() {
     const handleCategoryTabClick = (index) => {
         setActiveCategoryTab(index);
     };
+
+    async function handleAddCategory() {
+        try {
+            await axios.post(`http://localhost:8080/studio/createCategoryUsingStockId?stockId=57&nameOfNewCategory=Wed26`,
+                {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    withCredentials: true,
+                });
+
+            console.log("created a new category")
+
+        } catch (error) {
+            console.error('Error adding category', error);
+        }
+    }
+
+    function handleRemoveCategory() {
+
+    }
 
     if (isLoading) {
         return <div className="dashboard-is-loading">Loading dashboard...</div>;
@@ -79,7 +101,10 @@ export default function Dashboard() {
                                     </button>
 
                                 ))}
-                                <CategoryDropdownMenu/>
+                                <CategoryDropdownMenu
+                                    addCategory={handleAddCategory}
+                                    removeCategory={handleRemoveCategory}
+                                />
                             </div>
                             <div className="dashboard-category-tab-content">
                                 {stocks[activeStockTab].categories.map((category, index) => (
