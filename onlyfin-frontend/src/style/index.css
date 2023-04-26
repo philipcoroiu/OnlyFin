@@ -55,7 +55,11 @@ Navbar
     width: 60px;
     margin: 15px 0px;
     border: none;
+    fill: #9569b9;
 }
+
+
+
 
 .navbar--icon{
     width: 50px;
@@ -63,9 +67,23 @@ Navbar
     margin-top: 65px;
 }
 
+.navbar--icon > box-icon {
+    width: 35px;
+    height: 35px;
+    fill: #565656;
+}
+
 .navbar--img--line {
     border-bottom: 1px solid #b4b4b4;
     padding: 10px;
+}
+
+.navbar--img--line > box-icon{
+    height: 40px;
+    width: 40px;
+    margin: 15px 0px;
+    border: none;
+    fill: #565656;
 }
 
 .navbar-container {
