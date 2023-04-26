@@ -58,7 +58,15 @@ public class SecurityConfig {
                                 "/principal-username",
                                 "/principal-id",
                                 "/feed/**",
-                                "/fetch-current-user-subscriptions"
+                                "/fetch-current-user-subscriptions",
+                                "/stonks/**",
+                                "/search-analyst-include-sub-info",
+                                "/search-all-analysts-include-sub-info",
+                                "/fetch-about-me-with-sub-info",
+                                "/user-subscription-list-sorted-by-postdate",
+                                "/user-subscription-list-sorted-by-update-date",
+                                "/algo/**",
+                                "/find-analysts-that-cover-stock"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -67,12 +75,13 @@ public class SecurityConfig {
                                 "/register",
                                 "/plz",
                                 "/login",
-                                "/assets/**")
+                                "/assets/**"
+                        )
                         .permitAll()
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
                 )
-                .formLogin().loginProcessingUrl("/plz");
+                .formLogin().loginProcessingUrl("/plz").successHandler(new LoginSuccessHandlerDoNothingImpl());;
         return http.build();
     }
 

@@ -3,10 +3,29 @@ import {Link} from "react-router-dom";
 import homeIcon from "../../assets/icons/home.png"
 import studioIcon from "../../assets/icons/studio.png"
 import Avatar from "../../assets/images/avatar.png";
+import axios from "axios";
+
 
 /*
 Make logout function (POST / logout)
  */
+
+async function logout() {
+    try {
+        await axios.post(`http://localhost:8080/logout`,
+            {},
+            { headers: {
+                    'Content-type': 'application/json'
+                },
+                withCredentials: true,
+            });
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    window.location.replace("http://localhost:3000");
+}
 
 export default function NavBar() {
     return (
@@ -22,12 +41,14 @@ export default function NavBar() {
             <Link to="/Studio">
                 <img className="navbar--icon" src={studioIcon} alt="Studio" title="Studio"/>
             </Link>
-            <Link to="/studio">
-                <img className="navbar--icon" src={homeIcon} alt="Studio"/>
+            <Link to="/searchpage">
+                <img className="navbar--icon" src={homeIcon} alt="Search page"/>
             </Link>
-            <Link to="Studio2">
-                <img className="navbar--icon" src={homeIcon} alt="Studio"/>
+            <Link to="/feed">
+                <img className="navbar--icon" src={homeIcon} alt="Feed"/>
             </Link>
+
+            <button className="navbar--logout" onClick={logout}/>
         </div>
     )
 }

@@ -7,21 +7,29 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
-import se.onlyfin.onlyfinbackend.repository.*;
+import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
+import se.onlyfin.onlyfinbackend.repository.CategoryRepository;
+import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
+import se.onlyfin.onlyfinbackend.repository.StockRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/studio")
 public class StudioController {
-
     private final StockRepository stockRepository;
     private final CategoryRepository categoryRepository;
     private final ModuleRepository moduleRepository;
     private final DashboardRepository dashboardRepository;
 
-    public StudioController(StockRepository stockRepository, CategoryRepository categoryRepository, ModuleRepository moduleRepository, DashboardRepository dashboardRepository) {
+    public StudioController(StockRepository stockRepository,
+                            CategoryRepository categoryRepository,
+                            ModuleRepository moduleRepository,
+                            DashboardRepository dashboardRepository) {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
@@ -29,43 +37,58 @@ public class StudioController {
     }
 
     @PostMapping("/createStock")
-    public String createStock(@RequestBody Stock stock){
-
-        try{
-            stockRepository.save(stock);
-            return "stock added successfully";
-        } catch (Exception e){ System.out.println(e.getMessage());}
-
-        return "could not add stock";
+    public String createStock(@RequestBody Stock stock) {
+        stockRepository.save(stock);
+        return "stock added successfully";
     }
 
     @DeleteMapping("/deleteStock/{id}")
     public String deleteStock(@PathVariable String id) {
 
-        try {
-            int intId = Integer.parseInt(id);
-            if(!stockRepository.existsById(intId)) {
-                return "There is no stock with that id";
-            }
-            stockRepository.deleteById(intId);
-            return "Removed stock successfully";
-        } catch (Exception e) {
-            System.out.println(e);
+        int intId = Integer.parseInt(id);
+        if (!stockRepository.existsById(intId)) {
+            return "There is no stock with that id";
         }
-        return "Could not remove stock";
+        stockRepository.deleteById(intId);
+        return "Removed stock successfully";
     }
 
     @PostMapping("/createCategory")
-    public ResponseEntity<?> createCategory(@RequestBody Category category){
+    public ResponseEntity<?> createCategory(@RequestBody Category category) {
 
-        try{
-            if(!stockRepository.existsById(category.getStock_id())) return ResponseEntity.badRequest().body("there is no stock for that id");
+        if (!stockRepository.existsById(category.getStock_id())) {
+            return ResponseEntity.badRequest().body("there is no stock for that id");
+        }
+        categoryRepository.save(category);
+        return ResponseEntity.ok(categoryRepository.getReferenceById(category.getId()));
+    }
 
-            categoryRepository.save(category);
-            return ResponseEntity.ok(categoryRepository.getReferenceById(category.getId()));
-        } catch (Exception e){ System.out.println(e.getMessage());}
+    /**
+     * Creates a new category under a stock specified by id
+     *
+     * @param stockId           id of the target stock
+     * @param nameOfNewCategory name of the new category to be created
+     * @return name of new category if successful
+     */
+    @PostMapping("/createCategoryUsingStockId")
+    public ResponseEntity<String> createCategoryUsingStockId(Integer stockId, String nameOfNewCategory) {
+        if (nameOfNewCategory.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.badRequest().body("could not add category");
+        Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
+                new NoSuchElementException("No such stock!"));
+
+        List<Category> currentCategories = new ArrayList<>(targetStock.getCategories());
+
+        Category newCategory = new Category();
+        newCategory.setName(nameOfNewCategory);
+        currentCategories.add(newCategory);
+
+        targetStock.setCategories(currentCategories);
+        stockRepository.save(targetStock);
+
+        return ResponseEntity.ok().body(newCategory.getName());
     }
 
     @DeleteMapping("/deleteCategory/{id}")
@@ -85,11 +108,11 @@ public class StudioController {
     }
 
     @PutMapping("/updateCategoryName")
-    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDTO nameChangeRequest){
+    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDTO nameChangeRequest) {
 
         Category category;
 
-        if(categoryRepository.existsById(nameChangeRequest.getId())){
+        if (categoryRepository.existsById(nameChangeRequest.getId())) {
             category = categoryRepository.getReferenceById(nameChangeRequest.getId());
             category.setName(nameChangeRequest.getName());
             categoryRepository.save(category);
@@ -99,42 +122,33 @@ public class StudioController {
     }
 
     @PostMapping("/createModule")
-    public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave){
+    public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave) {
 
-        try{
-            if(!categoryRepository.existsById(moduleToSave.getCategory_id())) return ResponseEntity.badRequest().body("there is no category for that id");
-
-            moduleRepository.save(moduleToSave);
-            return ResponseEntity.ok(moduleRepository.getReferenceById(moduleToSave.getId()));
-        } catch (Exception e){ System.out.println(e.getMessage());}
-
-        return ResponseEntity.badRequest().body("could not add module");
+        if (!categoryRepository.existsById(moduleToSave.getCategory_id())) {
+            return ResponseEntity.badRequest().body("there is no category for that id");
+        }
+        moduleRepository.save(moduleToSave);
+        return ResponseEntity.ok(moduleRepository.getReferenceById(moduleToSave.getId()));
     }
 
     @DeleteMapping("/deleteModule/{id}")
-    public String deleteModule(@PathVariable String id) {
+    public String deleteModule(@PathVariable Integer id) {
 
-        try {
-            int intId = Integer.parseInt(id);
-            if (!moduleRepository.existsById(intId)) {
-                return "There is no module with that id";
-            }
-            moduleRepository.deleteById(intId);
-            return "Removed module successfully";
-        } catch (Exception e) {
-            System.out.println(e);
+        if (!moduleRepository.existsById(id)) {
+            return "There is no module with that id";
         }
-        return "Could not module category";
+        moduleRepository.deleteById(id);
+        return "Removed module successfully";
     }
 
     @GetMapping("getStocksAndCategories/{id}")
-    public ResponseEntity<?> getStocksAndCategories(@PathVariable Integer id){
+    public ResponseEntity<?> getStocksAndCategories(@PathVariable Integer id) {
         Dashboard dashboard;
         if (dashboardRepository.existsById(id)) {
-            Optional<Dashboard> dashboardOptional= dashboardRepository.findById(id);
+            Optional<Dashboard> dashboardOptional = dashboardRepository.findById(id);
             dashboard = dashboardOptional.orElse(null);
-            for (int i = 0; i < dashboard.getStocks().size(); i++){
-                for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++){
+            for (int i = 0; i < dashboard.getStocks().size(); i++) {
+                for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++) {
                     dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
                 }
             }

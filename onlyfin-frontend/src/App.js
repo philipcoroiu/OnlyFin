@@ -9,6 +9,7 @@ import PersonalPage from "./components/personalPage/PersonalPage";
 import MyPage from "./components/personalPage/MyPage";
 import UserNotFound from "./components/personalPage/UserNotFound"
 import Register from "./components/registration/Register";
+import Feed from "./components/feed/Feed";
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="mypage" element={<MyPage/>}></Route>
             <Route path="usernotfound" element={<UserNotFound/>}></Route>
             <Route path="register" element={<Register/>}></Route>
+            <Route path="feed" element={<Feed/>}></Route>
         </Routes>
     );
 }
