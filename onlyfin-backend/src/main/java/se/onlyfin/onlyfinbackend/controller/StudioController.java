@@ -13,6 +13,9 @@ import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
 import se.onlyfin.onlyfinbackend.repository.StockRepository;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
@@ -61,6 +64,33 @@ public class StudioController {
         }
         categoryRepository.save(category);
         return ResponseEntity.ok(categoryRepository.getReferenceById(category.getId()));
+    }
+
+    /**
+     * Creates a new category under a stock specified by id
+     *
+     * @param stockId id of the target stock
+     * @param nameOfNewCategory name of the new category to be created
+     * @return name of new category if successful
+     */
+    @PostMapping("/createCategoryUsingStockId")
+    public ResponseEntity<String> createCategoryUsingStockId(Integer stockId, String nameOfNewCategory) {
+        if (nameOfNewCategory.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
+                new NoSuchElementException("No such stock!"));
+
+        List<Category> currentCategories = new ArrayList<>(targetStock.getCategories());
+
+        Category newCategory = new Category();
+        newCategory.setName(nameOfNewCategory);
+
+        currentCategories.add(newCategory);
+        targetStock.setCategories(currentCategories);
+
+        return ResponseEntity.ok().body(newCategory.getName());
     }
 
     @DeleteMapping("/deleteCategory/{id}")
