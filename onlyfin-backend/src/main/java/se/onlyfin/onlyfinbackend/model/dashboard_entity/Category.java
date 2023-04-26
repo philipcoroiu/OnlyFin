@@ -55,5 +55,7 @@ public class Category {
         return stock_id.getId();
     }
 
-
+    public void setStock_id(Stock stock_id) {
+        this.stock_id = stock_id;
+    }
 }

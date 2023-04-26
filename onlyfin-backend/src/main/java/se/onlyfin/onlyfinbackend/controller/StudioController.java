@@ -79,13 +79,16 @@ public class StudioController {
         Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
                 new NoSuchElementException("No such stock!"));
 
-        List<Category> currentCategories = new ArrayList<>(targetStock.getCategories());
+        List<Category> currentCategories = targetStock.getCategories();
+        if (currentCategories == null) {
+            return ResponseEntity.badRequest().build();
+        }
 
         Category newCategory = new Category();
         newCategory.setName(nameOfNewCategory);
-        currentCategories.add(newCategory);
+        newCategory.setStock_id(targetStock);
 
-        targetStock.setCategories(currentCategories);
+        currentCategories.add(newCategory);
         stockRepository.save(targetStock);
 
         return ResponseEntity.ok().body(newCategory.getName());
