@@ -4,6 +4,8 @@ import NavBar from "../navBar/NavBar";
 import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import CategoryDropdownMenu from "./CategoryDropdownMenu";
+import StockDropdownMenu from "./StockDropdownMenu";
 /*import { SearchBox } from 'react-search-box';*/
 
 export default function Dashboard() {
@@ -62,6 +64,7 @@ export default function Dashboard() {
                                 {stock.stock_ref_id.name}
                             </button>
                         ))}
+                        <StockDropdownMenu/>
                     </div>
                     <div className="stock-tab-content">
                         <div className="dashboard-category-tab-container">
@@ -74,7 +77,9 @@ export default function Dashboard() {
                                     >
                                         {category.name}
                                     </button>
+
                                 ))}
+                                <CategoryDropdownMenu/>
                             </div>
                             <div className="dashboard-category-tab-content">
                                 {stocks[activeStockTab].categories.map((category, index) => (
