@@ -12,7 +12,6 @@ import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 /**

@@ -184,6 +184,13 @@ public class SearchController {
         return ResponseEntity.ok().body(profileListWithSubInfo);
     }
 
+    /**
+     * Finds analysts that cover a target stock
+     *
+     * @param principal the logged-in user
+     * @param stockName name of the target stock
+     * @return list of analysts covering target stock
+     */
     @GetMapping("/find-analysts-that-cover-stock")
     public ResponseEntity<List<ProfileDTO>> findAnalystsThatCoverStock(Principal principal, @RequestParam String stockName) {
         User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->

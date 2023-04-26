@@ -99,6 +99,12 @@ public class SubscriptionController {
         return ResponseEntity.ok().body(userToUnsubscribeFrom.getUsername());
     }
 
+    /**
+     * Fetches the logged-in user's subscriptions as profiles
+     *
+     * @param principal the logged-in user
+     * @return profile list containing the user's subscriptions
+     */
     @GetMapping("/fetch-current-user-subscriptions")
     public ResponseEntity<List<ProfileDTO>> fetchCurrentUserSubscriptions(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
@@ -117,6 +123,13 @@ public class SubscriptionController {
         return ResponseEntity.ok().body(subscriptionsDTOList);
     }
 
+    /**
+     * Checks if a user is subscribed to another
+     *
+     * @param subscriber   the target subscribing user
+     * @param subscribedTo the target subscribed-to user
+     * @return if the user is subscribed
+     */
     public boolean isUserSubscribedToThisUser(User subscriber, User subscribedTo) {
         return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
     }

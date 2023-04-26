@@ -8,5 +8,4 @@ package se.onlyfin.onlyfinbackend.DTO;
  * @param password the password of the user
  */
 public record UserDTO(String email, String username, String password) {
-
 }

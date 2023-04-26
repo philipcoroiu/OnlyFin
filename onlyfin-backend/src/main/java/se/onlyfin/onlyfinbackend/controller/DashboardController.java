@@ -35,6 +35,12 @@ public class DashboardController {
         return ResponseEntity.ok(dashboard);
     }
 
+    /**
+     * This method goes through all the analyst's posts and returns whichever Instant is the latest date
+     *
+     * @param targetAnalyst the analysts to target
+     * @return Instant object containing time&date information about the last post date
+     */
     public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
         Dashboard targetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId()).orElseThrow();
 
@@ -54,6 +60,12 @@ public class DashboardController {
         return latestInstant;
     }
 
+    /**
+     * This method goes through all the analyst's posts and returns whichever Instant is the latest update date
+     *
+     * @param targetAnalyst the analysts to target
+     * @return Instant object containing time&date information about the last post update date
+     */
     public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
         Dashboard targetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId()).orElseThrow();
 
@@ -73,10 +85,22 @@ public class DashboardController {
         return latestInstant;
     }
 
+    /**
+     * Returns the dashboard object for a user specified by user id
+     *
+     * @param userId id of user to target
+     * @return dashboard object or null if no dashboard is found
+     */
     public Dashboard fetchDashboard(Integer userId) {
         return dashboardRepository.findById(userId).orElse(null);
     }
 
+    /**
+     * Returns a map which contains what stocks are covered by which analysts
+     *
+     * @param analysts analysts to include
+     * @return map of stocks and who covers them
+     */
     public HashMap<StockRef, ArrayList<User>> fetchCoverageMap(List<User> analysts) {
         HashMap<StockRef, ArrayList<User>> coverageMap = new HashMap<>();
 
@@ -100,7 +124,6 @@ public class DashboardController {
         }
 
         return coverageMap;
-
     }
 
 }
