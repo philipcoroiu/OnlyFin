@@ -17,13 +17,13 @@ public class Category {
         this.id = id;
     }
 
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id")
     private Stock stock_id;
-
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Column (name = "name")
     private String name;

@@ -7,12 +7,11 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
-import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
 import se.onlyfin.onlyfinbackend.repository.CategoryRepository;
+import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
 import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
 import se.onlyfin.onlyfinbackend.repository.StockRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -75,7 +74,7 @@ public class StudioController {
         if (nameOfNewCategory.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
                 new NoSuchElementException("No such stock!"));
 
