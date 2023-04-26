@@ -81,7 +81,7 @@ public class SecurityConfig {
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
                 )
-                .formLogin().loginProcessingUrl("/plz");
+                .formLogin().loginProcessingUrl("/plz").successHandler(new LoginSuccessHandlerDoNothingImpl());;
         return http.build();
     }
 
