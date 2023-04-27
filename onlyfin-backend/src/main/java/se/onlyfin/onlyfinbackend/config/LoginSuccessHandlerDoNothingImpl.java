@@ -4,6 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 
+/**
+ * This class is used to override the default behaviour of Spring Security's login success handler.
+ * This is to disable the redirect to the default login success page.
+ */
 public class LoginSuccessHandlerDoNothingImpl implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

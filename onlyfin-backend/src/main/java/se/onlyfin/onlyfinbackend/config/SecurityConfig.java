@@ -31,7 +31,7 @@ public class SecurityConfig {
     /**
      * This method is used to configure which endpoints are protected by roles and which are not.
      * It is here that you can see which endpoints need authentication and which do not.
-     * This method also sets up the login form.
+     * This method is also used to set up the login form.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,7 +66,8 @@ public class SecurityConfig {
                                 "/user-subscription-list-sorted-by-postdate",
                                 "/user-subscription-list-sorted-by-update-date",
                                 "/algo/**",
-                                "/find-analysts-that-cover-stock"
+                                "/find-analysts-that-cover-stock",
+                                "/reviews/**"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -86,20 +87,6 @@ public class SecurityConfig {
     }
 
     /**
-     * This method can be used to disable authentication globally for testing purposes.
-     * It should not be used in production.
-     */
-    /*
-    @Bean
-    public WebSecurityCustomizer ignoringCustomizer() {
-        //DISABLE AUTH GLOBALLY
-        return (web) -> web.ignoring().requestMatchers("/**");
-
-    }
-
-     */
-
-    /**
      * This method is used to configure which password encoder to use.
      */
     @Bean
@@ -107,6 +94,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * This method is used to configure CORS globally for the application.
+     *
+     * @return a WebMvcConfigurer that allows CORS from localhost:3000
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
