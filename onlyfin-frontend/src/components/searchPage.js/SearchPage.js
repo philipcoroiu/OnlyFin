@@ -166,10 +166,10 @@ export default function SearchPage() {
                 <div
                     className="search--profile--container"
                 >
-                    {searchData.map(data => (
+                    {searchData.map((data, index) => (
                         <div className="search--profile--tab">
                             <Profile
-                                key={data.profile.id}
+                                key={index}
                                 name={data.profile.username}
                                 function={() => handleSubscription(data.profile.username, data.subscribed)}
                                 isSubscribed = {data.subscribed}
