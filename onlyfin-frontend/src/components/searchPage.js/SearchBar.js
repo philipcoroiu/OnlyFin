@@ -8,11 +8,8 @@ export default function SearchBar(props) {
     const handleChange = (event) => {
         setSearchTerm(event.target.value);
 
-        if (event.target.value === '') {
-            setDropdownResult([]);
-        } else {
-            handleDropdownResults(event.target.value);
-        }
+        handleDropdownResults(event.target.value);
+
 
     };
 
@@ -22,25 +19,27 @@ export default function SearchBar(props) {
     };
 
     async function handleDropdownResults(searchTerm) {
-        await axios.get(`http://localhost:8080/search-analyst-include-sub-info?search=${searchTerm}`,
-            {
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                withCredentials: true,
+
+        try {
+            const response = await axios.get(`http://localhost:8080/search-analyst-include-sub-info?search=${searchTerm}`,
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            if(searchTerm === '') {
+                setDropdownResult([]);
+            } else {
+                setDropdownResult(response.data)
             }
 
-        )
-            .then(response => {
 
-                console.log('Search bar response:', response.data);
-                setDropdownResult(response.data)
-
-            })
-            .catch(error => {
-
-                setDropdownResult([]);
-            });
+        } catch (error) {
+            //setDropdownResult([]);
+        }
     }
 
 

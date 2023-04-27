@@ -106,7 +106,7 @@ export default function SearchPage() {
                 });
             setSearchData(response.data);
         } catch (error) {
-            console.log(error)
+            console.log("Error when updating search data",error)
         }
     }
 
@@ -126,7 +126,7 @@ export default function SearchPage() {
                 }
             )
         } catch(error) {
-            console.log(error)
+            console.log("onSubscribe",error)
         }
 
     };
@@ -145,7 +145,7 @@ export default function SearchPage() {
                 }
             )
         } catch(error) {
-            console.log(error)
+            console.log("onUnsubscribe",error)
         }
     };
 
