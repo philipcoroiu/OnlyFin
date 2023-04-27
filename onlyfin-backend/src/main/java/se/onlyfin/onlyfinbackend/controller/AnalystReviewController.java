@@ -98,7 +98,7 @@ public class AnalystReviewController {
      * Fetches the logged-in user's review of a target user if a review exists
      *
      * @param targetUsername the target username
-     * @param principal the logged-in user
+     * @param principal      the logged-in user
      * @return Response with the review
      */
     @GetMapping("/get-my-review")
