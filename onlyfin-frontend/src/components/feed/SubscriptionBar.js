@@ -1,54 +1,89 @@
 import React, {useEffect} from "react"
 import axios from "axios";
 import SubscriptionProfile from "./SubscriptionProfile";
-import FeedModule from "./FeedModule";
-
 
 export default function SubscriptionBar() {
 
     const [subData, setSubData] = React.useState(null);
+    const [suggestedData, setSuggestedData] = React.useState(null);
 
     useEffect(() => {
 
-        const getData = async () => {
+        const getSubData = async () => {
             try {
 
-                const response = await axios.get(`http://localhost:8080/user-subscription-list-sorted-by-postdate`,
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        },
-                        withCredentials: true,
-                    });
+                const response = await
+                    axios.get(`http://localhost:8080/user-subscription-list-sorted-by-postdate`,
+                        {
+                            headers: {
+                                'Content-type': 'application/json'
+                            },
+                            withCredentials: true,
+                        });
 
                 console.log("Subscription bar data: ", response.data)
 
                 setSubData(response.data)
 
             } catch (error) {
+                console.log("Get sub data error: ", error)
+            }
+        }
+
+        const getSuggestedData = async () => {
+            try {
+
+                const response = await
+                    axios.get(`http://localhost:8080/algo/by-stocks-covered-weighed-by-post-amount`,
+                        {
+                            headers: {
+                                'Content-type': 'application/json'
+                            },
+                            withCredentials: true,
+                        });
+
+                console.log("Suggested subscribers bar data: ",
+                    response.data)
+
+                setSuggestedData(response.data)
+
+            } catch (error) {
                 console.log(error)
             }
         }
 
-        getData();
+
+        getSubData();
+        getSuggestedData();
 
     }, [])
-
     return (
-        <div className="subBar">
-            <h3>Subscriptions</h3>
-            {subData === null ? (
-                <div>Loading</div>
-            ) : (
-                <div>
-                    {subData.map(data => (
-                        <div>
-                            <SubscriptionProfile username={data.username}/>
-                        </div>
+        <div>
+            <div className="subBar">
+                <h3>Subscriptions</h3>
+                {subData === null ? (
+                    <div>Loading</div>
+                ) : (
+                    <div>
+                        {subData.map((data, index) => (
+                            <div>
+                                <SubscriptionProfile key={index} username={data.username}/>
+                            </div>
 
-                    ))}
-                </div>
-            )}
+                        ))}
+
+                        <div className="suggestionBar">
+                            <h3>Suggested</h3>
+                            {suggestedData.map((data, index) => (
+                                <div>
+                                    <SubscriptionProfile key={index} username={data.profileDTO.username}/>
+                                </div>
+
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
