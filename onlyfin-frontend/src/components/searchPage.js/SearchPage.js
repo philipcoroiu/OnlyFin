@@ -82,6 +82,7 @@ export default function SearchPage() {
                             <Profile
                                 key={index}
                                 name={data.profile.username}
+                                isSubscribed={data.subscribed}
                             >
                             </Profile>
                         </div>
