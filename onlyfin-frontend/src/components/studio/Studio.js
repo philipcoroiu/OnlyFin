@@ -4,6 +4,7 @@ import {Link, NavLink} from "react-router-dom";
 import axios from "axios"
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
+import NavBar from "../navBar/NavBar";
 
 export default function Studio() {
     document.title = "Studio"
@@ -15,12 +16,49 @@ export default function Studio() {
         {index: 3, color: "#c99664"},
         {index: 4, color: "#6384d2"},
     ];
+
+    const [chartWidth, setC] = React.useState(window.screen.width * 0.4);
+    const [chartHeith, setChartHeith] = React.useState(window.screen.height * 0.8);
+
+    const [divWidth, setDivWidth] = useState(window.innerWidth);
+    const [divHeight, setDivHeight] = useState(window.innerHeight);
+
+    React.useEffect(() => {
+        function handleResize() {
+            setStudioChart(prevState => {
+
+                return {
+                    ...prevState,
+                    chart: {
+                        ...prevState.chart,
+                        width: `${window.innerWidth * 0.4}`,
+                        height: `${window.innerHeight * 0.8}`
+                    }
+
+                };
+            });
+        }
+
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("orientationchange", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("orientationchange", handleResize);
+        };
+    }, []);
+
+
     const studioChartInitState = {
         chart: {
             type: "line",
             style: {
                 fontFamily: "Tahoma"
-            }
+            },
+            width: `${divWidth * 0.4}`,
+            height: `${divHeight * 0.8}`
         },
         style: {
             borderColor: "#1A1616"
@@ -236,13 +274,13 @@ export default function Studio() {
 
 
         if (categoryId === null) {
-            setErrorMessage(prevState => [...prevState, "ERROR: select both stock and category"])
+            setErrorMessage(prevState => [...prevState, "Please, select both STOCK and CATEGORY"])
             hasError = true;
         }
 
         studioChart.series.forEach((serie) => {
             if (serie.data.filter((data) => data !== "").length === 0) {
-                setErrorMessage(prevState => [...prevState, "ERROR: atleast one dataset has no data"])
+                setErrorMessage(prevState => [...prevState, "Pay attention, at least one DATASET has NO DATA"])
                 hasError = true;
             }
         });
@@ -345,13 +383,9 @@ export default function Studio() {
     }
 
     return (
-        <>
-            <div className="studio--navbar">
-                <h1>Studio</h1>
-                <Link to="/Dashboard">
-                    <button className="studio--navbar--button">Dashboard</button>
-                </Link>
-            </div>
+
+        <div className="studio">
+            <NavBar/>
             <div className="studio--container">
                 <div ref={(chartContainer) => {
                     if (chartContainer && chartContainer.chart) {
@@ -381,7 +415,9 @@ export default function Studio() {
                         handleCategoryIdChange={handleCategoryIdChange}
                         putChartToInitState={putChartToInitState}
                     />
-                    <button onClick={() => postChart()}> Post</button>
+                    <div className="studio--submit">
+                        <button onClick={() => postChart()}> Submit</button>
+                    </div>
                 </div>
             </div>
             <div className={`studio-message-container ${showErrorMessage || showSuccessMessage ? 'show' : ''}`}>
@@ -398,6 +434,6 @@ export default function Studio() {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     )
 }
