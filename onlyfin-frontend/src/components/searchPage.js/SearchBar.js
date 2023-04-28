@@ -16,6 +16,8 @@ export default function SearchBar(props) {
     const handleFormSubmit = (event) => {
         event.preventDefault();
         props.onSearch(searchTerm);
+        setSearchTerm('');
+        setDropdownResult([]);
     };
 
     async function handleDropdownResults(searchTerm) {
@@ -44,6 +46,8 @@ export default function SearchBar(props) {
 
     function handleButtonSubmit(username) {
         props.onSearch(username)
+        setDropdownResult([]);
+        setSearchTerm('');
     }
 
 
@@ -60,7 +64,7 @@ export default function SearchBar(props) {
                 />
             </form>
 
-                {<div>
+                {<div style={{marginLeft: "40%"}}>
                     <ul>
                         {dropdownResult.map((option, index) => (
                             <li>

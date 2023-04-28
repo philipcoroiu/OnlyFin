@@ -63,72 +63,6 @@ export default function SearchPage() {
     };
 
 
-    async function handleSubscription(username, subscribed) {
-        if (subscribed) {
-            await onUnsubscribe(username)
-        } else {
-            await onSubscribe(username)
-        }
-        await updateSearchData();
-    }
-
-    async function updateSearchData() {
-        try {
-            const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true,
-                });
-            setSearchData(response.data);
-        } catch (error) {
-            console.log("Error when updating search data",error)
-        }
-    }
-
-    const onSubscribe = async (username) => {
-
-        try {
-            console.log('Subscribing to:', username);
-
-            await axios.post(
-                `http://localhost:8080/subscribe?username=${username}`,
-                {},
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true,
-                }
-            )
-        } catch(error) {
-            console.log("onSubscribe",error)
-        }
-
-    };
-
-    const onUnsubscribe = async (username) => {
-        try {
-            console.log('Unsubscribing to:', username);
-
-            await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${username}`,
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true
-                }
-            )
-        } catch(error) {
-            console.log("onUnsubscribe",error)
-        }
-    };
-
-
-
-
     return(
         <div className="search--body">
             <NavBar/>
@@ -148,8 +82,6 @@ export default function SearchPage() {
                             <Profile
                                 key={index}
                                 name={data.profile.username}
-                                function={() => handleSubscription(data.profile.username, data.subscribed)}
-                                isSubscribed = {data.subscribed}
                             >
                             </Profile>
                         </div>
