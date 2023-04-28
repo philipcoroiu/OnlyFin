@@ -40,7 +40,7 @@ export default function PersonalPage() {
                     });
 
                 console.log('API response:', response2.data);
-                setUserData(response2.data.text);
+                setUserData(response2.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 navigate("/Login")
