@@ -76,7 +76,11 @@ export default function SubscriptionBar() {
                             <h3>Suggested</h3>
                             {suggestedData.map((data, index) => (
                                 <div>
-                                    <SubscriptionProfile key={index} username={data.profileDTO.username}/>
+                                    <SubscriptionProfile
+                                        key={index}
+                                        username={data.profileDTO.username}
+                                        relatedStock={data.stock.name}
+                                    />
                                 </div>
 
                             ))}

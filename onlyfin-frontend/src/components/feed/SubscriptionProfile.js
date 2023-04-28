@@ -15,6 +15,7 @@ export default function SubscriptionProfile(props) {
             marginBottom: "20px"
         }}>
             <h3>{props.username}</h3>
+            <p>{props.relatedStock}</p>
             <img src={Avatar} width="50px"/>
         </div>
     )
