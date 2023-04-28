@@ -72,47 +72,63 @@ export default function StandardTable(props) {
         props.handleYAxisNameChange(name)
     }
 
-    return (
-        <div className="studio--toolbar--columns">
-            <div className="studio--category-container">
-                <h2>Categories</h2>
-                <div className="studio--category-y-axis-input">
-                    <input placeholder={"y-axis"} onChange={(event) => handleYAxisNameChange(event.target.value)}/>
-                </div>
-                <div className="studio--category-count-btn">
+    const ref1 = React.useRef(null);
+    const ref2 = React.useRef(null);
 
-                    <button onClick={() => handleCategoryCountChange(Math.max(1, categoryCount - 1))}>Remove</button>
-                    <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>Add</button>
-                </div>
-                <div className="studio--category-input-fields">
-                    {Array.from({length: categoryCount}, (_, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            placeholder={`Category ${index + 1}`}
-                            onChange={(e) => handleCategoryNameChange(index, e.target.value)}
-                        />
-                    ))}
-                </div>
+    const handleScroll = (e) => {
+        if (ref1.current && ref2.current) {
+            ref1.current.scrollTop = e.target.scrollTop;
+            ref2.current.scrollTop = e.target.scrollTop;
+        }
+    };
+
+    return (
+        <>
+
+            <div className="studio--category--axis--inputs">
+                <input placeholder={"(X-axis)"} onChange={(event) => handleYAxisNameChange(event.target.value)}/>
+                <input placeholder={"(Y-axis)"} onChange={(event) => handleYAxisNameChange(event.target.value)}/>
             </div>
-            <div className="studio--dataset-container">
-                <div className="studio--dataset--buttons">
-                    <div className="studio--add-dataset-btn">
-                        <button onClick={handleDatasetAdd}>Add Dataset</button>
-                    </div>
-                    <div className="studio--remove-dataset-btn">
-                        <button onClick={() => handleDatasetRemove(indexRemove)}>Remove Dataset
+            <div className="studio--toolbar--columns">
+                <div className="studio--category-container">
+                    <h2>Year</h2>
+                    <div className="studio--category-count-btn">
+                        <button onClick={() => handleCategoryCountChange(Math.max(1, categoryCount - 1))}>
+                            Remove
+                        </button>
+                        <button onClick={() => handleCategoryCountChange(categoryCount + 1)}>
+                            Add
                         </button>
                     </div>
+                    <div className="studio--category-input-fields" onScroll={handleScroll}
+                         ref={ref1}>
+                        {Array.from({length: categoryCount}, (_, index) => (
+                            <input
+                                key={index}
+                                type="text"
+                                placeholder={`Value ${index + 1}`}
+                                onChange={(e) => handleCategoryNameChange(index, e.target.value)}
+                            />
+                        ))}
+                    </div>
                 </div>
-                <div className="studio--dataset-tabs-btn">
-                    {datasets.map((dataset, index) => (
-                        <button key={index}
-                                onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}
+                <div className="studio--dataset-container">
+
+                    <div className="studio--dataset-tabs-btn">
+                        {datasets.map((dataset, index) => (
+                            <button key={index}
+                                    onClick={() => handleDatasetTabClick(index)}>{dataset.name || `Dataset ${index + 1}`}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="studio--dataset--buttons">
+                        <button onClick={handleDatasetAdd}>
+                            Add Dataset
                         </button>
-                    ))}
-                </div>
-                <div className="studio--dataset--value--container">
+                        <button onClick={() => handleDatasetRemove(indexRemove)}>
+                            Remove Dataset
+                        </button>
+                    </div>
                     {datasets.map((dataset, index) => (
                         <div className="studio--dataset-tab-container" key={index}
                              style={{display: activeDatasetIndex === index ? "block" : "none"}}>
@@ -120,7 +136,8 @@ export default function StandardTable(props) {
                                 <input type="text" placeholder="Name" value={dataset.name}
                                        onChange={(e) => handleDatasetNameChange(index, e.target.value)}/>
                             </div>
-                            <div className="dataset-input-fields">
+                            <div className="dataset-input-fields" onScroll={handleScroll}
+                                 ref={ref2}>
                                 {dataset.data.map((data, dataIndex) => (
                                     <input key={dataIndex} type="number" placeholder={`Data ${dataIndex + 1}`}
                                            value={data}
@@ -131,6 +148,6 @@ export default function StandardTable(props) {
                     ))}
                 </div>
             </div>
-        </div>
+        </>
     );
 }
