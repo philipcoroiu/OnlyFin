@@ -2,6 +2,8 @@ package se.onlyfin.onlyfinbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -16,12 +18,16 @@ public class User {
     private Integer id;
 
     @Column(name = "username")
+    @NotNull
     private String username;
 
     @Column(name = "password")
+    @NotNull
     private String password;
 
     @Column(name = "email")
+    @Email
+    @NotNull
     private String email;
 
     @Column(name = "enabled")

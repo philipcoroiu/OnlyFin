@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -68,7 +69,7 @@ public class UserController {
      * @return ResponseEntity with status code 200 and username if registration was successful.
      */
     @PostMapping("/register")
-    public ResponseEntity<String> registerNewUser(@RequestBody UserDTO user) {
+    public ResponseEntity<String> registerNewUser(@RequestBody @Valid UserDTO user) {
         if (userRepository.existsByEmail(user.email())) {
             return ResponseEntity.badRequest().body("Email is already registered!");
         }
