@@ -57,11 +57,12 @@ export default function SubscriptionBar() {
         getSuggestedData();
 
     }, [])
+
     return (
         <div>
             <div className="subBar">
                 <h3>Subscriptions</h3>
-                {subData === null ? (
+                {subData === null || suggestedData === null ? (
                     <div>Loading</div>
                 ) : (
                     <div>
