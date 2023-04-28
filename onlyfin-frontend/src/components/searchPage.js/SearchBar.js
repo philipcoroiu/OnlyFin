@@ -13,7 +13,7 @@ export default function SearchBar(props) {
 
     };
 
-    const handleSubmit = (event) => {
+    const handleFormSubmit = (event) => {
         event.preventDefault();
         props.onSearch(searchTerm);
     };
@@ -42,24 +42,34 @@ export default function SearchBar(props) {
         }
     }
 
+    function handleButtonSubmit(username) {
+        props.onSearch(username)
+    }
+
 
 
     return (
-        <form onSubmit={handleSubmit} className="search--form">
-            <input
-                className="search--search"
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onInput={handleChange}
-            />
-            {<div>
-                <ul>
-                    {dropdownResult.map((option, index) => (
-                        <p key={index}>{option.profile.username}</p>
-                    ))}
-                </ul>
-            </div>}
-        </form>
+        <div>
+            <form onSubmit={handleFormSubmit} className="search--form">
+                <input
+                    className="search--search"
+                    type="text"
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onInput={handleChange}
+                />
+            </form>
+
+                {<div>
+                    <ul>
+                        {dropdownResult.map((option, index) => (
+                            <li>
+                                <button key={index} onClick={() => handleButtonSubmit(option.profile.username)}>{option.profile.username}</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>}
+
+        </div>
     );
 };
