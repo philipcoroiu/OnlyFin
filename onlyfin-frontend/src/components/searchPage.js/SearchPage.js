@@ -37,29 +37,6 @@ export default function SearchPage() {
     }, []);
 
 
-    const getAllAnalysts = () => {
-        axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
-            {
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                withCredentials: true,
-            }
-
-        )
-            .then(response => {
-                console.log('API response:', response.data);
-                setSearchData(response.data)
-
-            })
-            .catch(error => {
-
-                console.error('API error:', error);
-
-            });
-    }
-
-
     const onSearch = (searchTerm) => {
         console.log('Performing search with searchTerm:', searchTerm);
 
@@ -180,7 +157,6 @@ export default function SearchPage() {
                     ))}
                 </div>
             )}
-            <button onClick={getAllAnalysts}>Get all analysts</button>
         </div>
 
     )
