@@ -37,29 +37,6 @@ export default function SearchPage() {
     }, []);
 
 
-    const getAllAnalysts = () => {
-        axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
-            {
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                withCredentials: true,
-            }
-
-        )
-            .then(response => {
-                console.log('API response:', response.data);
-                setSearchData(response.data)
-
-            })
-            .catch(error => {
-
-                console.error('API error:', error);
-
-            });
-    }
-
-
     const onSearch = (searchTerm) => {
         console.log('Performing search with searchTerm:', searchTerm);
 
@@ -86,72 +63,6 @@ export default function SearchPage() {
     };
 
 
-    async function handleSubscription(username, subscribed) {
-        if (subscribed) {
-            await onUnsubscribe(username)
-        } else {
-            await onSubscribe(username)
-        }
-        await updateSearchData();
-    }
-
-    async function updateSearchData() {
-        try {
-            const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true,
-                });
-            setSearchData(response.data);
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const onSubscribe = async (username) => {
-
-        try {
-            console.log('Subscribing to:', username);
-
-            await axios.post(
-                `http://localhost:8080/subscribe?username=${username}`,
-                {},
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true,
-                }
-            )
-        } catch(error) {
-            console.log(error)
-        }
-
-    };
-
-    const onUnsubscribe = async (username) => {
-        try {
-            console.log('Unsubscribing to:', username);
-
-            await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${username}`,
-                {
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    withCredentials: true
-                }
-            )
-        } catch(error) {
-            console.log(error)
-        }
-    };
-
-
-
-
     return(
         <div className="search--body">
             <NavBar/>
@@ -166,13 +77,11 @@ export default function SearchPage() {
                 <div
                     className="search--profile--container"
                 >
-                    {searchData.map(data => (
+                    {searchData.map((data, index) => (
                         <div className="search--profile--tab">
                             <Profile
-                                key={data.profile.id}
+                                key={index}
                                 name={data.profile.username}
-                                function={() => handleSubscription(data.profile.username, data.subscribed)}
-                                isSubscribed = {data.subscribed}
                             >
                             </Profile>
                         </div>
@@ -180,7 +89,6 @@ export default function SearchPage() {
                     ))}
                 </div>
             )}
-            <button onClick={getAllAnalysts}>Get all analysts</button>
         </div>
 
     )
