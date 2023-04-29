@@ -3,15 +3,11 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
-import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
-import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
-import se.onlyfin.onlyfinbackend.repository.CategoryRepository;
-import se.onlyfin.onlyfinbackend.repository.ModuleRepository;
-import se.onlyfin.onlyfinbackend.repository.StockRepository;
+import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
+import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
+import se.onlyfin.onlyfinbackend.repository.*;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,20 +21,31 @@ public class StudioController {
     private final CategoryRepository categoryRepository;
     private final ModuleRepository moduleRepository;
     private final DashboardRepository dashboardRepository;
+    private final StockRefRepository stockRefRepository;
 
     public StudioController(StockRepository stockRepository,
                             CategoryRepository categoryRepository,
                             ModuleRepository moduleRepository,
-                            DashboardRepository dashboardRepository) {
+                            DashboardRepository dashboardRepository,
+                            StockRefRepository stockRefRepository) {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
         this.dashboardRepository = dashboardRepository;
+        this.stockRefRepository = stockRefRepository;
     }
 
     @PostMapping("/createStock")
-    public String createStock(@RequestBody Stock stock) {
-        stockRepository.save(stock);
+    public String createStock(@RequestBody StockRefDTO stockRefDTO) {
+        StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElseThrow(() ->
+                new NoSuchElementException("Stock ref not found"));
+
+        Stock stockToSave = new Stock();
+        stockToSave.setStock_ref_id(stockRef);
+
+        stockToSave.setDashboard_id(new Dashboard(stockRefDTO.dashboardId()));
+
+        stockRepository.save(stockToSave);
         return "stock added successfully";
     }
 

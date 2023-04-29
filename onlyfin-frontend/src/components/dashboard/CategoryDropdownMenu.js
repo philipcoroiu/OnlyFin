@@ -3,7 +3,7 @@ import React, {useEffect, useRef} from "react"
 export default function CategoryDropdownMenu(props) {
 
     const [showMenu, setShowMenu] = React.useState(false);
-    const [inputValue, setInputValue] = React.useState();
+    const [inputValue, setInputValue] = React.useState("");
     const dropdownRef = useRef(null);
 
     /**
@@ -66,8 +66,9 @@ export default function CategoryDropdownMenu(props) {
                         // >>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
                     }}>
 
-                        <button onClick={props.addCategory}>Add Category</button>
-                        <button onClick={props.removeCategory}>Remove Category</button>
+                        <button onClick={ () => props.addCategory(inputValue)}>Add Category</button>
+                        <button onClick={ () => props.removeCategory()}>Remove Category</button>
+                        <button onClick={() => props.changeCategoryName(inputValue)}>Change name</button>
 
                         <form onSubmit={handleOnSubmit}>
                             <input

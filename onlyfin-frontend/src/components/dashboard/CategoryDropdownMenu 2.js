@@ -68,6 +68,7 @@ export default function CategoryDropdownMenu(props) {
 
                         <button onClick={props.addCategory}>Add Category</button>
                         <button onClick={props.removeCategory}>Remove Category</button>
+                        <button onClick={props.changeCategoryName}>Change name</button>
 
                         <form onSubmit={handleOnSubmit}>
                             <input
