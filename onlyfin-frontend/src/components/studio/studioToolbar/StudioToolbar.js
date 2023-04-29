@@ -57,6 +57,7 @@ export default function StudioToolbar(props) {
     }
 
 
+
     switch (tableType) {
         case "pie":
             table = <PieTable

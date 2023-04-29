@@ -10,6 +10,8 @@ import MyPage from "./components/personalPage/MyPage";
 import UserNotFound from "./components/personalPage/UserNotFound"
 import Register from "./components/registration/Register";
 import Feed from "./components/feed/Feed";
+import EditableDashboard from "./components/editableDashboard/EditableDashboard"
+import DragAndDropTest from "./components/editableDashboard/DragAndDropList"
 
 function App() {
     return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="usernotfound" element={<UserNotFound/>}></Route>
             <Route path="register" element={<Register/>}></Route>
             <Route path="feed" element={<Feed/>}></Route>
+            <Route path="editableDashboard" element={<EditableDashboard/>}></Route>
+            <Route path="dragAndDropTest" element={<DragAndDropTest/>}></Route>
         </Routes>
     );
 }
