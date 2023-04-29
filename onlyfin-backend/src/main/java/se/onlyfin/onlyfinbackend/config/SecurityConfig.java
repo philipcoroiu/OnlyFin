@@ -51,6 +51,7 @@ public class SecurityConfig {
                                 "/fetch-about-me",
                                 "/update-about-me",
                                 "/dashboard/**",
+                                "/dashboard/getStockRef",
                                 "/studio/**",
                                 "/studio/deleteStock/**",
                                 "/studio/deleteCategory/**",

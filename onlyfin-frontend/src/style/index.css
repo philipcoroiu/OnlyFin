@@ -1110,6 +1110,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     margin-left: 20px;
     position: fixed;
     z-index: 3;
+    background-color: blue;
 }
 
 

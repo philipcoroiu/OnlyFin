@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
+import se.onlyfin.onlyfinbackend.repository.StockRefRepository;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,10 +19,12 @@ import java.util.Optional;
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class DashboardController {
 
-    private final DashboardRepository dashboardRepository;
+    private DashboardRepository dashboardRepository;
+    private StockRefRepository stockRefRepository;
 
-    public DashboardController(DashboardRepository dashboardRepository) {
+    public DashboardController(DashboardRepository dashboardRepository, StockRefRepository stockRefRepository) {
         this.dashboardRepository = dashboardRepository;
+        this.stockRefRepository = stockRefRepository;
     }
 
     @GetMapping("/{id}")
@@ -33,6 +36,13 @@ public class DashboardController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(dashboard);
+    }
+
+    @GetMapping("/getStockRef")
+    public ResponseEntity<?> getStockRef(){
+        List<StockRef> stockRefs = stockRefRepository.findAll();
+
+        return ResponseEntity.ok(stockRefs);
     }
 
     /**
