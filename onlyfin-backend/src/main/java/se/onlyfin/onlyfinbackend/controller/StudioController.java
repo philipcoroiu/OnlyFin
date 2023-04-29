@@ -2,6 +2,7 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
@@ -115,13 +116,13 @@ public class StudioController {
     }
 
     @PutMapping("/updateCategoryName")
-    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDTO nameChangeRequest) {
+    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDT nameChangeRequest) {
 
         Category category;
 
-        if (categoryRepository.existsById(nameChangeRequest.getId())) {
-            category = categoryRepository.getReferenceById(nameChangeRequest.getId());
-            category.setName(nameChangeRequest.getName());
+        if (categoryRepository.existsById(nameChangeRequest.id())) {
+            category = categoryRepository.getReferenceById(nameChangeRequest.id());
+            category.setName(nameChangeRequest.name());
             categoryRepository.save(category);
             return ResponseEntity.ok(category);
         }

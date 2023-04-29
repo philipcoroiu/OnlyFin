@@ -61,15 +61,11 @@ export default function CategoryDropdownMenu(props) {
                         borderRadius: "5px",
                         boxShadow: "0 0 5px rgba(0,0,0,0.3)",
                         backgroundColor: "#fff",
-                        padding: "10px"
+                        padding: "10px",
+                        position: "absolute"
 
                         // >>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
                     }}>
-
-                        <button onClick={ () => props.addCategory(inputValue)}>Add Category</button>
-                        <button onClick={ () => props.removeCategory()}>Remove Category</button>
-                        <button onClick={() => props.changeCategoryName(inputValue)}>Change name</button>
-
                         <form onSubmit={handleOnSubmit}>
                             <input
                                 type="text"
@@ -78,6 +74,10 @@ export default function CategoryDropdownMenu(props) {
                                 onChange={(e) => setInputValue(e.target.value)}
                             />
                         </form>
+
+                        <button onClick={ () => props.addCategory(inputValue)}>Add Category</button>
+                        <button onClick={ () => props.removeCategory()}>Remove Category</button>
+                        <button onClick={() => props.changeCategoryName(inputValue)}>Change name</button>
                     </div>
                 )
             }

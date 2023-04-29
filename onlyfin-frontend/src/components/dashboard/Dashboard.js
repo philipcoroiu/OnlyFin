@@ -11,8 +11,8 @@ import StockDropdownMenu from "./StockDropdownMenu";
 export default function Dashboard() {
     document.title = "Dashboard"
     const [dashboard, setDashboard] = useState(null);
-    const [activeStockTab, setActiveStockTab] = useState(0);
-    const [activeCategoryTab, setActiveCategoryTab] = useState(0);
+    const [activeStockTab, setActiveStockTab] = useState(null);
+    const [activeCategoryTab, setActiveCategoryTab] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState();
     const [currentStockId, setCurrentStockId] = useState(null);
@@ -44,14 +44,37 @@ export default function Dashboard() {
     }, []);
 
     const handleStockTabClick = (index) => {
+        //changes the button index from the input
         setActiveStockTab(index);
-        handleCategoryTabClick(0);
-        setCurrentStockId(dashboard.stocks[index].id);
+
+        //sets the category click to null
+        handleCategoryTabClick(null);
+
+        //sets the current id of the selected stock (needs to be able to be null)
+        if (index != null){
+            setCurrentStockId(dashboard.stocks[index].id);
+        }
+        else {
+            setCurrentStockId(null)
+        }
     };
 
     const handleCategoryTabClick = (index) => {
+
+        console.log("index: " + index)
+        console.log("activeCategoryTab: " + activeCategoryTab)
+        console.log("activeStockTab: " + activeStockTab)
+        console.log("currenCategoryID: " + currentCategoryId)
+        console.log("currenStockID: " + currentStockId)
+
+        //changes the activecategorytab to index.
         setActiveCategoryTab(index);
-        if(dashboard.stocks[activeStockTab].categories.length != 0){
+
+        //index is null
+        if (index === null) return;
+
+
+        if(activeStockTab == dashboard.stocks[activeStockTab].categories.length != 0){
             setCurrentCategoryId(dashboard.stocks[activeStockTab].categories[index].id)
         }
         else setCurrentStockId(null);
@@ -67,15 +90,23 @@ export default function Dashboard() {
                 },
                 {withCredentials: true}
             )
-            refreshDashboard();
+            refreshDashboard(activeStockTab, 0);
         }
         else console.log("need to enter a string")
         console.log("clicked add")
 
     }
 
-    async function handleChangeCategoryName(name){
-
+    async function handleChangeCategoryName(inputName){
+        await axios.put(
+            "http://localhost:8080/studio/updateCategoryName",
+            {
+                id: currentCategoryId,
+                name: inputName
+            },
+            {withCredentials: true}
+        )
+        refreshDashboard(activeStockTab,activeCategoryTab)
     }
 
     async function handleRemoveCategory() {
@@ -89,8 +120,7 @@ export default function Dashboard() {
             }
 
         )
-        await refreshDashboard();
-        handleCategoryTabClick(0);
+        refreshDashboard(activeStockTab, 0);
 
         //bugg i koden, klickar man remove category två gånger i rad utan att göra något innan så tror den
         //att current category id är det samma som för den förra
@@ -100,11 +130,16 @@ export default function Dashboard() {
         console.log(currentCategoryId)
     }
 
-    async function refreshDashboard(){
+    async function refreshDashboard(StockIndex, categoryIndex){
         await axios.get("http://localhost:8080/dashboard/" + userId,
             {withCredentials: true}).then((response) => {
                 setDashboard(response.data);
             ;})
+        if(activeStockTab != StockIndex && activeStockTab != null){
+            handleStockTabClick(StockIndex)
+            handleCategoryTabClick(categoryIndex)
+        }
+        else handleCategoryTabClick(categoryIndex)
     }
 
     async function handleAddStock(stockRefId){
@@ -115,8 +150,7 @@ export default function Dashboard() {
             },
             {withCredentials: true}
             )
-        await refreshDashboard()
-        handleStockTabClick(stocks.length)
+        refreshDashboard(dashboard.stocks.length-1,0)
     }
     async function handleRemoveStock(){
         await axios.delete(
@@ -128,8 +162,8 @@ export default function Dashboard() {
                 withCredentials: true
             }
         )
-        await refreshDashboard()
-        handleStockTabClick(0)
+        refreshDashboard(null,null)
+
     }
 
     if (isLoading) {
@@ -168,7 +202,7 @@ export default function Dashboard() {
 
                             <div className="dashboard-category-tab-buttons">
 
-                                {stocks.length > 0 && stocks[activeStockTab].categories.map((category, index) => (
+                                {activeStockTab != null && stocks.length > 0 && stocks[activeStockTab].categories.map((category, index) => (
                                     <button
                                         key={category.id}
                                         className={index === activeCategoryTab ? "active" : ""}
@@ -178,14 +212,16 @@ export default function Dashboard() {
                                     </button>
 
                                 ))}
-                                <CategoryDropdownMenu
-                                    addCategory={handleAddCategory}
-                                    removeCategory={handleRemoveCategory}
-                                    changeCategoryName={handleChangeCategoryName}
-                                />
+                                {stocks.length > 0 && activeStockTab != null && (
+                                    <CategoryDropdownMenu
+                                        addCategory={handleAddCategory}
+                                        removeCategory={handleRemoveCategory}
+                                        changeCategoryName={handleChangeCategoryName}
+                                    />
+                                )}
                             </div>
                             <div className="dashboard-category-tab-content">
-                                {stocks.length > 0 && stocks[activeStockTab].categories && stocks[activeStockTab].categories.length > 0 && stocks[activeStockTab].categories.map((category, index) => (
+                                {activeStockTab != null && stocks.length > 0 && stocks[activeStockTab].categories && stocks[activeStockTab].categories.length > 0 && stocks[activeStockTab].categories.map((category, index) => (
                                     <div
                                         key={category.id}
                                         className={`module-container ${

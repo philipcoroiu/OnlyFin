@@ -64,7 +64,6 @@ export default function StockDropdownMenu(props) {
                         border: "1px solid #ccc",
                         borderRadius: "5px",
                         boxShadow: "0 0 5px rgba(0,0,0,0.3)",
-                        backgroundColor: "red",
                         padding: "10px",
                         zIndex: 10000,
                         position: "absolute",
@@ -76,7 +75,7 @@ export default function StockDropdownMenu(props) {
                     }}>
                     <div><input placeholder={"Search for a stock"}/></div>
                         <button onClick={() => props.removeStock()}>Remove</button>
-
+                        <p>---- Add a new stock ----</p>
                         {refStocks.map((stock) => (
                             <div className="dashboard-stock-add-container" key={stock.id}>
                                 <li>{stock.name}</li>
