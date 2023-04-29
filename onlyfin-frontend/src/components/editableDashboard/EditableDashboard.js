@@ -31,63 +31,92 @@ export default function EditableDashboard() {
         })
     }, []);
 
-   return (
+    const onDragEnd = (result) => {
+        const { source, destination } = result;
 
-       <div>
-           {/* >>>>>>>>>>>>>>>>>>>> Stock <<<<<<<<<<<<<<<<<<<<<<<  */}
-           <DragDropContext>
-               <Droppable droppableId="characters">
-                   {(provided, snapshot) => (
-                       <div {...provided.droppableProps}
-                            ref={provided.innerRef} >
+        // Check if the item was dropped outside the list or if the source and destination are the same
+        if (!destination || (source.index === destination.index && source.droppableId === destination.droppableId)) {
+            return;
+        }
 
-                           <ul className="characters" {...provided.droppableProps} ref={provided.innerRef}>
-                               {stocks.map((stock, index) => (
-                                   <div>
+        // Extract category IDs from the droppableIds
+        const sourceCategoryId = parseInt(source.droppableId.split("-")[1]);
+        const destCategoryId = parseInt(destination.droppableId.split("-")[1]);
 
-                                       {/* >>>>>>>>>>>>>>>>>>>> Category <<<<<<<<<<<<<<<<<<<<<<<  */}
-                                        {stock.categories.map((category, index) => (
-                                            <div>
-                                                {/* >>>>>>>>>>>>>>>>>>>> Module <<<<<<<<<<<<<<<<<<<<<<<  */}
-                                                {category.moduleEntities.map((moduleEntity, index) => (
-                                                    <div>
-                                                        <Draggable key={index} draggableId={index} index={index}>
-                                                            {(provided, snapshot) => (
-                                                                <div
+        // Find the source and destination categories
+        const sourceCategory = stocks.flatMap(stock => stock.categories).find(category => category.id === sourceCategoryId);
+        const destCategory = stocks.flatMap(stock => stock.categories).find(category => category.id === destCategoryId);
 
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    {...provided.dragHandleProps}
+        // Create a deep copy of the source and destination moduleEntities arrays
+        const sourceModuleEntities = [...sourceCategory.moduleEntities];
+        const destModuleEntities = [...destCategory.moduleEntities];
 
-                                                                    style={{border: '1px solid #ccc',
-                                                                    borderRadius: '4px',
-                                                                    padding: '16px',
-                                                                    margin: '8px',
-                                                                    width: '300px',
-                                                                    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)'}}>
+        // Remove the dragged item from the source array and insert it into the destination array
+        const [removed] = sourceModuleEntities.splice(source.index, 1);
+        destModuleEntities.splice(destination.index, 0, removed);
 
-                                                                    <li > hej
+        // Update the stocks state with the updated moduleEntities arrays
+        const updatedStocks = stocks.map(stock => ({
+            ...stock,
+            categories: stock.categories.map(category => {
+                if (category.id === sourceCategoryId) {
+                    return { ...category, moduleEntities: sourceModuleEntities };
+                }
+                if (category.id === destCategoryId) {
+                    return { ...category, moduleEntities: destModuleEntities };
+                }
+                return category;
+            }),
+        }));
+
+        setStocks(updatedStocks);
+    };
 
 
 
-                                                                    </li >
-                                                                </div>
-                                                                )}
-                                                        </Draggable>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                       ))}
-                                   </div>
-                               ))}
-
-                           </ul>
-                       </div>
-
-                   )}
-               </Droppable>
-           </DragDropContext>
-       </div>
+    return (
+        <div>
+            <DragDropContext onDragEnd={onDragEnd}>
+                {stocks.map((stock, stockIndex) => (
+                    <div key={stock.id}>
+                        <h3>Stock name: {stock.name}</h3>
+                        {stock.categories.map((category, categoryIndex) => (
+                            <Droppable key={category.id} droppableId={`category-${category.id}`}>
+                                {(provided, snapshot) => (
+                                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                                        <h4>Category: {category.name}</h4>
+                                        <ul className="module-entities">
+                                            {category.moduleEntities.map((moduleEntity, moduleIndex) => (
+                                                <Draggable key={moduleEntity.id} draggableId={moduleEntity.id} index={moduleIndex}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            style={{
+                                                                border: "1px solid #ccc",
+                                                                borderRadius: "4px",
+                                                                padding: "16px",
+                                                                margin: "8px",
+                                                                width: "300px",
+                                                                boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                                                            }}
+                                                        >
+                                                            <li>{moduleEntity.name}</li>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                        </ul>
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        ))}
+                    </div>
+                ))}
+            </DragDropContext>
+        </div>
 
    )
 }
