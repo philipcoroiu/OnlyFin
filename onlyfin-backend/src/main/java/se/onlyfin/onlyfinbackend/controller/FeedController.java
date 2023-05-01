@@ -115,7 +115,7 @@ public class FeedController {
                                                     moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(),
                                                     ZoneId.systemDefault())
                                             .format(DateTimeFormatter
-                                                    .ofPattern("dd/MMMM HH:mm yyyy", Locale.ENGLISH))));
+                                                    .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))));
                         }
                     }
                 }
@@ -205,7 +205,7 @@ public class FeedController {
                                                         moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(),
                                                         ZoneId.systemDefault())
                                                 .format(DateTimeFormatter
-                                                        .ofPattern("dd/MMMM HH:mm yyyy", Locale.ENGLISH))));
+                                                        .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))));
                             }
                         }
                     }
