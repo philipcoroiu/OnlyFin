@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
 import {Link} from "react-router-dom";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
 import StockDropdownMenu from "./StockDropdownMenu";
-import {wait} from "@testing-library/user-event/dist/utils";
-/*import { SearchBox } from 'react-search-box';*/
+import EditableLayout from "./EditableLayout";
+import GridLayout from 'react-grid-layout';
+import { WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 
 export default function Dashboard() {
     document.title = "Dashboard"
@@ -175,6 +176,7 @@ export default function Dashboard() {
         refreshDashboard()
     }
 
+
     if (isLoading) {
         return <div className="dashboard-is-loading">Loading dashboard...</div>;
     }
@@ -261,21 +263,10 @@ export default function Dashboard() {
                                         ) : (
                                             {/* if there are any moules in the category the modules will be
                                              displayed as highcharts*/},
-                                            category.moduleEntities.map((moduleEntity) => (
-                                                <div key={moduleEntity.id} className="dashboard-module-container">
-                                                    <pre>
-                                                        <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                                                            <button>edit</button>
-                                                        </Link>
-                                                        <HighchartsReact
-                                                            highcharts={Highcharts}
-                                                            options={moduleEntity.content}
-                                                        />
-                                                    </pre>
 
-                                                </div>
-                                                ))
-                                            )}
+                                                <EditableLayout category={category}/>
+
+                                        )}
                                     </div>
                                 ))}
                             </div>

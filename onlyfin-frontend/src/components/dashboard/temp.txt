@@ -1,0 +1,44 @@
+
+
+
+
+
+
+
+
+
+
+
+
+            <ResponsiveGridLayout
+                        className="layout"
+                        layouts={{ lg: layout }}
+                        breakpoints={{ lg: 1200 }}
+                        cols={{ lg: 12 }}
+                        rowHeight={150}
+                        isResizable={true}
+                        compactType="vertical"
+                        onLayoutChange={onLayoutChange}
+                        isBounded={true}
+                        isDraggable={true}
+                    >
+
+
+
+                            {props.category.moduleEntities.map((moduleEntity) => (
+                                    <div key={moduleEntity.id} className="dashboard-module-container">
+                                        <pre>
+                                            <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
+                                                <button>edit</button>
+                                            </Link>
+                                            <HighchartsReact
+                                                highcharts={Highcharts}
+                                                options={moduleEntity.content}
+                                            />
+                                        </pre>
+
+                                    </div>
+                                ))}
+
+
+                    </ResponsiveGridLayout>
