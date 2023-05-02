@@ -29,7 +29,24 @@ export default function CategoryDropdownMenu(props) {
     }
 
 
-    function handleRemoveCategory() {
+    function handleRemoveCategory(event) {
+        props.removeCategory()
+        handleOnSubmit(event)
+    }
+
+    function handleAddCategory(event, inputValue){
+        if(inputValue !== ""){
+            props.addCategory(inputValue)
+            handleOnSubmit(event)
+        }
+
+    }
+
+    function handleCangeCategoryName(event, inputValue){
+        if(inputValue !== ""){
+            props.changeCategoryName(inputValue)
+            handleOnSubmit(event)
+        }
 
     }
 
@@ -75,9 +92,9 @@ export default function CategoryDropdownMenu(props) {
                             />
                         </form>
 
-                        <button onClick={ () => props.addCategory(inputValue)}>Add Category</button>
-                        <button onClick={ () => props.removeCategory()}>Remove Category</button>
-                        <button onClick={() => props.changeCategoryName(inputValue)}>Change name</button>
+                        <button onClick={ (e) => handleAddCategory(e, inputValue)}>Add Category</button>
+                        <button onClick={ (e) => handleRemoveCategory(e)}>Remove Category</button>
+                        <button onClick={(e) => handleCangeCategoryName(e, inputValue)}>Change name</button>
                     </div>
                 )
             }
