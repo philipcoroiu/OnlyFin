@@ -7,8 +7,10 @@ import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
+import se.onlyfin.onlyfinbackend.DTO.ModuleChangeDTO;
 
 import javax.swing.text.html.Option;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -179,17 +181,17 @@ public class StudioController {
         else return ResponseEntity.badRequest().build();
     }
 
-    /*@PutMapping("/updateModuleContent")
-    public ResponseEntity<?> updateModuleContent(@RequestBody ContentChangeRequest ccr){
+    @PutMapping("/updateModuleContent")
+    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module){
 
-        ModuleEntity module;
-
-        if(moduleRepository.existsById(ccr.getId())){
-            module = moduleRepository.getReferenceById(ccr.getId());
-            module.setContent(ccr.getContent());
-            moduleRepository.save(module);
-            return ResponseEntity.ok(module);
+        if(moduleRepository.existsById(module.getId())){
+            Optional<ModuleEntity> moduleOptional= moduleRepository.findById(module.getId());
+            ModuleEntity moduleToSave = moduleOptional.orElse(null);
+            moduleToSave.setContent(module.getContent());
+            moduleToSave.setUpdatedDate(Instant.now());
+            moduleRepository.save(moduleToSave);
+            return  ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
         }
         return ResponseEntity.badRequest().body("module id does not exist");
-    }*/
+    }
 }
