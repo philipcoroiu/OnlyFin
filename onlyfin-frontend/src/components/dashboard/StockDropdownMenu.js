@@ -7,8 +7,8 @@ export default function StockDropdownMenu(props) {
     const [showMenu, setShowMenu] = React.useState(false);
     const dropdownRef = useRef(null);
     const [refStocks, setRefStocks] = React.useState(null);
-    const [refStockButtons, setRefStockButtons] = React.useState(null);
-
+    const [refStocksToShow, setRefStocksToShow] = React.useState(null);
+    const [searchText, setSearchText] = React.useState("");
 
     /**
      * The menu closes when clicked outside the dropdown menu
@@ -16,9 +16,8 @@ export default function StockDropdownMenu(props) {
     useEffect(() => {
         axios.get("http://localhost:8080/dashboard/getStockRef", {withCredentials: true}).then((response) => {
             setRefStocks(response.data);
+            setRefStocksToShow(response.data);
             console.log("stockRefs: ", response.data);
-
-
         })
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -50,6 +49,35 @@ export default function StockDropdownMenu(props) {
         }
     }
 
+    function handleSearchTextChange(value){
+        setSearchText(value)
+
+        if(value === ""){
+            setRefStocksToShow(refStocks)
+        }
+        else{
+            const searchedRefStock = refStocks.filter((stock) => {
+                const searchTerm = value.toLowerCase();
+                const stockName = stock.name.toLowerCase();
+                const stockTicker = stock.ticker.toLowerCase();
+
+                return stockName.includes(searchTerm) || stockTicker.includes(searchTerm);
+            });
+            setRefStocksToShow(searchedRefStock)
+        }
+    }
+
+    function handleAddStock(stockId){
+        props.addStock(stockId);
+        handleToggleMenu();
+        handleSearchTextChange("");
+    }
+
+    function handleRemoveStock(){
+        props.removeStock();
+        handleToggleMenu();
+    }
+
 
     return (
         <div ref={dropdownRef}>
@@ -69,23 +97,31 @@ export default function StockDropdownMenu(props) {
                         position: "absolute",
                         overflow: "auto",
                         height: "450px",
-                        width: "300px"
+                        width: "300px",
+                        backgroundColor: "#FFFFFF"
 
                         // >>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
                     }}>
-                    <div><input placeholder={"Search for a stock"}/></div>
-                        <button onClick={() => props.removeStock()}>Remove</button>
-                        <p>---- Add a new stock ----</p>
-                        {refStocks.map((stock) => (
-                            <div className="dashboard-stock-add-container" key={stock.id}>
-                                <li>{stock.name}</li>
-                                <button value={stock.id}
-                                        onClick={() => props.addStock(stock.id)}
-
-                                >Add</button>
-                            </div>
-                        ))}
-                    </ul>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Search for a stock"
+                            value={searchText}
+                            onChange={(e) =>handleSearchTextChange(e.target.value)}
+                        />
+                    </div>
+                    <button onClick={() => handleRemoveStock()}>Remove</button>
+                    <p>---- Add a new stock ----</p>
+                    {refStocksToShow != null &&
+                        refStocksToShow.map((stock) => (
+                        <div className="dashboard-stock-add-container" key={stock.id}>
+                            <li>{stock.name} [{stock.ticker}]</li>
+                            <button value={stock.id}
+                                    onClick={() => handleAddStock(stock.id)}
+                            >Add</button>
+                        </div>
+                    ))}
+                </ul>
                 )
             }
 

@@ -121,12 +121,14 @@ public class StudioController {
         Category category;
 
         if (categoryRepository.existsById(nameChangeRequest.id())) {
-            category = categoryRepository.getReferenceById(nameChangeRequest.id());
+
+            Optional<Category> optionalCategory = categoryRepository.findById(nameChangeRequest.id());
+            category = optionalCategory.orElse(null);
             category.setName(nameChangeRequest.name());
             categoryRepository.save(category);
-            return ResponseEntity.ok(category);
+            return ResponseEntity.ok().body(category);
         }
-        return ResponseEntity.badRequest().body("category id does not exist");
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createModule")
@@ -163,6 +165,18 @@ public class StudioController {
             return ResponseEntity.ok(dashboard);
         }
         return ResponseEntity.badRequest().body("cant find dashboard");
+    }
+
+    @GetMapping("getModuleFromId/{id}")
+    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id){
+        System.out.println(id);
+
+        if(moduleRepository.existsById(id)){
+            Optional<ModuleEntity> moduleOptional = moduleRepository.findById(id);
+            ModuleEntity module = moduleOptional.orElse(null);
+            return ResponseEntity.ok(module);
+        }
+        else return ResponseEntity.badRequest().build();
     }
 
     /*@PutMapping("/updateModuleContent")

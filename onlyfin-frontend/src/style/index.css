@@ -1214,6 +1214,25 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
+.dashboard-empty-module {
+    padding: 0px;
+    display: inline-grid;
+    margin: 15px;
+    background-color: var(--light-color);
+    border-radius: var(--dashboard-module-border-radius);
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 72px;
+    color: black;
+    text-decoration: none;
+    border: none;
+}
+
 .dashboard-profile-button {
     position: absolute;
     right: 17px;
