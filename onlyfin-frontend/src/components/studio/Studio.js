@@ -31,6 +31,8 @@ export default function Studio() {
     const [moduleId, setModuleId] = useState(null);
     const navigate = useNavigate();
 
+
+
     React.useEffect(() => {
 
         if(editModule && moduleIndex != null){
@@ -188,6 +190,7 @@ export default function Studio() {
         /* sets timeout for the duration input and then sets the showSuccessMessage to false */
         setTimeout(() => {
             setShowSuccessMessage(false);
+            navigate("/Dashboard")
         }, duration);
     }
 
@@ -224,8 +227,6 @@ export default function Studio() {
         /* shows success message*/
         setSuccessMessage("SUCCESS: Your chart has been updated");
         await showSuccessMessageForDuration(successMessage, 5000);
-
-        await navigate("/Dashboard")
     }
 
     function createChart() {
