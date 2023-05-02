@@ -21,11 +21,11 @@ import java.util.*;
 @RestController
 @RequestMapping("/algo")
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
-public class UserSuggestionAlgorith {
+public class UserSuggestionAlgorithm {
     private final UserRepository userRepository;
     private final DashboardController dashboardController;
 
-    public UserSuggestionAlgorith(UserRepository userRepository, DashboardController dashboardController) {
+    public UserSuggestionAlgorithm(UserRepository userRepository, DashboardController dashboardController) {
         this.userRepository = userRepository;
         this.dashboardController = dashboardController;
     }
