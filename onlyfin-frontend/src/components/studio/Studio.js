@@ -76,8 +76,6 @@ export default function Studio() {
             style: {
                 fontFamily: "Tahoma"
             },
-            width: `${divWidth * 0.4}`,
-            height: `${divHeight * 0.8}`
         },
         style: {
             borderColor: "#1A1616"
@@ -131,7 +129,7 @@ export default function Studio() {
             data: [""],
             borderWidth: 0,
             color: "#b0ffa6",
-        }]
+        }],
     });
 
     /* messages shown to user */
@@ -230,15 +228,19 @@ export default function Studio() {
 
     function createChart() {
 
-        /* checks for error messages, the post wont be posted if there are error messages */
+        /* checks for error messages, the post won't be posted if there are error messages */
         if (!checkForError()) {
 
             /* creates a const of the chart that is going to be sent */
             const chartToSubmit = studioChart;
 
             /* change the width and height to the standard width and height */
-            chartToSubmit.chart.width = 365;
-            chartToSubmit.chart.height = 345;
+            chartToSubmit.chart.width = null;
+            chartToSubmit.chart.height = null;
+
+            //const coordinates = {
+            //    x: 1
+            //}
 
             /* creates a post chart with the needed data to be stored in the database */
             const postChart = {
@@ -263,6 +265,14 @@ export default function Studio() {
             showErrorMessageForDuration(5000);
         }
     }
+    const options = {
+        title: {
+            text: 'highcharts-react-official'
+        },
+        series: [{
+            data: [1, 5, 3, 4]
+        }]
+    }
 
     return (
 
@@ -272,17 +282,12 @@ export default function Studio() {
             <NavBar/>
             {/* --STUDIO CONTAINER-- */}
             <div className="studio--container">
-                <div ref={(chartContainer) => {
-                    if (chartContainer && chartContainer.chart) {
-                        chartContainer.chart.reflow();
-                    }
-                }}
-                     className="studio--chart"
-                >
+                <div className="studio--chart">
                     {/* --HIGHCHART-- */}
                     <HighchartsReact
+                        containerProps={{ style: { height: "100%", width: "100%"} }}
                         highcharts={Highcharts}
-                        options={studioChart}
+                        options={options}
                     />
                 </div>
                 <div className="studio--toolbar">

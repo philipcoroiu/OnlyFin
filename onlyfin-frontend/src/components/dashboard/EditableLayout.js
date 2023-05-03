@@ -1,5 +1,5 @@
-import React from "react"
-import GridLayout, {Responsive} from 'react-grid-layout';
+import React, {useState} from "react"
+import {Responsive} from 'react-grid-layout';
 import { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -12,38 +12,53 @@ export default function EditableLayout(props) {
 
     const ResponsiveGridLayout = WidthProvider(Responsive);
 
-    const [layout, setLayout] = React.useState([]);
+    const standardWidth = 2;
+    const standardAmountColumns = 8;
 
-    const onLayoutChange = (newLayout) => {
-        setLayout(newLayout);
+    const layout = props.category.moduleEntities.map((item, index) => ({
+        i: item.id.toString(),
+        x: index * standardWidth % standardAmountColumns,
+        y: Math.floor(index / 5) * standardWidth,
+        w: standardWidth,
+        h: 2,
+    }));
+
+    const [updatedChart, setUpdateChart] = useState(
+
+    )
+
+    const onLayoutChange = (newLayout, event) => {
+        console.log(newLayout)
     };
 
 
-    return(
-        <div>
 
+
+    return(
             <ResponsiveGridLayout
                 className="layout"
                 layouts={{ lg: layout }}
-                breakpoints={{ lg: 1200 }}
-                cols={{ lg: 12 }}
-                rowHeight={150}
+                cols={{ lg: 8, md: 6, sm: 4, xs: 2, xxs: 1 }}
+                rowHeight={200}
                 isResizable={true}
                 compactType="vertical"
-                onLayoutChange={onLayoutChange}
+                onLayoutChange={(newLayout, event) => onLayoutChange(newLayout, event)}
                 isBounded={true}
-                isDraggable={true}
+                isDraggable={false}
+                autoPosition={[0, 0]}
             >
 
                 {props.category.moduleEntities.map((moduleEntity) => (
-                    <div key={moduleEntity.id} className="dashboard-module-container">
+                    <div key={moduleEntity.id} className="dashboard-module-container" >
                         <pre>
                             <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
                                 <button>edit</button>
                             </Link>
                             <HighchartsReact
+                                containerProps={{ style: { height: "100%" } }}
                                 highcharts={Highcharts}
                                 options={moduleEntity.content}
+
                             />
                         </pre>
 
@@ -51,8 +66,6 @@ export default function EditableLayout(props) {
                 ))}
 
             </ResponsiveGridLayout>
-
-        </div>
     )
 
 }

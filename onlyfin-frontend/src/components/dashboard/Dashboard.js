@@ -236,7 +236,7 @@ export default function Dashboard() {
                                     />
                                 )}
                             </div>
-                            <div className="dashboard-category-tab-content">
+                            <div className="dashboard-category-tab-content" >
                                 {/* --CATEGORIY CONTAINER-- */}
                                 {activeStockTab != null && stocks.length > 0
                                     /* checks to see if the activeStocktab isnt null, the stocks.length isnt 0,

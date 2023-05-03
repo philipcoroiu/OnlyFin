@@ -1493,3 +1493,9 @@ Feed
 .subBar > h3 {
     color: #919191;
 }
+
+.layout {
+    display: flex;
+    justify-content: start;
+
+}
