@@ -68,7 +68,8 @@ public class SecurityConfig {
                                 "/user-subscription-list-sorted-by-update-date",
                                 "/algo/**",
                                 "/find-analysts-that-cover-stock",
-                                "/reviews/**"
+                                "/reviews/**",
+                                "/error"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

@@ -3,12 +3,10 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
-import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -168,15 +166,14 @@ public class StudioController {
     }
 
     @GetMapping("getModuleFromId/{id}")
-    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id){
+    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id) {
         System.out.println(id);
 
-        if(moduleRepository.existsById(id)){
+        if (moduleRepository.existsById(id)) {
             Optional<ModuleEntity> moduleOptional = moduleRepository.findById(id);
             ModuleEntity module = moduleOptional.orElse(null);
             return ResponseEntity.ok(module);
-        }
-        else return ResponseEntity.badRequest().build();
+        } else return ResponseEntity.badRequest().build();
     }
 
     /*@PutMapping("/updateModuleContent")
