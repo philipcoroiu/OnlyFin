@@ -39,7 +39,7 @@ public class DashboardController {
     }
 
     @GetMapping("/getStockRef")
-    public ResponseEntity<?> getStockRef(){
+    public ResponseEntity<?> getStockRef() {
         List<StockRef> stockRefs = stockRefRepository.findAll();
 
         return ResponseEntity.ok(stockRefs);

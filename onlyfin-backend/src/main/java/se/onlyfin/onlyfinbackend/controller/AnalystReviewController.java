@@ -2,11 +2,11 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewDTO;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewPostDTO;
 import se.onlyfin.onlyfinbackend.model.AnalystReview;
+import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.AnalystReviewRepository;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
@@ -42,16 +42,16 @@ public class AnalystReviewController {
      */
     @PutMapping("/post")
     @Transactional
-    public ResponseEntity<String> addReviewForUser(@RequestBody AnalystReviewPostDTO analystReviewPostDTO, Principal principal) {
+    public ResponseEntity<String> addReviewForUser(@RequestBody AnalystReviewPostDTO analystReviewPostDTO, Principal principal) throws NoSuchUserException {
         if (analystReviewPostDTO.reviewText().isBlank() || analystReviewPostDTO.targetUsername().isBlank()) {
             return ResponseEntity.badRequest().build();
         }
 
         User authorOfReview = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new UsernameNotFoundException("Could not find any user with that name!"));
+                new NoSuchUserException("Could not find any user with that name!"));
 
         User targetUser = userRepository.findByUsername(analystReviewPostDTO.targetUsername()).orElseThrow(() ->
-                new UsernameNotFoundException("Could not find any user with that name!"));
+                new NoSuchUserException("Could not find any user with that name!"));
 
         //only one review per user is allowed so check that if review already exists and delete if present
         if (analystReviewRepository.findByTargetUserAndAuthorUsername(targetUser, authorOfReview.getUsername()).isPresent()) {
@@ -76,9 +76,9 @@ public class AnalystReviewController {
      * @return Response with "Review deleted"
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<String> removeReviewForUser(@RequestParam String targetUsername, Principal principal) {
+    public ResponseEntity<String> removeReviewForUser(@RequestParam String targetUsername, Principal principal) throws NoSuchUserException {
         User targetUser = userRepository.findByUsername(targetUsername).orElseThrow(() ->
-                new UsernameNotFoundException("No such username found"));
+                new NoSuchUserException("No such username found"));
 
         AnalystReview targetReview = analystReviewRepository
                 .findByTargetUserAndAuthorUsername(targetUser, principal.getName()).orElseThrow(() ->
@@ -102,9 +102,9 @@ public class AnalystReviewController {
      * @return Response with the review
      */
     @GetMapping("/get-my-review")
-    public ResponseEntity<AnalystReviewDTO> fetchReviewByAuthorCurrentUserAndTargetUser(@RequestParam String targetUsername, Principal principal) {
+    public ResponseEntity<AnalystReviewDTO> fetchReviewByAuthorCurrentUserAndTargetUser(@RequestParam String targetUsername, Principal principal) throws NoSuchUserException {
         User targetReviewedUser = userRepository.findByUsername(targetUsername).orElseThrow(() ->
-                new UsernameNotFoundException("No user with that name found!"));
+                new NoSuchUserException("No user with that name found!"));
 
         AnalystReview targetReview = analystReviewRepository
                 .findByTargetUserAndAuthorUsername(targetReviewedUser, principal.getName()).orElseThrow(() ->
@@ -124,9 +124,9 @@ public class AnalystReviewController {
      * @return Response with all reviews for the target user
      */
     @GetMapping("/fetch-all")
-    public ResponseEntity<List<AnalystReviewDTO>> fetchAllReviewsForAnalyst(@RequestParam String targetUsername) {
+    public ResponseEntity<List<AnalystReviewDTO>> fetchAllReviewsForAnalyst(@RequestParam String targetUsername) throws NoSuchUserException {
         User targetUser = userRepository.findByUsername(targetUsername).orElseThrow(() ->
-                new UsernameNotFoundException("Could not find any user with that name!"));
+                new NoSuchUserException("Could not find any user with that name!"));
 
         List<AnalystReview> reviewList = new ArrayList<>(targetUser.getReviews());
         if (reviewList.isEmpty()) {

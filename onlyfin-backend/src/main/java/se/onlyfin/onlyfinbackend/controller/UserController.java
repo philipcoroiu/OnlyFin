@@ -3,13 +3,13 @@ package se.onlyfin.onlyfinbackend.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeDTO;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
+import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
@@ -179,8 +179,9 @@ public class UserController {
      * @return "about me" text & sub info
      */
     @GetMapping("/fetch-about-me-with-sub-info")
-    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) {
-        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) throws NoSuchUserException {
+        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new NoSuchUserException("Username not found!"));
 
         Optional<User> userOptionalTargetUser = userRepository.findByUsername(username);
         if (userOptionalTargetUser.isEmpty()) {
