@@ -18,12 +18,6 @@ export default function Studio() {
         {index: 4, color: "#6384d2"},
     ];
 
-    const [chartWidth, setC] = React.useState(window.screen.width * 0.4);
-    const [chartHeith, setChartHeith] = React.useState(window.screen.height * 0.8);
-
-    const [divWidth, setDivWidth] = useState(window.innerWidth);
-    const [divHeight, setDivHeight] = useState(window.innerHeight);
-
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const editModule = searchParams.get("editModule") || false;
@@ -40,33 +34,9 @@ export default function Studio() {
                 setStudioChart(response.data.content)
                 setModuleId(response.data.id)
                 setCategoryId(response.data.category_id)
-                handleResize();
             })
         }
-        function handleResize() {
-            setStudioChart(prevState => {
 
-                return {
-                    ...prevState,
-                    chart: {
-                        ...prevState.chart,
-                        width: `${window.innerWidth * 0.4}`,
-                        height: `${window.innerHeight * 0.8}`
-                    }
-
-                };
-            });
-        }
-
-        handleResize();
-
-        window.addEventListener("resize", handleResize);
-        window.addEventListener("orientationchange", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-            window.removeEventListener("orientationchange", handleResize);
-        };
     }, []);
 
     /* the initial state of the studiochart that is set when studio is first opened */
@@ -120,9 +90,6 @@ export default function Studio() {
             style: {
                 color: "#1A1616"
             }
-        },
-        plotOptions: {
-            bb: {}
         },
         series: [{
             name: "name",
@@ -234,14 +201,6 @@ export default function Studio() {
             /* creates a const of the chart that is going to be sent */
             const chartToSubmit = studioChart;
 
-            /* change the width and height to the standard width and height */
-            chartToSubmit.chart.width = null;
-            chartToSubmit.chart.height = null;
-
-            //const coordinates = {
-            //    x: 1
-            //}
-
             /* creates a post chart with the needed data to be stored in the database */
             const postChart = {
                 category_id: categoryId,
@@ -287,7 +246,7 @@ export default function Studio() {
                     <HighchartsReact
                         containerProps={{ style: { height: "100%", width: "100%"} }}
                         highcharts={Highcharts}
-                        options={options}
+                        options={studioChart}
                     />
                 </div>
                 <div className="studio--toolbar">
