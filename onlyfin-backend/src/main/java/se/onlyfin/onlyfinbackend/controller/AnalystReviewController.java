@@ -1,6 +1,7 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewDTO;
@@ -42,8 +43,8 @@ public class AnalystReviewController {
      */
     @PutMapping("/post")
     @Transactional
-    public ResponseEntity<String> addReviewForUser(@RequestBody AnalystReviewPostDTO analystReviewPostDTO, Principal principal) throws NoSuchUserException {
-        if (analystReviewPostDTO.reviewText().isBlank() || analystReviewPostDTO.targetUsername().isBlank()) {
+    public ResponseEntity<String> addReviewForUser(@RequestBody @NotNull AnalystReviewPostDTO analystReviewPostDTO, Principal principal) throws NoSuchUserException {
+        if (analystReviewPostDTO.reviewText() == null || analystReviewPostDTO.targetUsername() == null) {
             return ResponseEntity.badRequest().build();
         }
 
