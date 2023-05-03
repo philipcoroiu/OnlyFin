@@ -6,6 +6,7 @@ package se.onlyfin.onlyfinbackend.model;
 public class NoSuchUserException extends Exception {
     /**
      * Constructs an exception using the passed-in message
+     *
      * @param msg the error message
      */
     public NoSuchUserException(String msg) {

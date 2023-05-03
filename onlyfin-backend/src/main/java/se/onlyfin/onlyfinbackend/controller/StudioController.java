@@ -108,7 +108,7 @@ public class StudioController {
             categoryRepository.deleteById(intId);
             return "Removed category successfully";
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return "Could not remove category";
     }
@@ -117,11 +117,10 @@ public class StudioController {
     public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDT nameChangeRequest) {
 
         Category category;
-
         if (categoryRepository.existsById(nameChangeRequest.id())) {
 
             Optional<Category> optionalCategory = categoryRepository.findById(nameChangeRequest.id());
-            category = optionalCategory.orElse(null);
+            category = optionalCategory.orElseThrow();
             category.setName(nameChangeRequest.name());
             categoryRepository.save(category);
             return ResponseEntity.ok().body(category);
@@ -154,7 +153,7 @@ public class StudioController {
         Dashboard dashboard;
         if (dashboardRepository.existsById(id)) {
             Optional<Dashboard> dashboardOptional = dashboardRepository.findById(id);
-            dashboard = dashboardOptional.orElse(null);
+            dashboard = dashboardOptional.orElseThrow();
             for (int i = 0; i < dashboard.getStocks().size(); i++) {
                 for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++) {
                     dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
