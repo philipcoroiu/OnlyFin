@@ -1,6 +1,6 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import Avatar from "../../assets/images/avatar.png"
-import axios from "axios";
+import axios, {postForm} from "axios";
 import {useParams} from "react-router-dom";
 import NavBar from "../navBar/NavBar";
 
@@ -9,14 +9,18 @@ export default function PersonalPage() {
     const {username} = useParams();
     const [userData, setUserData] = React.useState();
     const [error, setError] = React.useState(null)
+    const [personalName, setPersonalName] = useState()
+    const [reviewText, setReviewText] = useState()
 
-    document.title =`${username}`
+    const [isPosted, setIsPosted] = useState(false);
+
+    document.title = `${username}`
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
+                const responseTargetUser = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -24,8 +28,30 @@ export default function PersonalPage() {
                         withCredentials: true,
                     });
 
-                console.log('API response:', response.data);
-                setUserData(response.data);
+                const responseUser = await axios.get(`http://localhost:8080/principal-username`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    });
+
+                setPersonalName(responseUser.data)
+                console.log(personalName)
+
+                console.log('API response:', responseUser.data);
+                setUserData(responseTargetUser.data);
+
+                const responseReviews = await axios.get(`http://localhost:8080/reviews/fetch-all?targetUsername=${username}`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    });
+
+                console.log(responseReviews.data)
+
             } catch (error) {
                 if (error.response && error.response.status === 400) {
                     // Handle 400 error
@@ -39,7 +65,7 @@ export default function PersonalPage() {
         };
 
         fetchData();
-    }, [username]);
+    }, [personalName]);
 
     async function handleClick() {
         if (userData.subscribed) {
@@ -112,6 +138,36 @@ export default function PersonalPage() {
     }
 
 
+    function posted() {
+        setIsPosted(true)
+        post()
+    }
+
+    const post = async () => {
+
+        try {
+            console.log('Posting review to:', username);
+
+            await axios.put(
+                `http://localhost:8080/reviews/post`,
+                {reviewText, username, personalName},
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                }
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    function makeReview(e) {
+        setReviewText(e.target.value)
+    }
+
+
     return (
         <div>
             {error ? <p>{error}</p> : (
@@ -129,6 +185,51 @@ export default function PersonalPage() {
                         <div className="mypage--bio--container">
                             <p>{userData.aboutMe}</p>
                             <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
+                        </div>
+                    </div>
+                    <div className="personalPage-review-section">
+                        <div className="personalPage-review-card">
+                            {isPosted ?
+                                (
+                                    <div>
+                                        <div className="personalPage-review-card-header">
+                                            <img src={Avatar} style={{
+                                                width: 50,
+                                                height: 50
+                                            }}/>
+                                            <h3>{personalName}</h3>
+                                        </div>
+                                        <div className="personalPage-review-card-post-area">
+                                            <p>{reviewText}</p>
+                                        </div>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <div>
+                                        <div className="personalPage-review-card-header">
+
+                                            <img src={Avatar} style={{
+                                                width: 50,
+                                                height: 50
+                                            }}/>
+                                            <h3>{personalName}</h3>
+                                        </div>
+                                        <div className="personalPage-review-card-post-area">
+                                            <textarea
+                                                value={reviewText}
+                                                onChange={makeReview}
+                                                rows={5}
+                                                cols={30}
+                                                maxLength={700}
+                                                className=""
+                                            />
+                                            <button onClick={posted}>Post</button>
+                                        </div>
+                                    </div>
+                                )
+                            }
+
                         </div>
                     </div>
                 </div>

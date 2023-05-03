@@ -67,7 +67,8 @@ export default function PersonalPage() {
     const updateUserText = async () => {
         try {
             await axios.put(`http://localhost:8080/update-about-me`,
-                {text: userData}, {
+                {text: userData},
+                {
                     headers: {
                         'Content-type': 'application/json',
                     },
