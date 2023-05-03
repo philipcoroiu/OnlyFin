@@ -78,7 +78,7 @@ export default function SearchPage() {
                     className="search--profile--container"
                 >
                     {searchData.map((data, index) => (
-                        <div className="search--profile--tab">
+                        <div className="search--profile--tab" key={index}>
                             <Profile
                                 key={index}
                                 name={data.profile.username}
