@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import Avatar from "../../assets/images/avatar.png"
 import axios from "axios";
 import {useNavigate} from "react-router-dom"
@@ -6,13 +6,15 @@ import NavBar from "../navBar/NavBar";
 
 export default function PersonalPage() {
 
+    const [reviews, setReviews] = useState([""])
     const [isEditable, setIsEditable] = React.useState(false);
     const [username, setUsername] = React.useState();
     const [userData, setUserData] = React.useState();
+    const [isVisible, setIsVisible] = React.useState(false)
 
     const navigate = useNavigate();
 
-    document.title =`${username}`
+    document.title = `${username}`
 
     useEffect(() => {
 
@@ -45,7 +47,22 @@ export default function PersonalPage() {
                 console.error('Error fetching data:', error);
                 navigate("/Login")
             }
+
+            const responseReviews = await axios.get(`http://localhost:8080/reviews/fetch-all?targetUsername=${username}`,
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                }).then(responseReviews => {
+                    if(responseReviews.data != null){
+                        console.log(responseReviews.data)
+                        setReviews(responseReviews.data)
+                        setIsVisible(true)
+                    }
+            });
         };
+
 
         fetchData();
     }, [navigate]);
@@ -67,7 +84,8 @@ export default function PersonalPage() {
     const updateUserText = async () => {
         try {
             await axios.put(`http://localhost:8080/update-about-me`,
-                {text: userData}, {
+                {text: userData},
+                {
                     headers: {
                         'Content-type': 'application/json',
                     },
@@ -80,6 +98,24 @@ export default function PersonalPage() {
             console.error('Error updating user text:', error);
         }
     }
+
+    const showReviews = reviews.map((review, index) => {
+        return (
+
+            <div key={index}>
+                <div className="personalPage-review-card-header">
+                    <img src={Avatar} style={{
+                        width: 50,
+                        height: 50
+                    }}/>
+                    <h3>{review.author}</h3>
+                </div>
+                <div className="personalPage-review-card-post-area">
+                    <p>{review.reviewText}</p>
+                </div>
+            </div>
+        )
+    })
 
     return (
         <div className="mypage">
@@ -108,6 +144,10 @@ export default function PersonalPage() {
                     )}
                     <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
                 </div>
+            </div>
+            <div className="personalPage-review-section">
+
+                {isVisible && showReviews}
             </div>
         </div>
     )
