@@ -52,8 +52,12 @@ public class DashboardController {
      * @return Instant object containing time&date information about the last post date
      */
     public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
-        Dashboard targetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId()).orElseThrow();
+        Optional<Dashboard> optionalTargetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId());
+        if (optionalTargetAnalystsDashboard.isEmpty()) {
+            return Instant.MIN;
+        }
 
+        Dashboard targetAnalystsDashboard = optionalTargetAnalystsDashboard.get();
         List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
         Instant latestInstant = Instant.MIN;
         for (Stock currentStock : analystsStocks) {
@@ -77,8 +81,12 @@ public class DashboardController {
      * @return Instant object containing time&date information about the last post update date
      */
     public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
-        Dashboard targetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId()).orElseThrow();
+        Optional<Dashboard> optionalTargetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId());
+        if (optionalTargetAnalystsDashboard.isEmpty()) {
+            return Instant.MIN;
+        }
 
+        Dashboard targetAnalystsDashboard = optionalTargetAnalystsDashboard.get();
         List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
         Instant latestInstant = Instant.MIN;
         for (Stock currentStock : analystsStocks) {
