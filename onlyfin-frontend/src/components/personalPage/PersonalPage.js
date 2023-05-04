@@ -215,7 +215,7 @@ export default function PersonalPage() {
     for (let i = 0; i < reviews.length; i++) {
         const review = reviews[i]
         showReviews.push(
-            <div key={review.id}>
+            <div key={review.id} className="personalPage-review-card">
                 <div className="personalPage-review-card-header">
                     <img src={Avatar} style={{
                         width: 50,
@@ -231,24 +231,24 @@ export default function PersonalPage() {
     }
 
 
-/*
-    const showReviews = reviews.map(review => {
-        return (
-            <div key={review.id}>
-                <div className="personalPage-review-card-header">
-                    <img src={Avatar} style={{
-                        width: 50,
-                        height: 50
-                    }}/>
-                    <h3>{review.author}</h3>
+    /*
+        const showReviews = reviews.map(review => {
+            return (
+                <div key={review.id}>
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>{review.author}</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>{review.reviewText}</p>
+                    </div>
                 </div>
-                <div className="personalPage-review-card-post-area">
-                    <p>{review.reviewText}</p>
-                </div>
-            </div>
-        )
-    })
-*/
+            )
+        })
+    */
     const revertIsPosted = () => {
         setIsPosted(false)
     }
@@ -272,27 +272,27 @@ export default function PersonalPage() {
                             <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
                         </div>
                     </div>
-                    <div className="personalPage-review-section">
-                        <div className="personalPage-review-card">
-                            {isPosted ?
-                                (
-                                    <div>
-                                        {isVisible && showReviews}
-                                        <button onClick={revertIsPosted}>edit</button>
-                                    </div>
-                                )
-                                :
-                                (
-                                    <div>
-                                        <div className="personalPage-review-card-header">
+                    {isPosted ?
+                        (
+                            <div className="personalPage-review-section">
+                                {isVisible && showReviews}
+                                <button onClick={revertIsPosted} className="personalPage-review-card-edit">edit</button>
+                            </div>
+                        )
+                        :
+                        (
+                            <div className="personalPage-review-section">
+                                <div className="personalPage-review-card">
 
-                                            <img src={Avatar} style={{
-                                                width: 50,
-                                                height: 50
-                                            }}/>
-                                            <h3>{personalName}</h3>
-                                        </div>
-                                        <div className="personalPage-review-card-post-area">
+                                    <div className="personalPage-review-card-header">
+
+                                        <img src={Avatar} style={{
+                                            width: 50,
+                                            height: 50
+                                        }}/>
+                                        <h3>{personalName}</h3>
+                                    </div>
+                                    <div className="personalPage-review-card-post-area">
                                             <textarea
                                                 value={reviewText}
                                                 onChange={makeReview}
@@ -301,15 +301,13 @@ export default function PersonalPage() {
                                                 maxLength={700}
                                                 className=""
                                             />
-                                            <button onClick={posted}>Post</button>
-                                        </div>
-                                        {isVisible && showReviews}
+                                        <button onClick={posted}>Post</button>
                                     </div>
-
-                                )
-                            }
-                        </div>
-                    </div>
+                                </div>
+                                {isVisible && showReviews}
+                            </div>
+                        )
+                    }
                 </div>
             )}
         </div>

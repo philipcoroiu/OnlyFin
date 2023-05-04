@@ -108,7 +108,7 @@ export default function PersonalPage() {
     for (let i = 0; i < reviews.length; i++) {
         const review = reviews[i]
         showReviews.push(
-            <div key={review.id}>
+            <div key={review.id} className="personalPage-review-card">
                 <div className="personalPage-review-card-header">
                     <img src={Avatar} style={{
                         width: 50,
