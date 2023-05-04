@@ -1,35 +1,40 @@
-import React, {useEffect, useState} from "react"
-import Avatar from "../../assets/images/avatar.png"
+import React, {useEffect, useState} from "react";
+import Avatar from "../../assets/images/avatar.png";
 import axios, {postForm} from "axios";
 import {useParams} from "react-router-dom";
 import NavBar from "../navBar/NavBar";
 
 export default function PersonalPage() {
 
-    const [reviews, setReviews] = useState()
     const {username} = useParams();
     const [userData, setUserData] = React.useState();
     const [error, setError] = React.useState(null)
     const [personalName, setPersonalName] = useState()
     const [reviewText, setReviewText] = useState()
-
     const [isPosted, setIsPosted] = useState(false);
+    const [reviews, setReviews] = useState()
+    const [isVisible, setIsVisible] = React.useState(false)
 
     document.title = `${username}`
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseReviews = await axios.get(`http://localhost:8080/reviews/fetch-all?targetUsername=pumpndump`,
+                const responseReviews = await axios.get(`http://localhost:8080/reviews/fetch-all?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
                         },
                         withCredentials: true,
                     }).then(responseReviews => {
-                    console.log(responseReviews.data)
-                    setReviews(responseReviews.data)
-
+                    if (responseReviews.data !== null) {
+                        console.log("test", responseReviews.data)
+                        setReviews(responseReviews.data)
+                        if (reviews !== null) {
+                            setIsVisible(true)
+                            console.log(isVisible, "is Visible")
+                        }
+                    }
                 });
 
                 const responseIsPosted = await axios.get(`http://localhost:8080/reviews/get-my-review?targetUsername=${username}`,
@@ -59,6 +64,7 @@ export default function PersonalPage() {
             }
         }
         fetchData()
+        console.log("page is updated")
     }, [username])
 
     useEffect(() => {
@@ -205,10 +211,30 @@ export default function PersonalPage() {
         setReviewText(e.target.value)
     }
 
-    const showReviews = reviews.map((review, index) => {
-        return (
+    const showReviews = []
+    for (let i = 0; i < reviews.length; i++) {
+        const review = reviews[i]
+        showReviews.push(
+            <div key={review.id}>
+                <div className="personalPage-review-card-header">
+                    <img src={Avatar} style={{
+                        width: 50,
+                        height: 50
+                    }}/>
+                    <h3>{review.author}</h3>
+                </div>
+                <div className="personalPage-review-card-post-area">
+                    <p>{review.reviewText}</p>
+                </div>
+            </div>
+        )
+    }
 
-            <div key={index}>
+
+/*
+    const showReviews = reviews.map(review => {
+        return (
+            <div key={review.id}>
                 <div className="personalPage-review-card-header">
                     <img src={Avatar} style={{
                         width: 50,
@@ -222,7 +248,7 @@ export default function PersonalPage() {
             </div>
         )
     })
-
+*/
     const revertIsPosted = () => {
         setIsPosted(false)
     }
@@ -251,7 +277,7 @@ export default function PersonalPage() {
                             {isPosted ?
                                 (
                                     <div>
-                                        {showReviews}
+                                        {isVisible && showReviews}
                                         <button onClick={revertIsPosted}>edit</button>
                                     </div>
                                 )
@@ -277,7 +303,7 @@ export default function PersonalPage() {
                                             />
                                             <button onClick={posted}>Post</button>
                                         </div>
-                                        {showReviews}
+                                        {isVisible && showReviews}
                                     </div>
 
                                 )
