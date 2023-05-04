@@ -70,7 +70,8 @@ public class SecurityConfig {
                                 "/algo/**",
                                 "/find-analysts-that-cover-stock",
                                 "/reviews/**",
-                                "/error"
+                                "/error",
+                                "/password-update"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -85,7 +86,10 @@ public class SecurityConfig {
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
                 )
-                .formLogin().loginProcessingUrl("/plz").successHandler(new LoginSuccessHandlerDoNothingImpl());
+                .formLogin()
+                .loginProcessingUrl("/plz")
+                .successHandler(new LoginSuccessHandlerDoNothingImpl())
+                .failureHandler(new LoginFailureHandlerDoNothingImpl());
         return http.build();
     }
 
