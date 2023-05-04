@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import se.onlyfin.onlyfinbackend.controller.UserController;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
@@ -27,7 +28,7 @@ public class UserControllerTests {
     @BeforeEach
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
-        userController = new UserController(userRepository, null);
+        userController = new UserController(userRepository, null, new BCryptPasswordEncoder());
     }
 
     /**

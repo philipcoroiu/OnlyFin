@@ -3,11 +3,14 @@ package se.onlyfin.onlyfinbackend.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeDTO;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
+import se.onlyfin.onlyfinbackend.DTO.PasswordUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.User;
@@ -24,11 +27,13 @@ import java.util.Optional;
 public class UserController {
     private final UserRepository userRepository;
     private final SubscriptionController subscriptionController;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserRepository userRepository, SubscriptionController subscriptionController) {
+    public UserController(UserRepository userRepository, SubscriptionController subscriptionController, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.subscriptionController = subscriptionController;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -250,6 +255,42 @@ public class UserController {
 
         User userToGetUserIdOf = userOptional.get();
         return ResponseEntity.ok().body(userToGetUserIdOf.getId());
+    }
+
+    /**
+     * This method is used to change the password of a user.
+     * The user must provide both the old password and input a new password.
+     *
+     * @param passwordUpdateDTO DTO containing the old and new password
+     * @param principal         The logged-in user
+     * @return Status code 200 if the password was successfully changed.
+     */
+    @PostMapping("/password-update")
+    public ResponseEntity<String> changeUserPassword(@RequestBody PasswordUpdateDTO passwordUpdateDTO, Principal principal) {
+        User userToChangePassword = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found!"));
+
+        if (oldPasswordMatches(passwordUpdateDTO.oldPassword(), userToChangePassword)) {
+            String encodedNewPassword = passwordEncoder.encode(passwordUpdateDTO.newPassword());
+            userToChangePassword.setPassword(encodedNewPassword);
+            userRepository.save(userToChangePassword);
+
+            return ResponseEntity.ok().body("Updated password");
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+    /**
+     * This method is used to check if a given password matches a user's password.
+     *
+     * @param oldPasswordConfirmation The old password
+     * @param user                    The user to check the old password against
+     * @return true if the old password matches the user's password
+     */
+    private boolean oldPasswordMatches(String oldPasswordConfirmation, User user) {
+        return passwordEncoder.matches(oldPasswordConfirmation, user.getPassword());
     }
 
 }
