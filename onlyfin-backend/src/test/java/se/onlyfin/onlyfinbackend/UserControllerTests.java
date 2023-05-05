@@ -28,7 +28,7 @@ public class UserControllerTests {
     @BeforeEach
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
-        userController = new UserController(userRepository, null, new BCryptPasswordEncoder());
+        userController = new UserController(userRepository, null, null);
     }
 
     /**

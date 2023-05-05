@@ -3,18 +3,15 @@ package se.onlyfin.onlyfinbackend.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeDTO;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.PasswordUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
-import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
+import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -27,13 +24,13 @@ import java.util.Optional;
 public class UserController {
     private final UserRepository userRepository;
     private final SubscriptionController subscriptionController;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository, SubscriptionController subscriptionController, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepository userRepository, SubscriptionController subscriptionController, UserService userService) {
         this.userRepository = userRepository;
         this.subscriptionController = subscriptionController;
-        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     /**
@@ -71,28 +68,17 @@ public class UserController {
     /**
      * Registers a new user. If the username or email is already registered, a bad request is returned.
      *
-     * @param user UserDTO containing username, password and email.
+     * @param userDTO UserDTO containing username, password and email.
      * @return ResponseEntity with status code 200 and username if registration was successful.
      */
     @PostMapping("/register")
-    public ResponseEntity<String> registerNewUser(@RequestBody @Valid UserDTO user) {
-        if (userRepository.existsByEmail(user.email())) {
-            return ResponseEntity.badRequest().body("Email is already registered!");
-        }
-        if (userRepository.existsByUsername(user.username())) {
-            return ResponseEntity.badRequest().body("Username is already taken!");
+    public ResponseEntity<String> registerNewUser(@RequestBody @Valid UserDTO userDTO) {
+        User registeredUser = userService.registerUser(userDTO);
+        if (registeredUser == null) {
+            return ResponseEntity.badRequest().body("Registration failed");
         }
 
-        User userToRegister = new User();
-        userToRegister.setUsername(user.username());
-        userToRegister.setPassword(new BCryptPasswordEncoder().encode(user.password()));
-        userToRegister.setEmail(user.email());
-        userToRegister.setEnabled(true);
-        userToRegister.setRoles("ROLE_USER");
-        userToRegister.setAnalyst(false);
-        userRepository.save(userToRegister);
-
-        return ResponseEntity.ok(user.username());
+        return ResponseEntity.ok(registeredUser.getUsername());
     }
 
     /**
@@ -103,18 +89,12 @@ public class UserController {
      */
     @PutMapping("/enable-analyst")
     public ResponseEntity<String> enableAnalyst(Principal principal) {
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        User targetUser = userService.getUserOrException(principal.getName());
+        boolean succeeded = userService.enableAnalyst(targetUser);
 
-        User userToBecomeAnalyst = userOptional.get();
-        if (userToBecomeAnalyst.isAnalyst()) {
-            return ResponseEntity.badRequest().body("User is already analyst");
+        if (!succeeded) {
+            return ResponseEntity.badRequest().body("User is already analyst!");
         }
-
-        userToBecomeAnalyst.setAnalyst(true);
-        userRepository.save(userToBecomeAnalyst);
 
         return ResponseEntity.ok().build();
     }
@@ -127,18 +107,12 @@ public class UserController {
      */
     @PutMapping("/disable-analyst")
     public ResponseEntity<String> disableAnalyst(Principal principal) {
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        User targetUser = userService.getUserOrException(principal.getName());
+        boolean succeeded = userService.disableAnalyst(targetUser);
 
-        User analystToBecomeRegularUser = userOptional.get();
-        if (!analystToBecomeRegularUser.isAnalyst()) {
-            return ResponseEntity.badRequest().body("User is not analyst");
+        if (!succeeded) {
+            return ResponseEntity.badRequest().body("User is not analyst!");
         }
-
-        analystToBecomeRegularUser.setAnalyst(false);
-        userRepository.save(analystToBecomeRegularUser);
 
         return ResponseEntity.ok().build();
     }
@@ -151,13 +125,10 @@ public class UserController {
      */
     @GetMapping("/fetch-current-user-id")
     public ResponseEntity<Integer> fetchCurrentUserId(Principal principal) {
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        User targetUser = userService.getUserOrException(principal.getName());
+        Integer userId = targetUser.getId();
 
-        User userToFetchUserIdFrom = userOptional.get();
-        return ResponseEntity.ok().body(userToFetchUserIdFrom.getId());
+        return ResponseEntity.ok().body(userId);
     }
 
     /**
@@ -167,14 +138,11 @@ public class UserController {
      * @return "about me" text
      */
     @GetMapping("/fetch-about-me")
-    public ResponseEntity<?> fetchAboutMeFor(@RequestParam String username) {
-        Optional<User> userOptionalTargetUser = userRepository.findByUsername(username);
-        if (userOptionalTargetUser.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<String> fetchAboutMeFor(@RequestParam String username) {
+        User userToGetAboutMeFrom = userService.getUserOrException(username);
+        String aboutMeText = userToGetAboutMeFrom.getAboutMe();
 
-        User userToGetAboutMeFrom = userOptionalTargetUser.get();
-        return ResponseEntity.ok().body(userToGetAboutMeFrom.getAboutMe());
+        return ResponseEntity.ok().body(aboutMeText);
     }
 
     /**
@@ -184,15 +152,13 @@ public class UserController {
      * @return "about me" text & sub info
      */
     @GetMapping("/fetch-about-me-with-sub-info")
-    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) throws NoSuchUserException {
-        User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new UsernameNotFoundException("Username not found!"));
+    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
-        Optional<User> userOptionalTargetUser = userRepository.findByUsername(username);
-        if (userOptionalTargetUser.isEmpty()) {
+        User userToGetAboutMeFrom = userService.getUserOrNull(username);
+        if (userToGetAboutMeFrom == null) {
             return ResponseEntity.badRequest().build();
         }
-        User userToGetAboutMeFrom = userOptionalTargetUser.get();
 
         boolean subscribed = subscriptionController.isUserSubscribedToThisUser(fetchingUser, userToGetAboutMeFrom);
         AboutMeDTO aboutMeDTO = new AboutMeDTO(userToGetAboutMeFrom.getAboutMe(), subscribed);
@@ -209,17 +175,13 @@ public class UserController {
      */
     @PutMapping("update-about-me")
     public ResponseEntity<String> updateAboutMe(Principal principal, @RequestBody AboutMeUpdateDTO aboutMeUpdateDTO) {
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
         if (aboutMeUpdateDTO == null) {
             return ResponseEntity.badRequest().build();
         }
-        User userWantingToUpdateAboutMe = userOptional.get();
 
+        User userWantingToUpdateAboutMe = userService.getUserOrException(principal.getName());
         userWantingToUpdateAboutMe.setAboutMe(aboutMeUpdateDTO.text());
-        userRepository.save(userWantingToUpdateAboutMe);
+        userService.updateUser(userWantingToUpdateAboutMe);
 
         return ResponseEntity.ok().body(aboutMeUpdateDTO.text());
     }
@@ -232,11 +194,7 @@ public class UserController {
      */
     @GetMapping("/principal-username")
     public ResponseEntity<String> fetchUsernameOfPrincipal(Principal principal) {
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        User userToGetUsernameOf = userOptional.get();
+        User userToGetUsernameOf = userService.getUserOrException(principal.getName());
 
         return ResponseEntity.ok().body(userToGetUsernameOf.getUsername());
     }
@@ -249,11 +207,7 @@ public class UserController {
      */
     @GetMapping("/principal-id")
     public ResponseEntity<Integer> fetchUserIdOfPrincipal(Principal principal) {
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        User userToGetUserIdOf = userOptional.get();
+        User userToGetUserIdOf = userService.getUserOrException(principal.getName());
 
         return ResponseEntity.ok().body(userToGetUserIdOf.getId());
     }
@@ -268,29 +222,15 @@ public class UserController {
      */
     @PostMapping("/password-update")
     public ResponseEntity<String> changeUserPassword(@RequestBody PasswordUpdateDTO passwordUpdateDTO, Principal principal) {
-        User userToChangePassword = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new UsernameNotFoundException("Username not found!"));
+        User userToChangePassword = userService.getUserOrException(principal.getName());
 
-        if (oldPasswordMatches(passwordUpdateDTO.oldPassword(), userToChangePassword)) {
-            String encodedNewPassword = passwordEncoder.encode(passwordUpdateDTO.newPassword());
-            userToChangePassword.setPassword(encodedNewPassword);
-            userRepository.save(userToChangePassword);
+        boolean succeeded = userService.passwordChange(userToChangePassword, passwordUpdateDTO.oldPassword(), passwordUpdateDTO.newPassword());
 
+        if (succeeded) {
             return ResponseEntity.ok().body("Updated password");
         } else {
             return ResponseEntity.badRequest().body("Password does not match");
         }
-    }
-
-    /**
-     * This method is used to check if a given password matches a user's password.
-     *
-     * @param oldPasswordConfirmation The old password
-     * @param user                    The user to check the old password against
-     * @return true if the old password matches the user's password
-     */
-    private boolean oldPasswordMatches(String oldPasswordConfirmation, User user) {
-        return passwordEncoder.matches(oldPasswordConfirmation, user.getPassword());
     }
 
 }

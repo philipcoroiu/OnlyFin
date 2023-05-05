@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserRecommendationDTO;
-import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
