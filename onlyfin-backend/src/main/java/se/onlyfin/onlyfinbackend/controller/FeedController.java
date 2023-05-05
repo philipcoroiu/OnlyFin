@@ -2,6 +2,7 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +50,7 @@ public class FeedController {
     public ResponseEntity<List<FeedCardDTO>> fetchAllTheFeed(Principal principal) throws NoSuchUserException {
         //check that logged-in user exists
         User userToFetchFeedFor = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new NoSuchUserException("Username not found!"));
+                new UsernameNotFoundException("Username not found!"));
 
         //check that user has subscriptions
         if (userToFetchFeedFor.getSubscriptions().size() < 1) {
@@ -65,11 +66,10 @@ public class FeedController {
             User ownerOfDashboard =
                     userRepository.findById(currentSubscription.getSubscribedTo().getId()).orElseThrow();
 
-            Dashboard ownersDashboard = dashboardController.getDashboard(
+            Dashboard ownersDashboard = dashboardController.fetchDashboard(
                     currentSubscription
                             .getSubscribedTo()
-                            .getId()
-            ).getBody();
+                            .getId());
 
             dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
         }
@@ -138,7 +138,7 @@ public class FeedController {
     public ResponseEntity<List<FeedCardDTO>> fetchWeeklyFeed(Principal principal) throws NoSuchUserException {
         //check that logged-in user exists
         User userToFetchFeedFor = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new NoSuchUserException("Username not found!"));
+                new UsernameNotFoundException("Username not found!"));
 
         //check that user has subscriptions
         if (userToFetchFeedFor.getSubscriptions().size() < 1) {
