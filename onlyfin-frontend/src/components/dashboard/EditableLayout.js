@@ -60,8 +60,10 @@ export default function EditableLayout(props) {
                 {props.category.moduleEntities.map((moduleEntity) => (
                     <div key={moduleEntity.id} className="dashboard-module-container" >
                         <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                            <button>edit</button>
+                            <button>Edit</button>
+                            <button>Download</button>
                         </Link>
+
                         <HighchartsReact
                             containerProps={{ style: { height: "100%", weight: "100%" } }}
                             highcharts={Highcharts}
