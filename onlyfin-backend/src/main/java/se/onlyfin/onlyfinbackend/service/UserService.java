@@ -21,7 +21,8 @@ public class UserService {
     }
 
     public User getUserOrException(@NonNull String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("Username not found!"));
     }
 
     public User getUserOrNull(@NonNull String username) {
@@ -32,7 +33,7 @@ public class UserService {
         return !userRepository.existsByEmail(user.email()) && !userRepository.existsByUsername(user.username());
     }
 
-    public User registerUser(UserDTO userDTO) {
+    public User registerUser(@Valid UserDTO userDTO) {
         if (registrable(userDTO)) {
             User userToRegister = new User();
             userToRegister.setUsername(userDTO.username());
@@ -51,7 +52,7 @@ public class UserService {
         return passwordEncoder.matches(oldPasswordConfirmation, currentPassword);
     }
 
-    public boolean passwordChange(User targetUser, String oldPasswordConfirmation, String newPassword) {
+    public boolean passwordChange(@NonNull User targetUser, String oldPasswordConfirmation, String newPassword) {
         if (passwordMatches(oldPasswordConfirmation, targetUser.getPassword())) {
             String encodedNewPassword = passwordEncoder.encode(newPassword);
             targetUser.setPassword(encodedNewPassword);
@@ -62,7 +63,7 @@ public class UserService {
         }
     }
 
-    public boolean enableAnalyst(User targetUser) {
+    public boolean enableAnalyst(@NonNull User targetUser) {
         if (targetUser.isAnalyst()) {
             return false;
         }
@@ -73,7 +74,7 @@ public class UserService {
         return targetUser.isAnalyst();
     }
 
-    public boolean disableAnalyst(User targetUser) {
+    public boolean disableAnalyst(@NonNull User targetUser) {
         if (!targetUser.isAnalyst()) {
             return false;
         }
@@ -86,6 +87,14 @@ public class UserService {
 
     public User updateUser(@NonNull User targetUser) {
         return userRepository.save(targetUser);
+    }
+
+    public User getUserOrNull(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public User getUserOrException(Integer id) {
+        return userRepository.findById(id).orElseThrow();
     }
 
 }
