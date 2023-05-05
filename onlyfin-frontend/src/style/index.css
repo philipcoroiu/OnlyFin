@@ -1542,4 +1542,7 @@ Feed
     color: #919191;
 }
 
-
+.layout {
+    display: flex;
+    justify-content: start;
+}

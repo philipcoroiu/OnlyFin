@@ -6,6 +6,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
 import StockDropdownMenu from "./StockDropdownMenu";
+import EditableLayout from "./EditableLayout"
 import {wait} from "@testing-library/user-event/dist/utils";
 /*import { SearchBox } from 'react-search-box';*/
 
@@ -321,22 +322,9 @@ export default function Dashboard() {
                                         ) : (
                                             {/* if there are any moules in the category the modules will be
                                              displayed as highcharts*/},
-                                            category.moduleEntities.map((moduleEntity) => (
-                                                <div key={moduleEntity.id} className="dashboard-module-container">
-                                                    <pre>
-                                                        { ownDashboard && (
-                                                        <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                                                            <button>edit</button>
-                                                        </Link>
-                                                            )}
-                                                        <HighchartsReact
-                                                            highcharts={Highcharts}
-                                                            options={moduleEntity.content}
-                                                        />
-                                                    </pre>
 
-                                                </div>
-                                                ))
+                                            <EditableLayout category={category} />
+
                                             )}
                                     </div>
                                 ))}

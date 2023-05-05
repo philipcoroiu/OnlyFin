@@ -18,11 +18,6 @@ export default function Studio() {
         {index: 4, color: "#6384d2"},
     ];
 
-    const [chartWidth, setC] = React.useState(window.screen.width * 0.4);
-    const [chartHeith, setChartHeith] = React.useState(window.screen.height * 0.8);
-
-    const [divWidth, setDivWidth] = useState(window.innerWidth);
-    const [divHeight, setDivHeight] = useState(window.innerHeight);
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -30,8 +25,6 @@ export default function Studio() {
     const moduleIndex = searchParams.get("moduleIndex") || null;
     const [moduleId, setModuleId] = useState(null);
     const navigate = useNavigate();
-
-
 
     React.useEffect(() => {
 
@@ -42,33 +35,9 @@ export default function Studio() {
                 setStudioChart(response.data.content)
                 setModuleId(response.data.id)
                 setCategoryId(response.data.category_id)
-                handleResize();
             })
         }
-        function handleResize() {
-            setStudioChart(prevState => {
 
-                return {
-                    ...prevState,
-                    chart: {
-                        ...prevState.chart,
-                        width: `${window.innerWidth * 0.4}`,
-                        height: `${window.innerHeight * 0.8}`
-                    }
-
-                };
-            });
-        }
-
-        handleResize();
-
-        window.addEventListener("resize", handleResize);
-        window.addEventListener("orientationchange", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-            window.removeEventListener("orientationchange", handleResize);
-        };
     }, []);
 
     /* the initial state of the studiochart that is set when studio is first opened */
@@ -78,8 +47,6 @@ export default function Studio() {
             style: {
                 fontFamily: "Tahoma"
             },
-            width: `${divWidth * 0.4}`,
-            height: `${divHeight * 0.8}`
         },
         style: {
             borderColor: "#1A1616"
@@ -297,15 +264,12 @@ export default function Studio() {
             <NavBar/>
             {/* --STUDIO CONTAINER-- */}
             <div className="studio--container">
-                <div ref={(chartContainer) => {
-                    if (chartContainer && chartContainer.chart) {
-                        chartContainer.chart.reflow();
-                    }
-                }}
+                <div
                      className="studio--chart"
                 >
                     {/* --HIGHCHART-- */}
                     <HighchartsReact
+                        containerProps={{ style: { height: "100%", weight: "100%" } }}
                         highcharts={Highcharts}
                         options={studioChart}
                     />
