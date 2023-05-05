@@ -13,10 +13,7 @@ import se.onlyfin.onlyfinbackend.repository.AnalystReviewRepository;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class is responsible for handling requests related to analyst reviews.
@@ -125,9 +122,12 @@ public class AnalystReviewController {
      * @return Response with all reviews for the target user
      */
     @GetMapping("/fetch-all")
-    public ResponseEntity<List<AnalystReviewDTO>> fetchAllReviewsForAnalyst(@RequestParam String targetUsername) throws NoSuchUserException {
-        User targetUser = userRepository.findByUsername(targetUsername).orElseThrow(() ->
-                new NoSuchUserException("Could not find any user with that name!"));
+    public ResponseEntity<List<AnalystReviewDTO>> fetchAllReviewsForAnalyst(@RequestParam String targetUsername) {
+        Optional<User> optionalUser = userRepository.findByUsername(targetUsername);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        User targetUser = optionalUser.get();
 
         List<AnalystReview> reviewList = new ArrayList<>(targetUser.getReviews());
         if (reviewList.isEmpty()) {
