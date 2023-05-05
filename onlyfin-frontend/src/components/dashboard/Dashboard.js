@@ -23,27 +23,21 @@ export default function Dashboard() {
     const searchParams = new URLSearchParams(location.search);
     const categoryIndexId = searchParams.get("CategoryId") || null;
     const otherUserID = searchParams.get("User") || null
-    const [ownDashboard, setOwnDashboard] = useState(false)
+    const [ownDashboard, setOwnDashboard] = useState(true)
 
 
     useEffect(() => {
 
-        if(otherUserID == null){
-            axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then(
-                (response) => {
-
-                    if (parseInt(otherUserID) === response.data || otherUserID == null) {
-                        setUserId(response.data)
-                    } else {
-                        setUserId(otherUserID)
-                        setOwnDashboard(false)
-                    }
-                })
-        }
-        else{
-            setUserId(otherUserID)
-        }
-
+        axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then(
+            (response) => {
+                if(parseInt(otherUserID) === response.data || otherUserID == null){
+                    setUserId(response.data)
+                }
+                else {
+                    setUserId(otherUserID)
+                    setOwnDashboard(false)
+                }
+        })
     }, []);
 
     useEffect(() => {
@@ -51,8 +45,8 @@ export default function Dashboard() {
             return; // exit early if userId is not yet defined
         }
 
-        axios.get("http://localhost:8080/dashboard/get/" + userId,
-            ).then((response) => {
+        axios.get("http://localhost:8080/dashboard/" + userId,
+            {withCredentials: true}).then((response) => {
             setDashboard(response.data);
 
 
