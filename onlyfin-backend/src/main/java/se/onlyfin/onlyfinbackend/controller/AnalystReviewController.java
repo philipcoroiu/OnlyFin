@@ -104,9 +104,12 @@ public class AnalystReviewController {
         User targetReviewedUser = userRepository.findByUsername(targetUsername).orElseThrow(() ->
                 new NoSuchUserException("No user with that name found!"));
 
-        AnalystReview targetReview = analystReviewRepository
-                .findByTargetUserAndAuthorUsername(targetReviewedUser, principal.getName()).orElseThrow(() ->
-                        new NoSuchElementException("Could not find any review"));
+        Optional<AnalystReview> optionalTargetReview = analystReviewRepository
+                .findByTargetUserAndAuthorUsername(targetReviewedUser, principal.getName());
+        if (optionalTargetReview.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        AnalystReview targetReview = optionalTargetReview.get();
 
         AnalystReviewDTO reviewDTO = new AnalystReviewDTO(
                 targetReview.getAuthorUsername(),

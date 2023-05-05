@@ -2,6 +2,7 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
@@ -43,7 +44,7 @@ public class SubscriptionController {
     public ResponseEntity<String> addSubscription(Principal principal, @RequestParam("username") String username) throws NoSuchUserException {
         User userWantingToSubscribe =
                 userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                        new NoSuchUserException("Logged in user not present in db"));
+                        new UsernameNotFoundException("Logged in user not present in db"));
 
         //check that authenticated user is not changing other users' subscriptions
         if (!Objects.equals(userWantingToSubscribe.getUsername(), principal.getName())) {
@@ -75,26 +76,20 @@ public class SubscriptionController {
      */
     @DeleteMapping("/unsubscribe")
     public ResponseEntity<String> removeSubscription(Principal principal, @RequestParam("username") String username) throws NoSuchUserException {
-
         User userWantingToUnsubscribe = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new NoSuchUserException("Logged in user not present in db"));
-
-        //check that authenticated user is not changing other users' subscriptions
-        if (!Objects.equals(userWantingToUnsubscribe.getUsername(), principal.getName())) {
-            return ResponseEntity.badRequest().build();
-        }
+                new UsernameNotFoundException("Logged in user not present in db"));
 
         User userToUnsubscribeFrom = userRepository.findByUsername(username).orElseThrow(() ->
                 new NoSuchUserException("Subscribed-to user not found with ID " + username));
 
         Optional<Subscription> subscriptionOptional =
                 subscriptionRepository.findBySubscriberAndSubscribedTo(userWantingToUnsubscribe, userToUnsubscribeFrom);
-
         if (subscriptionOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        Subscription targetSubscription = subscriptionOptional.get();
 
-        subscriptionRepository.delete(subscriptionOptional.get());
+        subscriptionRepository.delete(targetSubscription);
 
         return ResponseEntity.ok().body(userToUnsubscribeFrom.getUsername());
     }
@@ -121,17 +116,6 @@ public class SubscriptionController {
         );
 
         return ResponseEntity.ok().body(subscriptionsDTOList);
-    }
-
-    /**
-     * Checks if a user is subscribed to another
-     *
-     * @param subscriber   the target subscribing user
-     * @param subscribedTo the target subscribed-to user
-     * @return if the user is subscribed
-     */
-    public boolean isUserSubscribedToThisUser(User subscriber, User subscribedTo) {
-        return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
     }
 
     /**
@@ -204,6 +188,17 @@ public class SubscriptionController {
                 new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
 
         return ResponseEntity.ok().body(profileDTOList);
+    }
+
+    /**
+     * Checks if a user is subscribed to another
+     *
+     * @param subscriber   the target subscribing user
+     * @param subscribedTo the target subscribed-to user
+     * @return if the user is subscribed
+     */
+    public boolean isUserSubscribedToThisUser(User subscriber, User subscribedTo) {
+        return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
     }
 
 }

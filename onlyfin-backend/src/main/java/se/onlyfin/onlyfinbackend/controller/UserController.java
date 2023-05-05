@@ -186,7 +186,7 @@ public class UserController {
     @GetMapping("/fetch-about-me-with-sub-info")
     public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) throws NoSuchUserException {
         User fetchingUser = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new NoSuchUserException("Username not found!"));
+                new UsernameNotFoundException("Username not found!"));
 
         Optional<User> userOptionalTargetUser = userRepository.findByUsername(username);
         if (userOptionalTargetUser.isEmpty()) {
@@ -195,8 +195,9 @@ public class UserController {
         User userToGetAboutMeFrom = userOptionalTargetUser.get();
 
         boolean subscribed = subscriptionController.isUserSubscribedToThisUser(fetchingUser, userToGetAboutMeFrom);
+        AboutMeDTO aboutMeDTO = new AboutMeDTO(userToGetAboutMeFrom.getAboutMe(), subscribed);
 
-        return ResponseEntity.ok().body(new AboutMeDTO(userToGetAboutMeFrom.getAboutMe(), subscribed));
+        return ResponseEntity.ok().body(aboutMeDTO);
     }
 
     /**
@@ -207,7 +208,7 @@ public class UserController {
      * @return Updated text if ok, bad request otherwise
      */
     @PutMapping("update-about-me")
-    public ResponseEntity<?> updateAboutMe(Principal principal, @RequestBody AboutMeUpdateDTO aboutMeUpdateDTO) {
+    public ResponseEntity<String> updateAboutMe(Principal principal, @RequestBody AboutMeUpdateDTO aboutMeUpdateDTO) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -215,8 +216,8 @@ public class UserController {
         if (aboutMeUpdateDTO == null) {
             return ResponseEntity.badRequest().build();
         }
-
         User userWantingToUpdateAboutMe = userOptional.get();
+
         userWantingToUpdateAboutMe.setAboutMe(aboutMeUpdateDTO.text());
         userRepository.save(userWantingToUpdateAboutMe);
 
@@ -230,13 +231,13 @@ public class UserController {
      * @return username of principal
      */
     @GetMapping("/principal-username")
-    public ResponseEntity<?> fetchUsernameOfPrincipal(Principal principal) {
+    public ResponseEntity<String> fetchUsernameOfPrincipal(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-
         User userToGetUsernameOf = userOptional.get();
+
         return ResponseEntity.ok().body(userToGetUsernameOf.getUsername());
     }
 
@@ -247,13 +248,13 @@ public class UserController {
      * @return user id of principal
      */
     @GetMapping("/principal-id")
-    public ResponseEntity<?> fetchUserIdOfPrincipal(Principal principal) {
+    public ResponseEntity<Integer> fetchUserIdOfPrincipal(Principal principal) {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-
         User userToGetUserIdOf = userOptional.get();
+
         return ResponseEntity.ok().body(userToGetUserIdOf.getId());
     }
 
@@ -277,9 +278,8 @@ public class UserController {
 
             return ResponseEntity.ok().body("Updated password");
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Password does not match");
         }
-
     }
 
     /**
