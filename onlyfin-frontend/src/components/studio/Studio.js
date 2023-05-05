@@ -31,6 +31,8 @@ export default function Studio() {
     const [moduleId, setModuleId] = useState(null);
     const navigate = useNavigate();
 
+
+
     React.useEffect(() => {
 
         if(editModule && moduleIndex != null){
@@ -137,7 +139,9 @@ export default function Studio() {
     /* messages shown to user */
     const [errorMessage, setErrorMessage] = useState([]);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
-    const [successMessage, setSuccessMessage] = useState("SUCCESS: Your chart has been posted");
+    const [successMessage, setSuccessMessage] = useState(
+        !editModule ? "SUCCESS: Your chart has been posted\nRedirecting..." : "SUCCESS: Your chart has been updated\nRedirecting..."
+    );
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     /* chart objects */
@@ -179,15 +183,16 @@ export default function Studio() {
         return hasError;
     }
 
-    function showSuccessMessageForDuration(message, duration) {
+    function showSuccessMessageForDuration(duration) {
 
         /* sets the showSuccessMessage to true to show the success message */
-        setSuccessMessage(message)
         setShowSuccessMessage(true);
 
         /* sets timeout for the duration input and then sets the showSuccessMessage to false */
         setTimeout(() => {
             setShowSuccessMessage(false);
+            navigate(`/Dashboard?CategoryId=${categoryId}`)
+
         }, duration);
     }
 
@@ -207,25 +212,30 @@ export default function Studio() {
         axios.post("http://localhost:8080/studio/createModule", postChart, {withCredentials: true})
 
         /* shows success message*/
-        setSuccessMessage("SUCCESS: Your chart has been posted");
-        showSuccessMessageForDuration(successMessage, 5000);
-
-        /* resets the whole studio back to its initial state */
-        setStudioChart(studioChartInitState);
-        setToolbarKey(key => key + 1);
-        setCategoryId(null);
+        showSuccessMessageForDuration(2000);
     }
 
     async function handleUpdateChart(postChart){
 
+        postChart.id = moduleId;
         /* posts the chart to the database */
-        axios.post("http://localhost:8080/studio/createModule", postChart, {withCredentials: true})
+
+        console.log("postedChart: ", postChart)
+        await axios.put(
+            "http://localhost:8080/studio/updateModuleContent",
+            postChart
+            ,{
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                withCredentials: true,
+            }
+        ).then((response) => {
+            console.log("response: ",response.data)
+        })
 
         /* shows success message*/
-        setSuccessMessage("SUCCESS: Your chart has been updated");
-        await showSuccessMessageForDuration(successMessage, 5000);
-
-        await navigate("/Dashboard")
+        showSuccessMessageForDuration(2000);
     }
 
     function createChart() {
@@ -248,6 +258,7 @@ export default function Studio() {
             };
 
             if(editModule){
+                setSuccessMessage("SUCCESS: Your chart has been updated");
                 handleUpdateChart(postChart)
             }
 
@@ -262,6 +273,20 @@ export default function Studio() {
         else {
             showErrorMessageForDuration(5000);
         }
+    }
+
+    async function deleteChart(){
+        await setSuccessMessage("SUCCESS: Your chart has been deleted\nRedirecting...")
+        await axios.delete(
+            `http://localhost:8080/studio/deleteModule/` + moduleId,
+            {
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                withCredentials: true
+            }
+        ).then(showSuccessMessageForDuration(2000)
+        )
     }
 
     return (
@@ -296,6 +321,7 @@ export default function Studio() {
                         setCategoryId={setCategoryId}
                         categoryId={categoryId}
                         createChart={createChart}
+                        deleteChart={deleteChart}
                     />
                 </div>
             </div>

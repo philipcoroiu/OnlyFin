@@ -3,10 +3,14 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
+import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
+import se.onlyfin.onlyfinbackend.DTO.ModuleChangeDTO;
 
+import javax.swing.text.html.Option;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -108,7 +112,7 @@ public class StudioController {
             categoryRepository.deleteById(intId);
             return "Removed category successfully";
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         return "Could not remove category";
     }
@@ -117,10 +121,11 @@ public class StudioController {
     public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDT nameChangeRequest) {
 
         Category category;
+
         if (categoryRepository.existsById(nameChangeRequest.id())) {
 
             Optional<Category> optionalCategory = categoryRepository.findById(nameChangeRequest.id());
-            category = optionalCategory.orElseThrow();
+            category = optionalCategory.orElse(null);
             category.setName(nameChangeRequest.name());
             categoryRepository.save(category);
             return ResponseEntity.ok().body(category);
@@ -153,7 +158,7 @@ public class StudioController {
         Dashboard dashboard;
         if (dashboardRepository.existsById(id)) {
             Optional<Dashboard> dashboardOptional = dashboardRepository.findById(id);
-            dashboard = dashboardOptional.orElseThrow();
+            dashboard = dashboardOptional.orElse(null);
             for (int i = 0; i < dashboard.getStocks().size(); i++) {
                 for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++) {
                     dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
@@ -165,27 +170,28 @@ public class StudioController {
     }
 
     @GetMapping("getModuleFromId/{id}")
-    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id) {
+    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id){
         System.out.println(id);
 
-        if (moduleRepository.existsById(id)) {
+        if(moduleRepository.existsById(id)){
             Optional<ModuleEntity> moduleOptional = moduleRepository.findById(id);
             ModuleEntity module = moduleOptional.orElse(null);
             return ResponseEntity.ok(module);
-        } else return ResponseEntity.badRequest().build();
+        }
+        else return ResponseEntity.badRequest().build();
     }
 
-    /*@PutMapping("/updateModuleContent")
-    public ResponseEntity<?> updateModuleContent(@RequestBody ContentChangeRequest ccr){
+    @PutMapping("/updateModuleContent")
+    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module){
 
-        ModuleEntity module;
-
-        if(moduleRepository.existsById(ccr.getId())){
-            module = moduleRepository.getReferenceById(ccr.getId());
-            module.setContent(ccr.getContent());
-            moduleRepository.save(module);
-            return ResponseEntity.ok(module);
+        if(moduleRepository.existsById(module.getId())){
+            Optional<ModuleEntity> moduleOptional= moduleRepository.findById(module.getId());
+            ModuleEntity moduleToSave = moduleOptional.orElse(null);
+            moduleToSave.setContent(module.getContent());
+            moduleToSave.setUpdatedDate(Instant.now());
+            moduleRepository.save(moduleToSave);
+            return  ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
         }
         return ResponseEntity.badRequest().body("module id does not exist");
-    }*/
+    }
 }
