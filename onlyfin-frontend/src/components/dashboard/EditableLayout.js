@@ -54,12 +54,12 @@ export default function EditableLayout(props) {
                             <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
                                 <button>edit</button>
                             </Link>
-                            <HighchartsReact
-                                containerProps={{ style: { height: "100%", weight: "100%" } }}
-                                highcharts={Highcharts}
-                                options={moduleEntity.content}
+                                <HighchartsReact
+                                    containerProps={{ style: { height: "100%", weight: "100%" } }}
+                                    highcharts={Highcharts}
+                                    options={moduleEntity.content}
 
-                            />
+                                />
                     </div>
                 ))}
 
