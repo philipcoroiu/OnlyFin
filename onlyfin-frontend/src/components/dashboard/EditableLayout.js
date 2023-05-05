@@ -44,24 +44,22 @@ export default function EditableLayout(props) {
                 compactType="vertical"
                 onLayoutChange={(newLayout, event) => onLayoutChange(newLayout, event)}
                 isBounded={true}
-                isDraggable={false}
+                isDraggable={true}
                 autoPosition={[0, 0]}
+
             >
 
                 {props.category.moduleEntities.map((moduleEntity) => (
                     <div key={moduleEntity.id} className="dashboard-module-container" >
-                        <pre>
                             <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
                                 <button>edit</button>
                             </Link>
                             <HighchartsReact
-                                containerProps={{ style: { height: "100%" } }}
+                                containerProps={{ style: { height: "100%", weight: "100%" } }}
                                 highcharts={Highcharts}
                                 options={moduleEntity.content}
 
                             />
-                        </pre>
-
                     </div>
                 ))}
 
