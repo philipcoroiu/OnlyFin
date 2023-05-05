@@ -27,7 +27,7 @@ public class DashboardController {
         this.stockRefRepository = stockRefRepository;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Dashboard> getDashboard(@PathVariable Integer id) {
         Optional<Dashboard> optionalDashboard = dashboardRepository.findById(id);
         Dashboard dashboard = optionalDashboard.orElse(null);

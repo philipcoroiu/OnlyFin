@@ -3,13 +3,10 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
-import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
-import se.onlyfin.onlyfinbackend.DTO.ModuleChangeDTO;
 
-import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +36,7 @@ public class StudioController {
     }
 
     @PostMapping("/createStock")
-    public String createStock(@RequestBody StockRefDTO stockRefDTO) {
+    public ResponseEntity<String> createStock(@RequestBody StockRefDTO stockRefDTO) {
         StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElseThrow(() ->
                 new NoSuchElementException("Stock ref not found"));
 
@@ -49,7 +46,7 @@ public class StudioController {
         stockToSave.setDashboard_id(new Dashboard(stockRefDTO.dashboardId()));
 
         stockRepository.save(stockToSave);
-        return "stock added successfully";
+        return ResponseEntity.ok().body("stock added successfully");
     }
 
     @DeleteMapping("/deleteStock/{id}")
