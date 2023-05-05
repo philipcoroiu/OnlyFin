@@ -7,14 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewDTO;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewPostDTO;
 import se.onlyfin.onlyfinbackend.model.AnalystReview;
-import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.AnalystReviewRepository;
-import se.onlyfin.onlyfinbackend.repository.UserRepository;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class is responsible for handling requests related to analyst reviews.
@@ -24,12 +25,10 @@ import java.util.*;
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class AnalystReviewController {
     private final AnalystReviewRepository analystReviewRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
 
-    public AnalystReviewController(AnalystReviewRepository analystReviewRepository, UserRepository userRepository, UserService userService) {
+    public AnalystReviewController(AnalystReviewRepository analystReviewRepository, UserService userService) {
         this.analystReviewRepository = analystReviewRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -43,7 +42,7 @@ public class AnalystReviewController {
      */
     @PutMapping("/post")
     @Transactional
-    public ResponseEntity<String> addReviewForUser(@RequestBody @NotNull AnalystReviewPostDTO analystReviewPostDTO, Principal principal) throws NoSuchUserException {
+    public ResponseEntity<String> addReviewForUser(@RequestBody @NotNull AnalystReviewPostDTO analystReviewPostDTO, Principal principal) {
         if (analystReviewPostDTO.reviewText() == null || analystReviewPostDTO.targetUsername() == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -78,7 +77,7 @@ public class AnalystReviewController {
      * @return Response with "Review deleted"
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<String> removeReviewForUser(@RequestParam String targetUsername, Principal principal) throws NoSuchUserException {
+    public ResponseEntity<String> removeReviewForUser(@RequestParam String targetUsername, Principal principal) {
         User targetUser = userService.getUserOrNull(targetUsername);
         if (targetUser == null) {
             return ResponseEntity.badRequest().build();
@@ -108,7 +107,7 @@ public class AnalystReviewController {
      * @return Response with the review
      */
     @GetMapping("/get-my-review")
-    public ResponseEntity<?> fetchReviewByAuthorCurrentUserAndTargetUser(@RequestParam String targetUsername, Principal principal) throws NoSuchUserException {
+    public ResponseEntity<?> fetchReviewByAuthorCurrentUserAndTargetUser(@RequestParam String targetUsername, Principal principal) {
         User targetReviewedUser = userService.getUserOrNull(targetUsername);
         if (targetReviewedUser == null) {
             return ResponseEntity.badRequest().body("No user with that name found!");
