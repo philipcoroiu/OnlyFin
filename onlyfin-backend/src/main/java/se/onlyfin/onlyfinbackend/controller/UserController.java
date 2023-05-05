@@ -10,11 +10,9 @@ import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.PasswordUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
-import se.onlyfin.onlyfinbackend.repository.UserRepository;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This class is responsible for handling requests related to user management.
@@ -22,13 +20,11 @@ import java.util.Optional;
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @Controller
 public class UserController {
-    private final UserRepository userRepository;
     private final SubscriptionController subscriptionController;
     private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository, SubscriptionController subscriptionController, UserService userService) {
-        this.userRepository = userRepository;
+    public UserController(SubscriptionController subscriptionController, UserService userService) {
         this.subscriptionController = subscriptionController;
         this.userService = userService;
     }
@@ -47,18 +43,16 @@ public class UserController {
     @Deprecated
     public ResponseEntity<User> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
         if (!username.isEmpty()) {
-            Optional<User> userOptional = userRepository.findByUsername(username);
-            if (userOptional.isPresent()) {
-                User debugUser = userOptional.get();
-                return ResponseEntity.ok().body(debugUser);
+            User targetUser = userService.getUserOrNull(username);
+            if (targetUser != null) {
+                return ResponseEntity.ok().body(targetUser);
             }
         }
 
         if (principal != null) {
-            Optional<User> userOptional = userRepository.findByUsername(principal.getName());
-            if (userOptional.isPresent()) {
-                User debugUser = userOptional.get();
-                return ResponseEntity.ok().body(debugUser);
+            User targetUser = userService.getUserOrNull(principal.getName());
+            if (targetUser != null) {
+                return ResponseEntity.ok().body(targetUser);
             }
         }
 
