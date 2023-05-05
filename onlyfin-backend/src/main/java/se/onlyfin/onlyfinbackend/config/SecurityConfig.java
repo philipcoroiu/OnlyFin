@@ -40,6 +40,15 @@ public class SecurityConfig {
                 csrf().disable()
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
+                                "/",
+                                "/register",
+                                "/plz",
+                                "/login",
+                                "/assets/**",
+                                "/dashboard/get/**"
+                        )
+                        .permitAll()
+                        .requestMatchers(
                                 "/user",
                                 "/search-all-analysts",
                                 "/get-analyst-by-name",
@@ -74,15 +83,6 @@ public class SecurityConfig {
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(
-                                "/dashboard/get/{id}",
-                                "/",
-                                "/register",
-                                "/plz",
-                                "/login",
-                                "/assets/**"
-                        )
-                        .permitAll()
                         //uncomment the row below to enable user debug:
                         .requestMatchers("/user-debug").permitAll()
                 )
