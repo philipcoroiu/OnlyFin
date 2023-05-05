@@ -28,16 +28,20 @@ export default function Dashboard() {
 
     useEffect(() => {
 
-        axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then(
-            (response) => {
-                if(parseInt(otherUserID) === response.data || otherUserID == null){
-                    setUserId(response.data)
-                }
-                else {
-                    setUserId(otherUserID)
-                    setOwnDashboard(false)
-                }
-        })
+        if(otherUserID == null) {
+            axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then(
+                (response) => {
+                    if (parseInt(otherUserID) === response.data || otherUserID == null) {
+                        setUserId(response.data)
+                    } else {
+                        setUserId(otherUserID)
+                        setOwnDashboard(false)
+                    }
+                })
+        }
+        else{
+            setUserId(otherUserID)
+        }
     }, []);
 
     useEffect(() => {
@@ -45,7 +49,7 @@ export default function Dashboard() {
             return; // exit early if userId is not yet defined
         }
 
-        axios.get("http://localhost:8080/dashboard/" + userId,
+        axios.get("http://localhost:8080/dashboard/get/" + userId,
             {withCredentials: true}).then((response) => {
             setDashboard(response.data);
 
