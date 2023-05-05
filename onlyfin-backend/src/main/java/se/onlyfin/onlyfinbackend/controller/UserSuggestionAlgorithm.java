@@ -71,7 +71,7 @@ public class UserSuggestionAlgorithm {
         //go through all analysts
         for (User currentSubscribedToAnalyst : subscribedToAnalysts) {
             //fetch current analysts dashboard
-            Dashboard analystsDashboard = dashboardController.fetchDashboard(currentSubscribedToAnalyst.getId());
+            Dashboard analystsDashboard = dashboardController.fetchDashboardOrNull(currentSubscribedToAnalyst.getId());
             if (analystsDashboard != null) {
                 //fetch stocks under dashboard
                 for (Stock currentStock : analystsDashboard.getStocks()) {
@@ -100,7 +100,7 @@ public class UserSuggestionAlgorithm {
         //go through all analysts
         for (User currentAnalyst : notSubscribedToAnalystsList) {
             //fetch analyst's dashboard
-            Dashboard currentDashboard = dashboardController.fetchDashboard(currentAnalyst.getId());
+            Dashboard currentDashboard = dashboardController.fetchDashboardOrNull(currentAnalyst.getId());
             if (currentDashboard != null) {
                 //fetch all stock objects
                 for (Stock currentStock : currentDashboard.getStocks()) {
