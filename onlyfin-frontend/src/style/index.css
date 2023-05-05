@@ -577,7 +577,7 @@ Studio toolbar
     box-shadow: inset 3px 3px 3px #8d8d8d;
 }
 
-.studio--dataset-input-name > input::placeholder{
+.studio--dataset-input-name > input::placeholder {
     color: #e7e7e7;
 }
 
@@ -610,7 +610,7 @@ Studio toolbar
     box-shadow: inset 3px 3px 3px #a6a6a6;
 }
 
-.studio--submit{
+.studio--submit {
     display: flex;
     justify-content: center;
     height: 4em;
@@ -620,7 +620,7 @@ Studio toolbar
     box-shadow: 0 2px 4px #7c7c7c;
 }
 
-.studio--submit > button{
+.studio--submit > button {
     border: none;
     font-size: 1.5em;
     background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
@@ -632,7 +632,7 @@ Studio toolbar
     border-radius: 0 0 0.3em 0.3em;
 }
 
-.studio--submit > button:hover{
+.studio--submit > button:hover {
     color: white;
     background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 400% 400%;
@@ -1338,6 +1338,54 @@ Profile page
     font-size: 15px;
 }
 
+.personalPage-review-section {
+    display: flex;
+    background-color: #61dafb;
+    position: absolute;
+    width: 90%;
+    height: 33%;
+    top: 65%;
+    left: 8%;
+    z-index: -1;
+    overflow-x: auto;
+}
+
+
+.personalPage-review-card {
+    display: flex;
+    flex-direction: column;
+    margin: 1% 1%;
+    width: 30%;
+    height: 90%;
+    top: 5%;
+    background-color: red;
+}
+
+.personalPage-review-card-header {
+    display: flex;
+    padding: 0 2%;
+    align-items: center;
+    background-color: #3bb273;
+}
+
+.personalPage-review-card-header > h3 {
+    margin-left: 5%;
+}
+
+.personalPage-review-card-post-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 75%;
+    font-size: 15px;
+    background-color: #4d9de0;
+}
+
+.personalPage-review-card-post-area > textarea, p {
+    font-size: 16px;
+}
+
 /**
 Search Page
  */
@@ -1494,7 +1542,4 @@ Feed
     color: #919191;
 }
 
-.layout {
-    display: flex;
-    justify-content: start;
-}
+

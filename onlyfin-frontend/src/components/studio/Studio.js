@@ -18,6 +18,12 @@ export default function Studio() {
         {index: 4, color: "#6384d2"},
     ];
 
+    const [chartWidth, setC] = React.useState(window.screen.width * 0.4);
+    const [chartHeith, setChartHeith] = React.useState(window.screen.height * 0.8);
+
+    const [divWidth, setDivWidth] = useState(window.innerWidth);
+    const [divHeight, setDivHeight] = useState(window.innerHeight);
+
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const editModule = searchParams.get("editModule") || false;
@@ -36,9 +42,33 @@ export default function Studio() {
                 setStudioChart(response.data.content)
                 setModuleId(response.data.id)
                 setCategoryId(response.data.category_id)
+                handleResize();
             })
         }
+        function handleResize() {
+            setStudioChart(prevState => {
 
+                return {
+                    ...prevState,
+                    chart: {
+                        ...prevState.chart,
+                        width: `${window.innerWidth * 0.4}`,
+                        height: `${window.innerHeight * 0.8}`
+                    }
+
+                };
+            });
+        }
+
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("orientationchange", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("orientationchange", handleResize);
+        };
     }, []);
 
     /* the initial state of the studiochart that is set when studio is first opened */
@@ -48,6 +78,8 @@ export default function Studio() {
             style: {
                 fontFamily: "Tahoma"
             },
+            width: `${divWidth * 0.4}`,
+            height: `${divHeight * 0.8}`
         },
         style: {
             borderColor: "#1A1616"
@@ -93,12 +125,15 @@ export default function Studio() {
                 color: "#1A1616"
             }
         },
+        plotOptions: {
+            bb: {}
+        },
         series: [{
             name: "name",
             data: [""],
             borderWidth: 0,
             color: "#b0ffa6",
-        }],
+        }]
     });
 
     /* messages shown to user */
@@ -205,11 +240,15 @@ export default function Studio() {
 
     function createChart() {
 
-        /* checks for error messages, the post won't be posted if there are error messages */
+        /* checks for error messages, the post wont be posted if there are error messages */
         if (!checkForError()) {
 
             /* creates a const of the chart that is going to be sent */
             const chartToSubmit = studioChart;
+
+            /* change the width and height to the standard width and height */
+            chartToSubmit.chart.width = 365;
+            chartToSubmit.chart.height = 345;
 
             /* creates a post chart with the needed data to be stored in the database */
             const postChart = {
@@ -235,14 +274,6 @@ export default function Studio() {
             showErrorMessageForDuration(5000);
         }
     }
-    const options = {
-        title: {
-            text: 'highcharts-react-official'
-        },
-        series: [{
-            data: [1, 5, 3, 4]
-        }]
-    }
 
     async function deleteChart(){
         await setSuccessMessage("SUCCESS: Your chart has been deleted\nRedirecting...")
@@ -266,10 +297,15 @@ export default function Studio() {
             <NavBar/>
             {/* --STUDIO CONTAINER-- */}
             <div className="studio--container">
-                <div className="studio--chart">
+                <div ref={(chartContainer) => {
+                    if (chartContainer && chartContainer.chart) {
+                        chartContainer.chart.reflow();
+                    }
+                }}
+                     className="studio--chart"
+                >
                     {/* --HIGHCHART-- */}
                     <HighchartsReact
-                        containerProps={{ style: { height: "100%", width: "100%"} }}
                         highcharts={Highcharts}
                         options={studioChart}
                     />
