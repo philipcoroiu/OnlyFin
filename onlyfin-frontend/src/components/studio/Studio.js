@@ -213,10 +213,6 @@ export default function Studio() {
             /* creates a const of the chart that is going to be sent */
             const chartToSubmit = studioChart;
 
-            /* change the width and height to the standard width and height */
-            chartToSubmit.chart.width = 365;
-            chartToSubmit.chart.height = 345;
-
             /* creates a post chart with the needed data to be stored in the database */
             const postChart = {
                 category_id: categoryId,

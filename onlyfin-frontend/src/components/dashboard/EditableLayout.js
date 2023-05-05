@@ -16,6 +16,8 @@ export default function EditableLayout(props) {
     const standardAmountColumns = 8;
 
     const layout = props.category.moduleEntities.map((item, index) => ({
+        
+
         i: item.id.toString(),
         x: index * standardWidth % standardAmountColumns,
         y: Math.floor(index / 5) * standardWidth,
@@ -23,16 +25,9 @@ export default function EditableLayout(props) {
         h: 2,
     }));
 
-    const [updatedChart, setUpdateChart] = useState(
-
-    )
-
     const onLayoutChange = (newLayout, event) => {
         console.log(newLayout)
     };
-
-
-
 
     return(
         <ResponsiveGridLayout
@@ -62,8 +57,6 @@ export default function EditableLayout(props) {
                     />
                 </div>
             ))}
-
         </ResponsiveGridLayout>
     )
-
 }
