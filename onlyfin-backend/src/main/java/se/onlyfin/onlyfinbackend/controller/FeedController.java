@@ -2,7 +2,6 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import se.onlyfin.onlyfinbackend.DTO.CategoryDTO;
 import se.onlyfin.onlyfinbackend.DTO.FeedCardDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockDTO;
-import se.onlyfin.onlyfinbackend.model.NoSuchUserException;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
@@ -19,6 +17,7 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.ModuleEntity;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
+import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
 import java.time.Instant;
@@ -34,10 +33,12 @@ import java.util.*;
 public class FeedController {
     private final DashboardController dashboardController;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public FeedController(DashboardController dashboardController, UserRepository userRepository) {
+    public FeedController(DashboardController dashboardController, UserRepository userRepository, UserService userService) {
         this.dashboardController = dashboardController;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     /**
@@ -47,10 +48,9 @@ public class FeedController {
      * @return a list of feed cards
      */
     @GetMapping("/all-the-things")
-    public ResponseEntity<List<FeedCardDTO>> fetchAllTheFeed(Principal principal) throws NoSuchUserException {
+    public ResponseEntity<List<FeedCardDTO>> fetchAllTheFeed(Principal principal) {
         //check that logged-in user exists
-        User userToFetchFeedFor = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new UsernameNotFoundException("Username not found!"));
+        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
 
         //check that user has subscriptions
         if (userToFetchFeedFor.getSubscriptions().size() < 1) {
@@ -60,19 +60,8 @@ public class FeedController {
         //grab their subscriptions
         List<Subscription> subscriptionList = new ArrayList<>(userToFetchFeedFor.getSubscriptions());
 
-        //assemble a map of dashboards for subscribed-to analysts, so each dashboard can be linked to analyst
-        HashMap<User, Dashboard> dashboardOwnershipMap = new HashMap<>();
-        for (Subscription currentSubscription : subscriptionList) {
-            User ownerOfDashboard =
-                    userRepository.findById(currentSubscription.getSubscribedTo().getId()).orElseThrow();
-
-            Dashboard ownersDashboard = dashboardController.fetchDashboard(
-                    currentSubscription
-                            .getSubscribedTo()
-                            .getId());
-
-            dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
-        }
+        //assemble a map of dashboards for subscribed-to analysts, so each dashboard can be linked to its owner
+        HashMap<User, Dashboard> dashboardOwnershipMap = createDashboardOwnershipMap(subscriptionList);
 
         List<FeedCardDTO> feedCardDTOS = new ArrayList<>();
         for (User currentAnalystUser : dashboardOwnershipMap.keySet()) {
@@ -89,36 +78,7 @@ public class FeedController {
                 //stocks that currentAnalystUser covers
                 List<Stock> stocksCoveredByCurrentAnalyst = new ArrayList<>(currentDashboard.getStocks());
 
-                //go through stocks that currentAnalystUser covers
-                for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
-                    //categories under current stock that currentAnalystUser covers
-                    for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
-                        //current module under the current stock category
-                        for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
-                            JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
-                            //create "feed card" using all available content
-                            feedCardDTOS.add(new FeedCardDTO(
-                                    currentAnalystProfileDTO,
-                                    new StockDTO(
-                                            currentStockThatCurrentAnalystCovers.getName(),
-                                            currentStockThatCurrentAnalystCovers.getId()),
-                                    new CategoryDTO(
-                                            categoryUnderCurrentStockThatCurrentAnalystCovers.getName(),
-                                            categoryUnderCurrentStockThatCurrentAnalystCovers.getId()),
-                                    content,
-                                    LocalDateTime.ofInstant(
-                                                    moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(),
-                                                    ZoneId.systemDefault())
-                                            .format(DateTimeFormatter
-                                                    .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
-                                    LocalDateTime.ofInstant(
-                                                    moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(),
-                                                    ZoneId.systemDefault())
-                                            .format(DateTimeFormatter
-                                                    .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))));
-                        }
-                    }
-                }
+                pushAnalystContentToList(feedCardDTOS, currentAnalystProfileDTO, stocksCoveredByCurrentAnalyst);
             }
 
         }
@@ -128,6 +88,59 @@ public class FeedController {
         return ResponseEntity.ok().body(feedCardDTOS);
     }
 
+    private void pushAnalystContentToList(List<FeedCardDTO> feedCardDTOS, ProfileDTO currentAnalystProfileDTO, List<Stock> stocksCoveredByCurrentAnalyst) {
+        //go through stocks that currentAnalystUser covers
+        for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
+            //categories under current stock that currentAnalystUser covers
+            for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
+                //current module under the current stock category
+                for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
+                    JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
+                    //create "feed card" using all available content
+                    feedCardDTOS.add(craftFeedCard(currentAnalystProfileDTO, currentStockThatCurrentAnalystCovers, categoryUnderCurrentStockThatCurrentAnalystCovers, moduleEntityUnderCurrentStockThatCurrentAnalystCovers, content));
+                }
+            }
+        }
+    }
+
+    private FeedCardDTO craftFeedCard(ProfileDTO currentAnalystProfileDTO,
+                                      Stock currentStockThatCurrentAnalystCovers,
+                                      Category categoryUnderCurrentStockThatCurrentAnalystCovers,
+                                      ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers,
+                                      JsonNode content) {
+        return new FeedCardDTO(
+                currentAnalystProfileDTO,
+                new StockDTO(
+                        currentStockThatCurrentAnalystCovers.getName(),
+                        currentStockThatCurrentAnalystCovers.getId()),
+                new CategoryDTO(
+                        categoryUnderCurrentStockThatCurrentAnalystCovers.getName(),
+                        categoryUnderCurrentStockThatCurrentAnalystCovers.getId()),
+                content,
+                LocalDateTime.ofInstant(
+                                moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(),
+                                ZoneId.systemDefault())
+                        .format(DateTimeFormatter
+                                .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
+                LocalDateTime.ofInstant(
+                                moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(),
+                                ZoneId.systemDefault())
+                        .format(DateTimeFormatter
+                                .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)));
+    }
+
+    private HashMap<User, Dashboard> createDashboardOwnershipMap(List<Subscription> subscriptionList) {
+        HashMap<User, Dashboard> dashboardOwnershipMap = new HashMap<>();
+        for (Subscription currentSubscription : subscriptionList) {
+            User ownerOfDashboard = currentSubscription.getSubscribedTo();
+
+            Dashboard ownersDashboard = dashboardController.fetchDashboardOrNull(ownerOfDashboard.getId());
+
+            dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
+        }
+        return dashboardOwnershipMap;
+    }
+
     /**
      * This method fetches feed cards from the last 7 days for the user that is logged in.
      *
@@ -135,10 +148,9 @@ public class FeedController {
      * @return a list of feed cards from the last 7 days
      */
     @GetMapping("/week")
-    public ResponseEntity<List<FeedCardDTO>> fetchWeeklyFeed(Principal principal) throws NoSuchUserException {
+    public ResponseEntity<List<FeedCardDTO>> fetchWeeklyFeed(Principal principal) {
         //check that logged-in user exists
-        User userToFetchFeedFor = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new UsernameNotFoundException("Username not found!"));
+        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
 
         //check that user has subscriptions
         if (userToFetchFeedFor.getSubscriptions().size() < 1) {
@@ -151,8 +163,7 @@ public class FeedController {
         //assemble a map of dashboards for subscribed-to analysts, so each dashboard can be linked to analyst
         HashMap<User, Dashboard> dashboardOwnershipMap = new HashMap<>();
         for (Subscription currentSubscription : subscriptionList) {
-            User ownerOfDashboard =
-                    userRepository.findById(currentSubscription.getSubscribedTo().getId()).orElseThrow();
+            User ownerOfDashboard = currentSubscription.getSubscribedTo();
 
             Dashboard ownersDashboard = dashboardController.getDashboard(
                     currentSubscription
