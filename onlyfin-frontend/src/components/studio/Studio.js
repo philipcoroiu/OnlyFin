@@ -11,9 +11,9 @@ export default function Studio() {
 
     /* colorscheme for the datasets */
     const colorscheme = [
-        {index: 0, color: "#79d06e"},
+        {index: 0, color: "#39a22a"},
         {index: 1, color: "#da6868"},
-        {index: 2, color: "#cfd574"},
+        {index: 2, color: "#a2a852"},
         {index: 3, color: "#c99664"},
         {index: 4, color: "#6384d2"},
     ];
@@ -99,7 +99,7 @@ export default function Studio() {
             name: "name",
             data: [""],
             borderWidth: 0,
-            color: "#b0ffa6",
+            color: "#39a22a",
         }]
     });
 
