@@ -53,7 +53,68 @@ public class FeedController {
      * @param principal the user that is logged in
      * @return a list of feed cards
      */
+    @GetMapping("/all-the-things")
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedAll(Principal principal) {
+        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
+
+        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
+        if (subscriptions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        HashMap<String, Integer> analystUsernameToIdMap = new HashMap<>();
+        ArrayList<FeedCard> feedCards = new ArrayList<>();
+        for (Subscription subscription : subscriptions) {
+            User currentAnalyst = subscription.getSubscribedTo();
+            feedCards.addAll(feedCardRepository.findByAnalystUsernameOrderByPostDateDesc(currentAnalyst.getUsername()));
+            analystUsernameToIdMap.put(currentAnalyst.getUsername(), currentAnalyst.getId());
+        }
+
+        List<FeedCardDTO> feedCardDTOS = craftFeedCardDTOList(analystUsernameToIdMap, feedCards);
+
+        return ResponseEntity.ok().body(feedCardDTOS);
+    }
+
+    /**
+     * This method fetches feed cards from the last 7 days for the user that is logged in.
+     *
+     * @param principal the user that is logged in
+     * @return a list of feed cards from the last 7 days
+     */
+    @GetMapping("/week")
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(Principal principal) {
+        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
+
+        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
+        if (subscriptions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        Instant cutoffDate = Instant.now().minus(7, ChronoUnit.DAYS);
+        HashMap<String, Integer> analystUsernameToId = new HashMap<>();
+        ArrayList<FeedCard> feedCards = new ArrayList<>();
+        for (Subscription subscription : subscriptions) {
+            User currentAnalyst = subscription.getSubscribedTo();
+            feedCards.addAll(
+                    feedCardRepository.findByAnalystUsernameAndPostDateAfterOrderByPostDateDesc(
+                            currentAnalyst.getUsername(),
+                            cutoffDate));
+            analystUsernameToId.put(currentAnalyst.getUsername(), currentAnalyst.getId());
+        }
+
+        List<FeedCardDTO> feedCardDTOS = craftFeedCardDTOList(analystUsernameToId, feedCards);
+
+        return ResponseEntity.ok().body(feedCardDTOS);
+    }
+
+    /**
+     * This method fetches all the feed cards for the user that is logged in.
+     *
+     * @param principal the user that is logged in
+     * @return a list of feed cards
+     */
     @GetMapping("/old-all-the-things")
+    @Deprecated
     public ResponseEntity<List<FeedCardDTO>> fetchAllTheFeed(Principal principal) {
         //check that logged-in user exists
         User userToFetchFeedFor = userService.getUserOrException(principal.getName());
@@ -94,59 +155,6 @@ public class FeedController {
         return ResponseEntity.ok().body(feedCardDTOS);
     }
 
-    private void pushAnalystContentToList(List<FeedCardDTO> feedCardDTOS, ProfileDTO currentAnalystProfileDTO, List<Stock> stocksCoveredByCurrentAnalyst) {
-        //go through stocks that currentAnalystUser covers
-        for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
-            //categories under current stock that currentAnalystUser covers
-            for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
-                //current module under the current stock category
-                for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
-                    JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
-                    //create "feed card" using all available content
-                    feedCardDTOS.add(craftFeedCard(currentAnalystProfileDTO, currentStockThatCurrentAnalystCovers, categoryUnderCurrentStockThatCurrentAnalystCovers, moduleEntityUnderCurrentStockThatCurrentAnalystCovers, content));
-                }
-            }
-        }
-    }
-
-    private FeedCardDTO craftFeedCard(ProfileDTO currentAnalystProfileDTO,
-                                      Stock currentStockThatCurrentAnalystCovers,
-                                      Category categoryUnderCurrentStockThatCurrentAnalystCovers,
-                                      ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers,
-                                      JsonNode content) {
-        return new FeedCardDTO(
-                currentAnalystProfileDTO,
-                new StockDTO(
-                        currentStockThatCurrentAnalystCovers.getName(),
-                        currentStockThatCurrentAnalystCovers.getId()),
-                new CategoryDTO(
-                        categoryUnderCurrentStockThatCurrentAnalystCovers.getName(),
-                        categoryUnderCurrentStockThatCurrentAnalystCovers.getId()),
-                content,
-                LocalDateTime.ofInstant(
-                                moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(),
-                                ZoneId.systemDefault())
-                        .format(DateTimeFormatter
-                                .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
-                LocalDateTime.ofInstant(
-                                moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(),
-                                ZoneId.systemDefault())
-                        .format(DateTimeFormatter
-                                .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)));
-    }
-
-    private HashMap<User, Dashboard> createDashboardOwnershipMap(List<Subscription> subscriptionList) {
-        HashMap<User, Dashboard> dashboardOwnershipMap = new HashMap<>();
-        for (Subscription currentSubscription : subscriptionList) {
-            User ownerOfDashboard = currentSubscription.getSubscribedTo();
-
-            Dashboard ownersDashboard = dashboardController.fetchDashboardOrNull(ownerOfDashboard.getId());
-
-            dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
-        }
-        return dashboardOwnershipMap;
-    }
-
     /**
      * This method fetches feed cards from the last 7 days for the user that is logged in.
      *
@@ -154,6 +162,7 @@ public class FeedController {
      * @return a list of feed cards from the last 7 days
      */
     @GetMapping("/oldweek")
+    @Deprecated
     public ResponseEntity<List<FeedCardDTO>> fetchWeeklyFeed(Principal principal) {
         //check that logged-in user exists
         User userToFetchFeedFor = userService.getUserOrException(principal.getName());
@@ -236,54 +245,89 @@ public class FeedController {
         return ResponseEntity.ok().body(feedCardDTOS);
     }
 
-    @GetMapping("/week")
-    public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(Principal principal) {
-        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
-
-        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
-        if (subscriptions.isEmpty()) {
-            return ResponseEntity.noContent().build();
+    /**
+     * This method pushes all the content from a specific analyst to an inputted list
+     *
+     * @param feedCardDTOS                  list of feed cards
+     * @param currentAnalystProfileDTO      profile of current analyst
+     * @param stocksCoveredByCurrentAnalyst list of stocks covered by current analyst
+     */
+    private void pushAnalystContentToList(List<FeedCardDTO> feedCardDTOS, ProfileDTO currentAnalystProfileDTO, List<Stock> stocksCoveredByCurrentAnalyst) {
+        //go through stocks that currentAnalystUser covers
+        for (Stock currentStockThatCurrentAnalystCovers : stocksCoveredByCurrentAnalyst) {
+            //categories under current stock that currentAnalystUser covers
+            for (Category categoryUnderCurrentStockThatCurrentAnalystCovers : currentStockThatCurrentAnalystCovers.getCategories()) {
+                //current module under the current stock category
+                for (ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers : categoryUnderCurrentStockThatCurrentAnalystCovers.getModuleEntities()) {
+                    JsonNode content = moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getContent();
+                    //create "feed card" using all available content
+                    feedCardDTOS.add(craftFeedCard(currentAnalystProfileDTO, currentStockThatCurrentAnalystCovers, categoryUnderCurrentStockThatCurrentAnalystCovers, moduleEntityUnderCurrentStockThatCurrentAnalystCovers, content));
+                }
+            }
         }
-
-        Instant cutoffDate = Instant.now().minus(7, ChronoUnit.DAYS);
-        HashMap<String, Integer> analystUsernameToId = new HashMap<>();
-        ArrayList<FeedCard> feedCards = new ArrayList();
-        for (Subscription subscription : subscriptions) {
-            User currentAnalyst = subscription.getSubscribedTo();
-            feedCards.addAll(
-                    feedCardRepository.findByAnalystUsernameAndPostDateAfterOrderByPostDateDesc(
-                            currentAnalyst.getUsername(),
-                            cutoffDate));
-            analystUsernameToId.put(currentAnalyst.getUsername(), currentAnalyst.getId());
-        }
-
-        List<FeedCardDTO> feedCardDTOS = craftFeedCardDTOList(analystUsernameToId, feedCards);
-
-        return ResponseEntity.ok().body(feedCardDTOS);
     }
 
-    @GetMapping("/all-the-things")
-    public ResponseEntity<List<FeedCardDTO>> fetchFeedAll(Principal principal) {
-        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
-
-        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
-        if (subscriptions.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        HashMap<String, Integer> analystUsernameToIdMap = new HashMap<>();
-        ArrayList<FeedCard> feedCards = new ArrayList<>();
-        for (Subscription subscription : subscriptions) {
-            User currentAnalyst = subscription.getSubscribedTo();
-            feedCards.addAll(feedCardRepository.findByAnalystUsernameOrderByPostDateDesc(currentAnalyst.getUsername()));
-            analystUsernameToIdMap.put(currentAnalyst.getUsername(), currentAnalyst.getId());
-        }
-
-        List<FeedCardDTO> feedCardDTOS = craftFeedCardDTOList(analystUsernameToIdMap, feedCards);
-
-        return ResponseEntity.ok().body(feedCardDTOS);
+    /**
+     * This method crafts a feed card inputted content
+     *
+     * @param currentAnalystProfileDTO                              profile of current analyst
+     * @param currentStockThatCurrentAnalystCovers                  stock
+     * @param categoryUnderCurrentStockThatCurrentAnalystCovers     stock category
+     * @param moduleEntityUnderCurrentStockThatCurrentAnalystCovers module entity
+     * @param content                                               content
+     * @return a feed card with the inputted content
+     */
+    private FeedCardDTO craftFeedCard(ProfileDTO currentAnalystProfileDTO,
+                                      Stock currentStockThatCurrentAnalystCovers,
+                                      Category categoryUnderCurrentStockThatCurrentAnalystCovers,
+                                      ModuleEntity moduleEntityUnderCurrentStockThatCurrentAnalystCovers,
+                                      JsonNode content) {
+        return new FeedCardDTO(
+                currentAnalystProfileDTO,
+                new StockDTO(
+                        currentStockThatCurrentAnalystCovers.getName(),
+                        currentStockThatCurrentAnalystCovers.getId()),
+                new CategoryDTO(
+                        categoryUnderCurrentStockThatCurrentAnalystCovers.getName(),
+                        categoryUnderCurrentStockThatCurrentAnalystCovers.getId()),
+                content,
+                LocalDateTime.ofInstant(
+                                moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getPostDate(),
+                                ZoneId.systemDefault())
+                        .format(DateTimeFormatter
+                                .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
+                LocalDateTime.ofInstant(
+                                moduleEntityUnderCurrentStockThatCurrentAnalystCovers.getUpdatedDate(),
+                                ZoneId.systemDefault())
+                        .format(DateTimeFormatter
+                                .ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)));
     }
 
+    /**
+     * This method creates a map with analysts as keys and their dashboards as values
+     *
+     * @param subscriptionList list of subscriptions
+     * @return a map of dashboards connected to analysts
+     */
+    private HashMap<User, Dashboard> createDashboardOwnershipMap(List<Subscription> subscriptionList) {
+        HashMap<User, Dashboard> dashboardOwnershipMap = new HashMap<>();
+        for (Subscription currentSubscription : subscriptionList) {
+            User ownerOfDashboard = currentSubscription.getSubscribedTo();
+
+            Dashboard ownersDashboard = dashboardController.fetchDashboardOrNull(ownerOfDashboard.getId());
+
+            dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
+        }
+        return dashboardOwnershipMap;
+    }
+
+    /**
+     * This method crafts a list of feed card DTOs using inputted feed cards and analyst username to id map
+     *
+     * @param analystUsernameToIdMap map of analyst usernames to their ids
+     * @param feedCards              list of feed cards
+     * @return a list of feed card DTOs
+     */
     private static List<FeedCardDTO> craftFeedCardDTOList(HashMap<String, Integer> analystUsernameToIdMap, ArrayList<FeedCard> feedCards) {
         return feedCards.stream()
                 .map(feedCard -> new FeedCardDTO(

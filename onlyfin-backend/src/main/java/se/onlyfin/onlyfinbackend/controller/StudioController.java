@@ -167,27 +167,26 @@ public class StudioController {
     }
 
     @GetMapping("getModuleFromId/{id}")
-    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id){
+    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id) {
         System.out.println(id);
 
-        if(moduleRepository.existsById(id)){
+        if (moduleRepository.existsById(id)) {
             Optional<ModuleEntity> moduleOptional = moduleRepository.findById(id);
             ModuleEntity module = moduleOptional.orElse(null);
             return ResponseEntity.ok(module);
-        }
-        else return ResponseEntity.badRequest().build();
+        } else return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/updateModuleContent")
-    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module){
+    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module) {
 
-        if(moduleRepository.existsById(module.getId())){
-            Optional<ModuleEntity> moduleOptional= moduleRepository.findById(module.getId());
+        if (moduleRepository.existsById(module.getId())) {
+            Optional<ModuleEntity> moduleOptional = moduleRepository.findById(module.getId());
             ModuleEntity moduleToSave = moduleOptional.orElse(null);
             moduleToSave.setContent(module.getContent());
             moduleToSave.setUpdatedDate(Instant.now());
             moduleRepository.save(moduleToSave);
-            return  ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
+            return ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
         }
         return ResponseEntity.badRequest().body("module id does not exist");
     }

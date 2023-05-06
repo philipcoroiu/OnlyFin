@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
