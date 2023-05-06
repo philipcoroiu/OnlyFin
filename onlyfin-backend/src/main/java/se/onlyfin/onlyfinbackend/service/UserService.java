@@ -10,6 +10,9 @@ import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -97,4 +100,15 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
+    public List<User> getAllAnalysts() {
+        return userRepository.findByisAnalystIsTrue();
+    }
+
+    public Optional<User> getAnalystByName(String username) {
+        return userRepository.findByisAnalystIsTrueAndUsernameEquals(username);
+    }
+
+    public List<User> findAnalystWithUsernameStartingWith(String search) {
+        return userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search);
+    }
 }

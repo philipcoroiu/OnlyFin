@@ -36,6 +36,9 @@ public class FeedCard {
     @Column(name = "module_type")
     private String moduleType;
 
+    @Column(name = "category_id")
+    private Integer categoryId;
+
     public Integer getId() {
         return id;
     }
@@ -98,5 +101,13 @@ public class FeedCard {
 
     public void setModuleType(String moduleType) {
         this.moduleType = moduleType;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }

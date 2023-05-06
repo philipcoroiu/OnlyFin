@@ -1,7 +1,6 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,7 @@ import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.StockRef;
-import se.onlyfin.onlyfinbackend.repository.UserRepository;
+import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
 import java.util.*;
@@ -22,12 +21,12 @@ import java.util.*;
 @RequestMapping("/algo")
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class UserSuggestionAlgorithm {
-    private final UserRepository userRepository;
     private final DashboardController dashboardController;
+    private final UserService userService;
 
-    public UserSuggestionAlgorithm(UserRepository userRepository, DashboardController dashboardController) {
-        this.userRepository = userRepository;
+    public UserSuggestionAlgorithm(DashboardController dashboardController, UserService userService) {
         this.dashboardController = dashboardController;
+        this.userService = userService;
     }
 
     /**
@@ -43,8 +42,7 @@ public class UserSuggestionAlgorithm {
     @GetMapping("/by-stocks-covered-weighed-by-post-amount")
     public ResponseEntity<List<UserRecommendationDTO>> suggestAnalystsBasedOnCommonStock(Principal principal) {
         //fetch logged-in user
-        User userFetchingRecommendedList = userRepository.findByUsername(principal.getName()).orElseThrow(() ->
-                new UsernameNotFoundException("Username not found"));
+        User userFetchingRecommendedList = userService.getUserOrException(principal.getName());
 
         //fetch subscriptions from logged-in user
         List<Subscription> subscriptionList = new ArrayList<>(userFetchingRecommendedList.getSubscriptions());
@@ -57,7 +55,7 @@ public class UserSuggestionAlgorithm {
                 .toList());
 
         //create a list of not subscribed-to analysts
-        List<User> notSubscribedToAnalystsList = new ArrayList<>(userRepository.findByisAnalystIsTrue());
+        List<User> notSubscribedToAnalystsList = new ArrayList<>(userService.getAllAnalysts());
         notSubscribedToAnalystsList.removeIf(subscribedToAnalysts::contains);
         notSubscribedToAnalystsList.remove(userFetchingRecommendedList);
         if (notSubscribedToAnalystsList.isEmpty()) {
@@ -65,7 +63,8 @@ public class UserSuggestionAlgorithm {
         }
 
         //Map the strongest commonalities between the subscribed-to analysts.
-        //Use name of stock_ref as key. Use Integer for how many of the subbed analysts cover that stock
+        //Use the name of stock_ref as a key.
+        // Use Integer for how many of the subbed analysts cover that stock
         HashMap<StockRef, Integer> commonalityMap = new HashMap<>();
 
         //go through all analysts
