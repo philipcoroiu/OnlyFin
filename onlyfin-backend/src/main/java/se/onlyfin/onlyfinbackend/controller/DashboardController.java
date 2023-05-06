@@ -3,9 +3,11 @@ package se.onlyfin.onlyfinbackend.controller;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.onlyfin.onlyfinbackend.model.FeedCard;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
+import se.onlyfin.onlyfinbackend.repository.FeedCardRepository;
 import se.onlyfin.onlyfinbackend.repository.StockRefRepository;
 
 import java.time.Instant;
@@ -18,13 +20,14 @@ import java.util.Optional;
 @RequestMapping("/dashboard")
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 public class DashboardController {
-
     private final DashboardRepository dashboardRepository;
     private final StockRefRepository stockRefRepository;
+    private final FeedCardRepository feedCardRepository;
 
-    public DashboardController(DashboardRepository dashboardRepository, StockRefRepository stockRefRepository) {
+    public DashboardController(DashboardRepository dashboardRepository, StockRefRepository stockRefRepository, FeedCardRepository feedCardRepository) {
         this.dashboardRepository = dashboardRepository;
         this.stockRefRepository = stockRefRepository;
+        this.feedCardRepository = feedCardRepository;
     }
 
     @GetMapping("/get/{id}")
@@ -45,61 +48,22 @@ public class DashboardController {
         return ResponseEntity.ok(stockRefs);
     }
 
-    /**
-     * This method goes through all the analyst's posts and returns whichever Instant is the latest date
-     *
-     * @param targetAnalyst the analysts to target
-     * @return Instant object containing time&date information about the last post date
-     */
     public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
-        Optional<Dashboard> optionalTargetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId());
-        if (optionalTargetAnalystsDashboard.isEmpty()) {
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findLatestPostDateByAnalystUsername(targetAnalyst.getUsername());
+        if (latestInstantOptional.isPresent()) {
+            return latestInstantOptional.get().getPostDate();
+        } else {
             return Instant.MIN;
         }
-
-        Dashboard targetAnalystsDashboard = optionalTargetAnalystsDashboard.get();
-        List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
-        Instant latestInstant = Instant.MIN;
-        for (Stock currentStock : analystsStocks) {
-            for (Category currentCategoryUnderStock : currentStock.getCategories()) {
-                for (ModuleEntity currentModuleUnderCategory : currentCategoryUnderStock.getModuleEntities()) {
-                    Instant currentInstant = currentModuleUnderCategory.getPostDate();
-                    if (currentInstant.isAfter(latestInstant)) {
-                        latestInstant = currentInstant;
-                    }
-                }
-            }
-        }
-
-        return latestInstant;
     }
 
-    /**
-     * This method goes through all the analyst's posts and returns whichever Instant is the latest update date
-     *
-     * @param targetAnalyst the analysts to target
-     * @return Instant object containing time&date information about the last post update date
-     */
     public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
-        Dashboard targetAnalystsDashboard = fetchDashboardOrNull(targetAnalyst.getId());
-        if (targetAnalystsDashboard == null) {
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findLatestUpdateDateByAnalystUsername(targetAnalyst.getUsername());
+        if (latestInstantOptional.isPresent()) {
+            return latestInstantOptional.get().getPostDate();
+        } else {
             return Instant.MIN;
         }
-
-        List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
-        Instant latestInstant = Instant.MIN;
-        for (Stock currentStock : analystsStocks) {
-            for (Category currentCategoryUnderStock : currentStock.getCategories()) {
-                for (ModuleEntity currentModuleUnderCategory : currentCategoryUnderStock.getModuleEntities()) {
-                    Instant currentInstant = currentModuleUnderCategory.getUpdatedDate();
-                    if (currentInstant.isAfter(latestInstant)) {
-                        latestInstant = currentInstant;
-                    }
-                }
-            }
-        }
-
-        return latestInstant;
     }
 
     /**
@@ -140,6 +104,65 @@ public class DashboardController {
         }
 
         return coverageMap;
+    }
+
+    /**
+     * This method goes through all the analyst's posts and returns whichever Instant is the latest update date
+     *
+     * @param targetAnalyst the analysts to target
+     * @return Instant object containing time&date information about the last post update date
+     */
+    @Deprecated
+    public Instant oldFetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
+        Dashboard targetAnalystsDashboard = fetchDashboardOrNull(targetAnalyst.getId());
+        if (targetAnalystsDashboard == null) {
+            return Instant.MIN;
+        }
+
+        List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
+        Instant latestInstant = Instant.MIN;
+        for (Stock currentStock : analystsStocks) {
+            for (Category currentCategoryUnderStock : currentStock.getCategories()) {
+                for (ModuleEntity currentModuleUnderCategory : currentCategoryUnderStock.getModuleEntities()) {
+                    Instant currentInstant = currentModuleUnderCategory.getUpdatedDate();
+                    if (currentInstant.isAfter(latestInstant)) {
+                        latestInstant = currentInstant;
+                    }
+                }
+            }
+        }
+
+        return latestInstant;
+    }
+
+    /**
+     * This method goes through all the analyst's posts and returns whichever Instant is the latest date
+     *
+     * @param targetAnalyst the analysts to target
+     * @return Instant object containing time&date information about the last post date
+     */
+    @Deprecated
+    public Instant oldFetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
+        Optional<Dashboard> optionalTargetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId());
+        if (optionalTargetAnalystsDashboard.isEmpty()) {
+            return Instant.MIN;
+        }
+
+        Dashboard targetAnalystsDashboard = optionalTargetAnalystsDashboard.get();
+        List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
+        Instant latestInstant = Instant.MIN;
+        for (Stock currentStock : analystsStocks) {
+            for (Category currentCategoryUnderStock : currentStock.getCategories()) {
+                for (ModuleEntity currentModuleUnderCategory : currentCategoryUnderStock.getModuleEntities()) {
+                    Instant currentInstant = currentModuleUnderCategory.getPostDate();
+                    if (currentInstant.isAfter(latestInstant)) {
+                        latestInstant = currentInstant;
+                    }
+                }
+            }
+        }
+
+        return latestInstant;
     }
 
 }

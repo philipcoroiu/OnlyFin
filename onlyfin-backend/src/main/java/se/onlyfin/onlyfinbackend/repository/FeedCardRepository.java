@@ -5,6 +5,7 @@ import se.onlyfin.onlyfinbackend.model.FeedCard;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository mapping for the feed card table.
@@ -32,5 +33,9 @@ public interface FeedCardRepository extends JpaRepository<FeedCard, Integer> {
      * @return A list of feed cards for the given analyst ordered by descending post-date
      */
     List<FeedCard> findByAnalystUsernameOrderByPostDateDesc(String username);
+
+    Optional<FeedCard> findLatestPostDateByAnalystUsername(String username);
+
+    Optional<FeedCard> findLatestUpdateDateByAnalystUsername(String username);
 
 }
