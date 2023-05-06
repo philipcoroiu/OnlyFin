@@ -81,12 +81,11 @@ public class DashboardController {
      * @return Instant object containing time&date information about the last post update date
      */
     public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
-        Optional<Dashboard> optionalTargetAnalystsDashboard = dashboardRepository.findById(targetAnalyst.getId());
-        if (optionalTargetAnalystsDashboard.isEmpty()) {
+        Dashboard targetAnalystsDashboard = fetchDashboardOrNull(targetAnalyst.getId());
+        if (targetAnalystsDashboard == null) {
             return Instant.MIN;
         }
 
-        Dashboard targetAnalystsDashboard = optionalTargetAnalystsDashboard.get();
         List<Stock> analystsStocks = targetAnalystsDashboard.getStocks();
         Instant latestInstant = Instant.MIN;
         for (Stock currentStock : analystsStocks) {
@@ -109,7 +108,7 @@ public class DashboardController {
      * @param userId id of user to target
      * @return dashboard object or null if no dashboard is found
      */
-    public Dashboard fetchDashboard(Integer userId) {
+    public Dashboard fetchDashboardOrNull(Integer userId) {
         return dashboardRepository.findById(userId).orElse(null);
     }
 
@@ -123,13 +122,12 @@ public class DashboardController {
         HashMap<StockRef, ArrayList<User>> coverageMap = new HashMap<>();
 
         ArrayList<User> analystList = new ArrayList<>(analysts);
-
         if (analystList.isEmpty()) {
             return coverageMap;
         }
 
         for (User currentAnalyst : analystList) {
-            Dashboard currentDashboard = fetchDashboard(currentAnalyst.getId());
+            Dashboard currentDashboard = fetchDashboardOrNull(currentAnalyst.getId());
             if (currentDashboard != null) {
                 for (Stock currentStock : currentDashboard.getStocks()) {
                     StockRef currentStockRef = currentStock.getStock_ref_id();
