@@ -47,6 +47,7 @@ export default function Studio() {
             style: {
                 fontFamily: "Tahoma"
             },
+            animation: false
         },
         style: {
             borderColor: "#1A1616"

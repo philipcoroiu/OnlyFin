@@ -70,13 +70,10 @@ export default function EditableLayout(props) {
             isBounded={true}
             isDraggable={true}
             autoPosition={[0, 0]}
-            containerProps={{ style: { height: "100%", width: "100%"} }}
         >
 
             {props.category.moduleEntities.map((moduleEntity) => (
-                <div key={moduleEntity.id} className="dashboard-module-container"
-                     containerProps={{ style: { height: "100%", width: "100%"} }}
-                >
+                <div key={moduleEntity.id} className="dashboard-module-container">
                     <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
                         <button>edit</button>
                     </Link>
