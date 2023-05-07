@@ -2,8 +2,10 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.onlyfin.onlyfinbackend.DTO.LayoutDTO;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
+import se.onlyfin.onlyfinbackend.DTO.LayoutArrayDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
 
@@ -22,17 +24,20 @@ public class StudioController {
     private final ModuleRepository moduleRepository;
     private final DashboardRepository dashboardRepository;
     private final StockRefRepository stockRefRepository;
+    private final DashboardLayoutRepository dashboardLayoutRepository;
 
     public StudioController(StockRepository stockRepository,
                             CategoryRepository categoryRepository,
                             ModuleRepository moduleRepository,
                             DashboardRepository dashboardRepository,
-                            StockRefRepository stockRefRepository) {
+                            StockRefRepository stockRefRepository,
+                            DashboardLayoutRepository dashboardLayoutRepository) {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
         this.dashboardRepository = dashboardRepository;
         this.stockRefRepository = stockRefRepository;
+        this.dashboardLayoutRepository = dashboardLayoutRepository;
     }
 
     @PostMapping("/createStock")
@@ -136,8 +141,10 @@ public class StudioController {
         if (!categoryRepository.existsById(moduleToSave.getCategory_id())) {
             return ResponseEntity.badRequest().body("there is no category for that id");
         }
-        moduleRepository.save(moduleToSave);
-        return ResponseEntity.ok(moduleRepository.getReferenceById(moduleToSave.getId()));
+
+        ModuleEntity savedModule = moduleRepository.save(moduleToSave);
+        dashboardLayoutRepository.save(new DashboardLayout(savedModule.getId(), savedModule.getCategory_id()));
+        return ResponseEntity.ok(savedModule);
     }
 
     @DeleteMapping("/deleteModule/{id}")
@@ -189,5 +196,26 @@ public class StudioController {
             return ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
         }
         return ResponseEntity.badRequest().body("module id does not exist");
+    }
+
+    @PutMapping("/updateDashboardLayout")
+    public ResponseEntity<?> updateDashboardLayout(@RequestBody List<LayoutDTO> layoutDTOList) {
+        System.out.println(layoutDTOList);
+
+        List<DashboardLayout> responseLayout = new ArrayList<>();
+        for (LayoutDTO tempLayout : layoutDTOList) {
+            if (dashboardLayoutRepository.existsById(tempLayout.moduleId())) {
+                Optional<DashboardLayout> optionalLayout = dashboardLayoutRepository.findById(tempLayout.moduleId());
+                DashboardLayout dashboardLayout = optionalLayout.orElse(null);
+                dashboardLayout.setH(tempLayout.h());
+                dashboardLayout.setW(tempLayout.w());
+                dashboardLayout.setY(tempLayout.y());
+                dashboardLayout.setX(tempLayout.x());
+
+                responseLayout.add(dashboardLayoutRepository.save(dashboardLayout));
+            }
+        }
+
+        return ResponseEntity.ok(responseLayout);
     }
 }
