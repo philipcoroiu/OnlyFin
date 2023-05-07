@@ -47,7 +47,12 @@ export default function Studio() {
             style: {
                 fontFamily: "Tahoma"
             },
-            animation: false
+            animation: {
+                duration: 0,
+                easing: 'linear'
+            },
+
+            renderTo: 'container'
         },
         style: {
             borderColor: "#1A1616"
@@ -94,7 +99,11 @@ export default function Studio() {
             }
         },
         plotOptions: {
-            bb: {}
+            series:{
+                animation:{
+                    duration: 0
+                }
+            }
         },
         series: [{
             name: "name",
