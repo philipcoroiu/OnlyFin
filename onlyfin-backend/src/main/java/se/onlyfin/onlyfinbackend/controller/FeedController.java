@@ -180,11 +180,10 @@ public class FeedController {
         for (Subscription currentSubscription : subscriptionList) {
             User ownerOfDashboard = currentSubscription.getSubscribedTo();
 
-            Dashboard ownersDashboard = dashboardController.getDashboard(
+            Dashboard ownersDashboard = dashboardController.fetchDashboardOrNull(
                     currentSubscription
-                            .getSubscribedTo()
-                            .getId()
-            ).getBody().dashboard();
+                    .getSubscribedTo()
+                    .getId());
 
             dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
         }

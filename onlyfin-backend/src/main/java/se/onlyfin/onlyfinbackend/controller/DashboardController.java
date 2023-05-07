@@ -53,10 +53,7 @@ public class DashboardController {
 
                 int tempCategoryId = dashboard.getStocks().get(i).getCategories().get(j).getId();
                 List<DashboardLayout> tempList = dashboardLayoutRepository.findByCategoryId(tempCategoryId);
-                for (int k = 0; k < tempList.size(); k++){
-                    layoutList.add(tempList.get(k));
-                }
-
+                layoutList.addAll(tempList);
             }
         }
 
