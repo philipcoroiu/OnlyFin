@@ -69,10 +69,12 @@ export default function EditableLayout(props) {
 
     return(
         <div>
-            <label className="switch">
-                <input type="checkbox" onClick={handleToggle}/>
-                <span className="slider round"></span>
-            </label>
+            {props.ownDashboard &&
+                <label className="switch">
+                    <input type="checkbox" onClick={handleToggle}/>
+                    <span className="slider round"></span>
+                </label>
+            }
             <ResponsiveGridLayout
                 className="layout"
                 layouts={{ lg: layout }}
@@ -88,9 +90,11 @@ export default function EditableLayout(props) {
 
                 {props.category.moduleEntities.map((moduleEntity) => (
                     <div key={moduleEntity.id} className="dashboard-module-container">
-                        <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                            <button>edit</button>
-                        </Link>
+                        {props.ownDashboard &&
+                            <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
+                                <button>edit</button>
+                            </Link>
+                        }
                         <HighchartsReact
                             containerProps={{ style: { height: "100%", weight: "100%" } }}
                             highcharts={Highcharts}

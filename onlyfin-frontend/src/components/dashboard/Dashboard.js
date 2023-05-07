@@ -25,7 +25,7 @@ export default function Dashboard() {
     const searchParams = new URLSearchParams(location.search);
     const categoryIndexId = searchParams.get("CategoryId") || null;
     const otherUserID = searchParams.get("User") || null
-    const [ownDashboard, setOwnDashboard] = useState(true)
+    const [ownDashboard, setOwnDashboard] = useState(false)
 
 
     useEffect(() => {
@@ -35,6 +35,7 @@ export default function Dashboard() {
                 (response) => {
                     if (parseInt(otherUserID) === response.data || otherUserID == null) {
                         setUserId(response.data)
+                        setOwnDashboard(true)
                     } else {
                         setUserId(otherUserID)
                         setOwnDashboard(false)
@@ -328,6 +329,7 @@ export default function Dashboard() {
                                             <EditableLayout
                                                 category={category}
                                                 dashboardLayout={dashboardLayout}
+                                                ownDashboard={ownDashboard}
                                             />
 
                                             )}
