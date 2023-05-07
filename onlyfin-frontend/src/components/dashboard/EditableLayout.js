@@ -6,6 +6,7 @@ import 'react-resizable/css/styles.css';
 import HighchartsReact from "highcharts-react-official";
 import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
+import axios from "axios";
 
 
 export default function EditableLayout(props) {
@@ -15,18 +16,46 @@ export default function EditableLayout(props) {
     const standardWidth = 2;
     const standardAmountColumns = 8;
 
-    const layout = props.category.moduleEntities.map((item, index) => ({
-        
+    const filteredLayout = props.dashboardLayout.filter(item => item.categoryId === props.category.id);
 
-        i: item.id.toString(),
-        x: index * standardWidth % standardAmountColumns,
-        y: Math.floor(index / 5) * standardWidth,
-        w: standardWidth,
-        h: 2,
+    const layout = filteredLayout.map((item, index) => ({
+        i: item.moduleId.toString(),
+        x: item.x,
+        y: item.y,
+        w: item.w,
+        h: item.h,
     }));
 
     const onLayoutChange = (newLayout, event) => {
         console.log(newLayout)
+        console.log("dashboardLayout", props.dashboardLayout);
+        console.log(props.category.id
+        )
+
+        const updatedLayout = newLayout.map((item) => ({
+            moduleId: parseInt(item.i),
+            categoryId: props.category.id,
+            x: item.x,
+            y: item.y,
+            w: item.w,
+            h: item.h
+        }))
+
+        console.log(JSON.stringify({layoutDTO: updatedLayout}));
+        axios.put(
+            "http://localhost:8080/studio/updateDashboardLayout",
+            updatedLayout,
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                withCredentials: true,
+            }
+        )
+
+
+
+
     };
 
     return(

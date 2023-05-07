@@ -3,8 +3,10 @@ package se.onlyfin.onlyfinbackend.controller;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.onlyfin.onlyfinbackend.DTO.DashboardWithLayoutDTO;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
+import se.onlyfin.onlyfinbackend.repository.DashboardLayoutRepository;
 import se.onlyfin.onlyfinbackend.repository.DashboardRepository;
 import se.onlyfin.onlyfinbackend.repository.StockRefRepository;
 
@@ -21,21 +23,42 @@ public class DashboardController {
 
     private final DashboardRepository dashboardRepository;
     private final StockRefRepository stockRefRepository;
+    public final DashboardLayoutRepository dashboardLayoutRepository;
 
-    public DashboardController(DashboardRepository dashboardRepository, StockRefRepository stockRefRepository) {
+    public DashboardController(DashboardRepository dashboardRepository,
+                               StockRefRepository stockRefRepository,
+                               DashboardLayoutRepository dashboardLayoutRepository) {
         this.dashboardRepository = dashboardRepository;
         this.stockRefRepository = stockRefRepository;
+        this.dashboardLayoutRepository = dashboardLayoutRepository;
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Dashboard> getDashboard(@PathVariable Integer id) {
+    public ResponseEntity<DashboardWithLayoutDTO> getDashboard(@PathVariable Integer id) {
         Optional<Dashboard> optionalDashboard = dashboardRepository.findById(id);
         Dashboard dashboard = optionalDashboard.orElse(null);
         if (dashboard == null) {
             System.out.println("is null");
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(dashboard);
+
+        List<DashboardLayout> layoutList = new ArrayList<>();
+
+        for (int i = 0; i < dashboard.getStocks().size(); i++){
+            for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++){
+
+                int tempCategoryId = dashboard.getStocks().get(i).getCategories().get(j).getId();
+                List<DashboardLayout> tempList = dashboardLayoutRepository.findByCategoryId(tempCategoryId);
+                for (int k = 0; k < tempList.size(); k++){
+                    layoutList.add(tempList.get(k));
+                }
+
+            }
+        }
+
+        DashboardWithLayoutDTO dashboardToSend = new DashboardWithLayoutDTO(dashboard, layoutList);
+
+        return ResponseEntity.ok(dashboardToSend);
     }
 
     @GetMapping("/getStockRef")
