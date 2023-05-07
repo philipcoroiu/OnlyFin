@@ -63,18 +63,20 @@ export default function EditableLayout(props) {
             className="layout"
             layouts={{ lg: layout }}
             cols={{ lg: 8, md: 6, sm: 4, xs: 2, xxs: 1 }}
-            rowHeight={200}
+            rowHeight={190}
             isResizable={true}
             compactType="vertical"
             onLayoutChange={(newLayout, event) => onLayoutChange(newLayout, event)}
             isBounded={true}
             isDraggable={true}
             autoPosition={[0, 0]}
-
+            containerProps={{ style: { height: "100%", width: "100%"} }}
         >
 
             {props.category.moduleEntities.map((moduleEntity) => (
-                <div key={moduleEntity.id} className="dashboard-module-container" >
+                <div key={moduleEntity.id} className="dashboard-module-container"
+                     containerProps={{ style: { height: "100%", width: "100%"} }}
+                >
                     <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
                         <button>edit</button>
                     </Link>

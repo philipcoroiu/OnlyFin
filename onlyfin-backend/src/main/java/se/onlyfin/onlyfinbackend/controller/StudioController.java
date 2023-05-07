@@ -153,7 +153,6 @@ public class StudioController {
         if (!moduleRepository.existsById(id)) {
             return "There is no module with that id";
         }
-        dashboardLayoutRepository.deleteById(id);
         moduleRepository.deleteById(id);
         return "Removed module successfully";
     }
