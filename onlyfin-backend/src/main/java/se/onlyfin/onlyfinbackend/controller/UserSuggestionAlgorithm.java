@@ -35,7 +35,7 @@ public class UserSuggestionAlgorithm {
      * Tries to give the user a list that includes the most active non-subscribed analysts for all stocks the user's
      * subscriptions have.
      * A limitation with this algorithm is that it can't recommend anything if the user isn't subscribed to anyone,
-     * and it can't recommend analysts that doesn't cover at least one stock that the user's subscriptions cover.
+     * and it can't recommend analysts that don't cover at least one stock that the user's subscriptions cover.
      *
      * @param principal the logged-in user
      * @return No-content if no suggestions can be made or List if suggestions can be made

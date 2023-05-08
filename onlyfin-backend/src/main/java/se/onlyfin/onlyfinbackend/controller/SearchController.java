@@ -152,10 +152,10 @@ public class SearchController {
     }
 
     /**
-     * Finds analysts that cover a target stock
+     * Finds analysts that cover an exact target stock name
      *
      * @param principal the logged-in user
-     * @param stockName name of the target stock
+     * @param stockName exact name of the target stock
      * @return list of analysts covering target stock
      */
     @GetMapping("/find-analysts-that-cover-stock")

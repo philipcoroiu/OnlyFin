@@ -1,6 +1,7 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -323,7 +324,7 @@ public class FeedController {
     }
 
     /**
-     * This method crafts a list of feed card DTOs using inputted feed cards and analyst username to id map
+     * This method creates a list of feed card DTOs using inputted feed cards and analyst username to an id map
      *
      * @param analystUsernameToIdMap map of analyst usernames to their ids
      * @param feedCards              list of feed cards
@@ -342,6 +343,24 @@ public class FeedController {
                                 .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))))
                 .sorted(Comparator.comparing(FeedCardDTO::postDate).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findLatestPostDateByAnalystUsername(targetAnalyst.getUsername());
+        if (latestInstantOptional.isPresent()) {
+            return latestInstantOptional.get().getPostDate();
+        } else {
+            return Instant.MIN;
+        }
+    }
+
+    public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findLatestUpdateDateByAnalystUsername(targetAnalyst.getUsername());
+        if (latestInstantOptional.isPresent()) {
+            return latestInstantOptional.get().getPostDate();
+        } else {
+            return Instant.MIN;
+        }
     }
 
 }

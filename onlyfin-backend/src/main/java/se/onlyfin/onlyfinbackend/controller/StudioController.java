@@ -128,6 +128,7 @@ public class StudioController {
 
             Optional<Category> optionalCategory = categoryRepository.findById(nameChangeRequest.id());
             category = optionalCategory.orElse(null);
+            assert category != null;
             category.setName(nameChangeRequest.name());
             categoryRepository.save(category);
             return ResponseEntity.ok().body(category);
@@ -163,6 +164,7 @@ public class StudioController {
         if (dashboardRepository.existsById(id)) {
             Optional<Dashboard> dashboardOptional = dashboardRepository.findById(id);
             dashboard = dashboardOptional.orElse(null);
+            assert dashboard != null;
             for (int i = 0; i < dashboard.getStocks().size(); i++) {
                 for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++) {
                     dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
@@ -190,6 +192,7 @@ public class StudioController {
         if (moduleRepository.existsById(module.getId())) {
             Optional<ModuleEntity> moduleOptional = moduleRepository.findById(module.getId());
             ModuleEntity moduleToSave = moduleOptional.orElse(null);
+            assert moduleToSave != null;
             moduleToSave.setContent(module.getContent());
             moduleToSave.setUpdatedDate(Instant.now());
             moduleRepository.save(moduleToSave);
@@ -207,6 +210,7 @@ public class StudioController {
             if (dashboardLayoutRepository.existsById(tempLayout.moduleId())) {
                 Optional<DashboardLayout> optionalLayout = dashboardLayoutRepository.findById(tempLayout.moduleId());
                 DashboardLayout dashboardLayout = optionalLayout.orElse(null);
+                assert dashboardLayout != null;
                 dashboardLayout.setH(tempLayout.h());
                 dashboardLayout.setW(tempLayout.w());
                 dashboardLayout.setY(tempLayout.y());

@@ -22,14 +22,14 @@ import java.util.*;
 @RestController
 public class SubscriptionController {
     private final SubscriptionRepository subscriptionRepository;
-    private final DashboardController dashboardController;
+    private final FeedController feedController;
     private final UserService userService;
 
     @Autowired
-    public SubscriptionController(SubscriptionRepository subscriptionRepository,
-                                  DashboardController dashboardController, UserService userService) {
+    public SubscriptionController(SubscriptionRepository subscriptionRepository, FeedController feedController,
+                                  UserService userService) {
         this.subscriptionRepository = subscriptionRepository;
-        this.dashboardController = dashboardController;
+        this.feedController = feedController;
         this.userService = userService;
     }
 
@@ -125,7 +125,7 @@ public class SubscriptionController {
         //we want the latest poster at the top, therefore, reverse order is used(default is ascending order)
         TreeMap<Instant, User> analystsLastPostTime = new TreeMap<>(Collections.reverseOrder());
         for (User currentAnalyst : subscribedToAnalysts) {
-            analystsLastPostTime.put(dashboardController.fetchAnalystsLastPostTime(currentAnalyst), currentAnalyst);
+            analystsLastPostTime.put(feedController.fetchAnalystsLastPostTime(currentAnalyst), currentAnalyst);
         }
         List<ProfileDTO> profiles = craftProfileListFromInstantAndUserTreemap(analystsLastPostTime);
 
@@ -155,7 +155,7 @@ public class SubscriptionController {
         //we want the latest poster at the top, therefore, reverse order is used(default is ascending order)
         TreeMap<Instant, User> analystsLastUpdateTime = new TreeMap<>(Collections.reverseOrder());
         for (User currentAnalyst : subscribedToAnalysts) {
-            analystsLastUpdateTime.put(dashboardController.fetchAnalystsLastUpdateTime(currentAnalyst), currentAnalyst);
+            analystsLastUpdateTime.put(feedController.fetchAnalystsLastUpdateTime(currentAnalyst), currentAnalyst);
         }
         List<ProfileDTO> profiles = craftProfileListFromInstantAndUserTreemap(analystsLastUpdateTime);
 
