@@ -29,5 +29,22 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
      */
     Optional<Subscription> findBySubscriberAndSubscribedTo(User subscriber, User subscribedTo);
 
+    /**
+     * Finds all subscriptions for a target user
+     *
+     * @param subscriber the target user
+     * @return List of all subscriptions for the target user
+     */
     List<Subscription> findBySubscriber(User subscriber);
+
+    /**
+     * Finds all subscribers for a target user
+     *
+     * @param targetUser the target user
+     * @return List of all subscribers for the target user
+     */
+    List<Subscription> findBySubscribedTo(User targetUser);
+
+    Integer countAllBySubscribedTo(User targetUser);
+
 }

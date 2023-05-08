@@ -2,8 +2,12 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
+import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.SubscriptionRepository;
@@ -136,11 +140,7 @@ public class SubscriptionController {
         for (User currentAnalyst : subscribedToAnalysts) {
             analystsLastPostTime.put(dashboardController.fetchAnalystsLastPostTime(currentAnalyst), currentAnalyst);
         }
-        List<User> sortedUserList = new ArrayList<>(analystsLastPostTime.values());
-
-        List<ProfileDTO> profileDTOList = new ArrayList<>();
-        sortedUserList.forEach((currentUser) -> profileDTOList.add(
-                new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
+        List<ProfileDTO> profileDTOList = craftProfileListFromInstantAndUserTreemap(analystsLastPostTime);
 
         return ResponseEntity.ok().body(profileDTOList);
     }
@@ -167,17 +167,61 @@ public class SubscriptionController {
         }
 
         //we want the latest poster at the top, therefore, reverse order is used(default is ascending order)
-        TreeMap<Instant, User> analystsLastPostTime = new TreeMap<>(Collections.reverseOrder());
+        TreeMap<Instant, User> analystsLastUpdateTime = new TreeMap<>(Collections.reverseOrder());
         for (User currentAnalyst : subscribedToAnalysts) {
-            analystsLastPostTime.put(dashboardController.fetchAnalystsLastUpdateTime(currentAnalyst), currentAnalyst);
+            analystsLastUpdateTime.put(dashboardController.fetchAnalystsLastUpdateTime(currentAnalyst), currentAnalyst);
         }
-        List<User> sortedUserList = new ArrayList<>(analystsLastPostTime.values());
+        List<ProfileDTO> profileDTOList = craftProfileListFromInstantAndUserTreemap(analystsLastUpdateTime);
+
+        return ResponseEntity.ok().body(profileDTOList);
+    }
+
+    /**
+     * Fetches the subscription count for the logged-in user
+     *
+     * @param principal the logged-in user
+     * @return the subscription count for the logged-in user
+     */
+    @GetMapping("/subscriptions/get-my-subscribe-count")
+    public ResponseEntity<Integer> fetchSubCountForPrincipal(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User targetUser = principal.getUser();
+
+        Integer subscriptionCount = subscriptionRepository.countAllBySubscribedTo(targetUser);
+
+        return ResponseEntity.ok().body(subscriptionCount);
+    }
+
+    /**
+     * Fetches the subscription count for the target user
+     *
+     * @param targetUsername the username of the target user
+     * @return the subscription count for the target user
+     */
+    @GetMapping("/subscriptions/get-subscribe-count")
+    public ResponseEntity<Integer> fetchSubCountForTarget(@RequestParam String targetUsername) {
+        User targetUser = userService.getUserOrNull(targetUsername);
+        if (targetUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Integer subscriptionCount = subscriptionRepository.countAllBySubscribedTo(targetUser);
+
+        return ResponseEntity.ok().body(subscriptionCount);
+    }
+
+    /**
+     * Helper method to craft a profile list from a treemap of instants and users
+     *
+     * @param analystsLastUpdateTime the treemap of instants and users
+     * @return a profile list in the same order as the treemap
+     */
+    private List<ProfileDTO> craftProfileListFromInstantAndUserTreemap(TreeMap<Instant, User> analystsLastUpdateTime) {
+        List<User> sortedUserList = new ArrayList<>(analystsLastUpdateTime.values());
 
         List<ProfileDTO> profileDTOList = new ArrayList<>();
         sortedUserList.forEach((currentUser) -> profileDTOList.add(
                 new ProfileDTO(currentUser.getUsername(), currentUser.getId())));
-
-        return ResponseEntity.ok().body(profileDTOList);
+        return profileDTOList;
     }
 
     /**

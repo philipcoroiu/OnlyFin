@@ -28,7 +28,8 @@ public class UserService {
     }
 
     /**
-     * Returns a user with the given username if it exists else throws an exception.
+     * Returns a user with the given username if it exists.
+     * Else throws a UsernameNotFound exception which causes a redirect to the login page to occur
      *
      * @param username The username of the user to be returned.
      * @return The user with the given username if it exists.

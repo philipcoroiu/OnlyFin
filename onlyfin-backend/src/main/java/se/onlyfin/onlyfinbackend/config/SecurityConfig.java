@@ -79,7 +79,9 @@ public class SecurityConfig {
                                 "/find-analysts-that-cover-stock",
                                 "/reviews/**",
                                 "/error",
-                                "/password-update"
+                                "/password-update",
+                                "/subscriptions/get-my-subscribe-count",
+                                "/subscriptions/get-subscribe-count"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

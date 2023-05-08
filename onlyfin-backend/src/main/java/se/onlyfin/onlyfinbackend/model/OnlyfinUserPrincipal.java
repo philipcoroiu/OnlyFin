@@ -79,4 +79,12 @@ public class OnlyfinUserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    /**
+     * @return the user object.
+     */
+    public User getUser() {
+        return user;
+    }
+
 }
