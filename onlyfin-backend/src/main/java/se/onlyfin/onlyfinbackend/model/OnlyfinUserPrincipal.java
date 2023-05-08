@@ -80,11 +80,4 @@ public class OnlyfinUserPrincipal implements UserDetails {
         return true;
     }
 
-    /**
-     * @return the user object.
-     */
-    public User getUser() {
-        return user;
-    }
-
 }

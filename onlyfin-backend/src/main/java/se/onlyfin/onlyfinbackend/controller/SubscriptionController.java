@@ -3,15 +3,14 @@ package se.onlyfin.onlyfinbackend.controller;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
-import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.SubscriptionRepository;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
 
@@ -41,8 +40,8 @@ public class SubscriptionController {
      * @return response entity with the username of the subscribed-to user if successful
      */
     @PostMapping("/subscribe")
-    public ResponseEntity<String> addSubscription(@RequestParam("username") String username, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User subscribingUser = principal.getUser();
+    public ResponseEntity<String> addSubscription(@RequestParam("username") String username, Principal principal) {
+        User subscribingUser = userService.getUserOrException(principal.getName());
 
         User userToSubscribeTo = userService.getUserOrNull(username);
         if (userToSubscribeTo == null) {
@@ -69,8 +68,8 @@ public class SubscriptionController {
      * @return response entity with the username of the unsubscribed-from user if successful
      */
     @DeleteMapping("/unsubscribe")
-    public ResponseEntity<String> removeSubscription(@RequestParam("username") String username, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User userWantingToUnsubscribe = principal.getUser();
+    public ResponseEntity<String> removeSubscription(@RequestParam("username") String username, Principal principal) {
+        User userWantingToUnsubscribe = userService.getUserOrException(principal.getName());
 
         User userToUnsubscribeFrom = userService.getUserOrNull(username);
         if (userToUnsubscribeFrom == null) {
@@ -96,8 +95,10 @@ public class SubscriptionController {
      * @return profile list containing the user's subscriptions
      */
     @GetMapping("/fetch-current-user-subscriptions")
-    public ResponseEntity<List<ProfileDTO>> fetchCurrentUserSubscriptions(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        List<ProfileDTO> profiles = getCurrentUserSubscriptions(principal);
+    public ResponseEntity<List<ProfileDTO>> fetchCurrentUserSubscriptions(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
+
+        List<ProfileDTO> profiles = getUserSubscriptionsAsProfiles(fetchingUser);
 
         return ResponseEntity.ok().body(profiles);
     }
@@ -109,8 +110,8 @@ public class SubscriptionController {
      * @return postdate-sorted analyst profile list
      */
     @GetMapping("/user-subscription-list-sorted-by-postdate")
-    public ResponseEntity<List<ProfileDTO>> generateUserSubscriptionListByPostDate(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileDTO>> generateUserSubscriptionListByPostDate(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<Subscription> subscriptions = new ArrayList<>(subscriptionRepository.findBySubscriber(fetchingUser));
         if (subscriptions.isEmpty()) {
@@ -139,8 +140,8 @@ public class SubscriptionController {
      * @return updated-date-sorted analyst profile list
      */
     @GetMapping("/user-subscription-list-sorted-by-update-date")
-    public ResponseEntity<List<ProfileDTO>> generateUserSubscriptionListByUpdateDate(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileDTO>> generateUserSubscriptionListByUpdateDate(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<Subscription> subscriptions = new ArrayList<>(subscriptionRepository.findBySubscriber(fetchingUser));
         if (subscriptions.isEmpty()) {
@@ -169,8 +170,8 @@ public class SubscriptionController {
      * @return the subscription count for the logged-in user
      */
     @GetMapping("/subscriptions/get-my-subscribe-count")
-    public ResponseEntity<Integer> fetchSubCountForPrincipal(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User targetUser = principal.getUser();
+    public ResponseEntity<Integer> fetchSubCountForPrincipal(Principal principal) {
+        User targetUser = userService.getUserOrNull(principal.getName());
 
         Integer subscriptionCount = subscriptionRepository.countAllBySubscribedTo(targetUser);
 
@@ -221,19 +222,15 @@ public class SubscriptionController {
         return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
     }
 
-    public List<ProfileDTO> getCurrentUserSubscriptions(@NonNull OnlyfinUserPrincipal principal) {
-        User userToFetchSubscriptionsFrom = principal.getUser();
+    public List<ProfileDTO> getUserSubscriptionsAsProfiles(@NonNull User targetUser) {
+        List<Subscription> subscriptions = new ArrayList<>(subscriptionRepository.findBySubscriber(targetUser));
 
-        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchSubscriptionsFrom);
-        return getProfilesFromSubscriptions(subscriptions);
-    }
-
-    private List<ProfileDTO> getProfilesFromSubscriptions(List<Subscription> subscriptions) {
         List<ProfileDTO> profiles = new ArrayList<>();
         subscriptions.forEach((currentSubscription) -> profiles.add(new ProfileDTO(
                 currentSubscription.getSubscribedTo().getUsername(),
                 currentSubscription.getSubscribedTo().getId()))
         );
+
         return profiles;
     }
 

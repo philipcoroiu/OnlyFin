@@ -2,18 +2,17 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileWithSubInfoForLoggedInUserDTO;
-import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.StockRef;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
+import java.security.Principal;
 import java.util.*;
 
 /**
@@ -43,8 +42,8 @@ public class SearchController {
      * @return a list of all analysts in the database.
      */
     @GetMapping("/search-all-analysts")
-    public ResponseEntity<List<ProfileDTO>> findAllAnalysts(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileDTO>> findAllAnalysts(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<User> foundUsers = new ArrayList<>(userService.getAllAnalysts());
         foundUsers.remove(fetchingUser);
@@ -80,8 +79,8 @@ public class SearchController {
      * @return a list of analysts that match the search string.
      */
     @GetMapping("/search-analyst")
-    public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileDTO>> searchForAnalysts(@RequestParam String search, Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<User> foundUsers = new ArrayList<>(userService.findAnalystWithUsernameStartingWith(search));
         foundUsers.remove(fetchingUser);
@@ -102,8 +101,8 @@ public class SearchController {
      * @return a list of analysts that match the search string.
      */
     @GetMapping("/search-analyst-include-sub-info")
-    public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> searchForAnalystsWithSubsIncluded(@RequestParam String search, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> searchForAnalystsWithSubsIncluded(@RequestParam String search, Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<User> foundUsers = new ArrayList<>(userService.findAnalystWithUsernameStartingWith(search));
         foundUsers.remove(fetchingUser);
@@ -113,7 +112,7 @@ public class SearchController {
 
         List<ProfileDTO> foundProfiles = createProfileList(foundUsers);
 
-        List<ProfileDTO> subscriptions = subscriptionController.getCurrentUserSubscriptions(principal);
+        List<ProfileDTO> subscriptions = subscriptionController.getUserSubscriptionsAsProfiles(fetchingUser);
         if (subscriptions == null) {
             return ResponseEntity.ok().body(getProfilesWithSubscribingFalse(foundProfiles));
         }
@@ -130,8 +129,8 @@ public class SearchController {
      * @return a list of all analysts.
      */
     @GetMapping("/search-all-analysts-include-sub-info")
-    public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> fetchAllAnalystsWithSubsIncluded(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> fetchAllAnalystsWithSubsIncluded(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<User> analysts = new ArrayList<>(userService.getAllAnalysts());
         analysts.remove(fetchingUser);
@@ -141,7 +140,7 @@ public class SearchController {
 
         List<ProfileDTO> analystProfiles = createProfileList(analysts);
 
-        List<ProfileDTO> subscriptions = subscriptionController.getCurrentUserSubscriptions(principal);
+        List<ProfileDTO> subscriptions = subscriptionController.getUserSubscriptionsAsProfiles(fetchingUser);
         if (subscriptions == null) {
             return ResponseEntity.ok().body(getProfilesWithSubscribingFalse(analystProfiles));
         }
@@ -159,8 +158,8 @@ public class SearchController {
      * @return list of analysts covering target stock
      */
     @GetMapping("/find-analysts-that-cover-stock")
-    public ResponseEntity<List<ProfileDTO>> findAnalystsThatCoverStock(@RequestParam String stockName, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<ProfileDTO>> findAnalystsThatCoverStock(@RequestParam String stockName, Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         StockRef targetStock = stockReferenceController.fetchStockRefByName(stockName).orElseThrow();
 

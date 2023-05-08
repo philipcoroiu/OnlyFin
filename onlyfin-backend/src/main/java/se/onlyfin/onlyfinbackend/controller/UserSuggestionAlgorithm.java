@@ -1,14 +1,12 @@
 package se.onlyfin.onlyfinbackend.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserRecommendationDTO;
-import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
@@ -16,6 +14,7 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.Stock;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.StockRef;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
+import java.security.Principal;
 import java.util.*;
 
 @RestController
@@ -41,9 +40,9 @@ public class UserSuggestionAlgorithm {
      * @return No-content if no suggestions can be made or List if suggestions can be made
      */
     @GetMapping("/by-stocks-covered-weighed-by-post-amount")
-    public ResponseEntity<List<UserRecommendationDTO>> suggestAnalystsBasedOnCommonStock(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+    public ResponseEntity<List<UserRecommendationDTO>> suggestAnalystsBasedOnCommonStock(Principal principal) {
         //fetch logged-in user
-        User fetchingUser = principal.getUser();
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         //fetch subscriptions from logged-in user
         List<Subscription> subscriptions = new ArrayList<>(fetchingUser.getSubscriptions());

@@ -3,7 +3,6 @@ package se.onlyfin.onlyfinbackend.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import se.onlyfin.onlyfinbackend.DTO.FeedCardDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockDTO;
 import se.onlyfin.onlyfinbackend.model.FeedCard;
-import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
@@ -57,8 +55,8 @@ public class FeedController {
      * @return a list of feed cards
      */
     @GetMapping("/all-the-things")
-    public ResponseEntity<List<FeedCardDTO>> fetchFeedAll(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User fetchingUser = principal.getUser();
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedAll(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
         List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(fetchingUser);
         if (subscriptions.isEmpty()) {
@@ -85,8 +83,8 @@ public class FeedController {
      * @return a list of feed cards from the last 7 days
      */
     @GetMapping("/week")
-    public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
-        User userToFetchFeedFor = principal.getUser();
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(Principal principal) {
+        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
 
         List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
         if (subscriptions.isEmpty()) {
