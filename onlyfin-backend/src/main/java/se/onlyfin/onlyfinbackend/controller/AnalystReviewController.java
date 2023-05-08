@@ -3,10 +3,12 @@ package se.onlyfin.onlyfinbackend.controller;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewDTO;
 import se.onlyfin.onlyfinbackend.DTO.AnalystReviewPostDTO;
 import se.onlyfin.onlyfinbackend.model.AnalystReview;
+import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.AnalystReviewRepository;
 import se.onlyfin.onlyfinbackend.service.UserService;
@@ -42,12 +44,12 @@ public class AnalystReviewController {
      */
     @PutMapping("/post")
     @Transactional
-    public ResponseEntity<String> addReviewForUser(@RequestBody @NotNull AnalystReviewPostDTO analystReviewPostDTO, Principal principal) {
+    public ResponseEntity<String> addReviewForUser(@RequestBody @NotNull AnalystReviewPostDTO analystReviewPostDTO, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
         if (analystReviewPostDTO.reviewText() == null || analystReviewPostDTO.targetUsername() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        User authorOfReview = userService.getUserOrException(principal.getName());
+        User authorOfReview = principal.getUser();
 
         User targetUser = userService.getUserOrNull(analystReviewPostDTO.targetUsername());
         if (targetUser == null) {
@@ -140,18 +142,18 @@ public class AnalystReviewController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<AnalystReview> reviewList = new ArrayList<>(targetUser.getReviews());
-        if (reviewList.isEmpty()) {
+        List<AnalystReview> reviews = new ArrayList<>(targetUser.getReviews());
+        if (reviews.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
-        List<AnalystReviewDTO> reviewDTOList = reviewList.stream()
+        List<AnalystReviewDTO> reviewDTOs = reviews.stream()
                 .map(currentReview -> new AnalystReviewDTO(
                         currentReview.getAuthorUsername(),
                         currentReview.getReviewText()))
                 .toList();
 
-        return ResponseEntity.ok().body(reviewDTOList);
+        return ResponseEntity.ok().body(reviewDTOs);
     }
 
 }

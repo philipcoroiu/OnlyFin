@@ -1,15 +1,16 @@
 package se.onlyfin.onlyfinbackend.controller;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeDTO;
 import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.PasswordUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
+import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
@@ -42,19 +43,15 @@ public class UserController {
      */
     @GetMapping("/user-debug")
     @Deprecated
-    public ResponseEntity<User> fetchUserDebug(Principal principal, @RequestParam(required = false) String username) {
+    public ResponseEntity<User> fetchUserDebug(@AuthenticationPrincipal OnlyfinUserPrincipal principal, @RequestParam(required = false) String username) {
         if (!username.isEmpty()) {
             User targetUser = userService.getUserOrNull(username);
-            if (targetUser != null) {
-                return ResponseEntity.ok().body(targetUser);
-            }
+            return ResponseEntity.ok().body(targetUser);
         }
 
         if (principal != null) {
-            User targetUser = userService.getUserOrNull(principal.getName());
-            if (targetUser != null) {
-                return ResponseEntity.ok().body(targetUser);
-            }
+            User fetchingUser = principal.getUser();
+            return ResponseEntity.ok().body(fetchingUser);
         }
 
         return ResponseEntity.badRequest().build();
@@ -83,8 +80,8 @@ public class UserController {
      * @return ResponseEntity with status code 200 if the user was successfully made an analyst.
      */
     @PutMapping("/enable-analyst")
-    public ResponseEntity<String> enableAnalyst(Principal principal) {
-        User targetUser = userService.getUserOrException(principal.getName());
+    public ResponseEntity<String> enableAnalyst(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User targetUser = principal.getUser();
         boolean succeeded = userService.enableAnalyst(targetUser);
 
         if (!succeeded) {
@@ -101,8 +98,8 @@ public class UserController {
      * @return ResponseEntity with status code 200 if the analyst was successfully made a regular user.
      */
     @PutMapping("/disable-analyst")
-    public ResponseEntity<String> disableAnalyst(Principal principal) {
-        User targetUser = userService.getUserOrException(principal.getName());
+    public ResponseEntity<String> disableAnalyst(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User targetUser = principal.getUser();
         boolean succeeded = userService.disableAnalyst(targetUser);
 
         if (!succeeded) {
@@ -119,10 +116,10 @@ public class UserController {
      * @return user id of principal
      */
     @GetMapping("/fetch-current-user-id")
-    public ResponseEntity<Integer> fetchCurrentUserId(Principal principal) {
-        User targetUser = userService.getUserOrException(principal.getName());
-        Integer userId = targetUser.getId();
+    public ResponseEntity<Integer> fetchCurrentUserId(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User targetUser = principal.getUser();
 
+        Integer userId = targetUser.getId();
         return ResponseEntity.ok().body(userId);
     }
 
@@ -134,10 +131,13 @@ public class UserController {
      */
     @GetMapping("/fetch-about-me")
     public ResponseEntity<String> fetchAboutMeFor(@RequestParam String username) {
-        User userToGetAboutMeFrom = userService.getUserOrException(username);
-        String aboutMeText = userToGetAboutMeFrom.getAboutMe();
+        User targetUser = userService.getUserOrNull(username);
+        if (targetUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.ok().body(aboutMeText);
+        String aboutMe = targetUser.getAboutMe();
+        return ResponseEntity.ok().body(aboutMe);
     }
 
     /**
@@ -147,18 +147,18 @@ public class UserController {
      * @return "about me" text & sub info
      */
     @GetMapping("/fetch-about-me-with-sub-info")
-    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, Principal principal) {
-        User fetchingUser = userService.getUserOrException(principal.getName());
+    public ResponseEntity<AboutMeDTO> fetchAboutMeWithSubInfoFor(@RequestParam String username, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User fetchingUser = principal.getUser();
 
-        User userToGetAboutMeFrom = userService.getUserOrNull(username);
-        if (userToGetAboutMeFrom == null) {
+        User targetUser = userService.getUserOrNull(username);
+        if (targetUser == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        boolean subscribed = subscriptionController.isUserSubscribedToThisUser(fetchingUser, userToGetAboutMeFrom);
-        AboutMeDTO aboutMeDTO = new AboutMeDTO(userToGetAboutMeFrom.getAboutMe(), subscribed);
+        boolean isSubscribed = subscriptionController.isUserSubscribedToThisUser(fetchingUser, targetUser);
+        AboutMeDTO aboutMe = new AboutMeDTO(targetUser.getAboutMe(), isSubscribed);
 
-        return ResponseEntity.ok().body(aboutMeDTO);
+        return ResponseEntity.ok().body(aboutMe);
     }
 
     /**
@@ -169,14 +169,14 @@ public class UserController {
      * @return Updated text if ok, bad request otherwise
      */
     @PutMapping("update-about-me")
-    public ResponseEntity<String> updateAboutMe(Principal principal, @RequestBody AboutMeUpdateDTO aboutMeUpdateDTO) {
+    public ResponseEntity<String> updateAboutMe(@AuthenticationPrincipal OnlyfinUserPrincipal principal, @RequestBody AboutMeUpdateDTO aboutMeUpdateDTO) {
         if (aboutMeUpdateDTO == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        User userWantingToUpdateAboutMe = userService.getUserOrException(principal.getName());
-        userWantingToUpdateAboutMe.setAboutMe(aboutMeUpdateDTO.text());
-        userService.updateUser(userWantingToUpdateAboutMe);
+        User actingUser = principal.getUser();
+        actingUser.setAboutMe(aboutMeUpdateDTO.text());
+        userService.updateUser(actingUser);
 
         return ResponseEntity.ok().body(aboutMeUpdateDTO.text());
     }
@@ -189,9 +189,9 @@ public class UserController {
      */
     @GetMapping("/principal-username")
     public ResponseEntity<String> fetchUsernameOfPrincipal(Principal principal) {
-        User userToGetUsernameOf = userService.getUserOrException(principal.getName());
+        String username = principal.getName();
 
-        return ResponseEntity.ok().body(userToGetUsernameOf.getUsername());
+        return ResponseEntity.ok().body(username);
     }
 
     /**
@@ -201,10 +201,10 @@ public class UserController {
      * @return user id of principal
      */
     @GetMapping("/principal-id")
-    public ResponseEntity<Integer> fetchUserIdOfPrincipal(Principal principal) {
-        User userToGetUserIdOf = userService.getUserOrException(principal.getName());
+    public ResponseEntity<Integer> fetchUserIdOfPrincipal(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User fetchingUser = principal.getUser();
 
-        return ResponseEntity.ok().body(userToGetUserIdOf.getId());
+        return ResponseEntity.ok().body(fetchingUser.getId());
     }
 
     /**
@@ -216,16 +216,16 @@ public class UserController {
      * @return Status code 200 if the password was successfully changed.
      */
     @PostMapping("/password-update")
-    public ResponseEntity<String> changeUserPassword(@RequestBody PasswordUpdateDTO passwordUpdateDTO, Principal principal) {
-        User userToChangePassword = userService.getUserOrException(principal.getName());
+    public ResponseEntity<String> changeUserPassword(@RequestBody PasswordUpdateDTO passwordUpdateDTO, @AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User userToChangePassword = principal.getUser();
 
         boolean succeeded = userService.passwordChange(userToChangePassword, passwordUpdateDTO.oldPassword(), passwordUpdateDTO.newPassword());
 
-        if (succeeded) {
-            return ResponseEntity.ok().body("Updated password");
-        } else {
+        if (!succeeded) {
             return ResponseEntity.badRequest().body("Password does not match");
         }
+
+        return ResponseEntity.ok().body("Updated password");
     }
 
 }

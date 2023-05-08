@@ -63,7 +63,7 @@ public class DashboardController {
     }
 
     @GetMapping("/getStockRef")
-    public ResponseEntity<?> getStockRef() {
+    public ResponseEntity<List<StockRef>> getStockRef() {
         List<StockRef> stockRefs = stockRefRepository.findAll();
 
         return ResponseEntity.ok(stockRefs);
@@ -103,7 +103,7 @@ public class DashboardController {
      * @param analysts analysts to include
      * @return map of stocks and who covers them
      */
-    public HashMap<StockRef, ArrayList<User>> fetchCoverageMap(List<User> analysts) {
+    public HashMap<StockRef, ArrayList<User>> createCoverageMap(List<User> analysts) {
         HashMap<StockRef, ArrayList<User>> coverageMap = new HashMap<>();
 
         ArrayList<User> analystList = new ArrayList<>(analysts);

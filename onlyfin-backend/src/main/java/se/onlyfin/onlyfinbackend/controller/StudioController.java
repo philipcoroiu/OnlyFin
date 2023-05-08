@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.LayoutDTO;
 import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
-import se.onlyfin.onlyfinbackend.DTO.LayoutArrayDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
 
@@ -83,6 +82,7 @@ public class StudioController {
      * @return name of new category if successful
      */
     @PostMapping("/createCategoryUsingStockId")
+    @Deprecated
     public ResponseEntity<String> createCategoryUsingStockId(Integer stockId, String nameOfNewCategory) {
         if (nameOfNewCategory.isBlank()) {
             return ResponseEntity.badRequest().build();
@@ -114,7 +114,7 @@ public class StudioController {
             categoryRepository.deleteById(intId);
             return "Removed category successfully";
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return "Could not remove category";
     }

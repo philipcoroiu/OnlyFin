@@ -2,6 +2,7 @@ package se.onlyfin.onlyfinbackend.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import se.onlyfin.onlyfinbackend.DTO.FeedCardDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockDTO;
 import se.onlyfin.onlyfinbackend.model.FeedCard;
+import se.onlyfin.onlyfinbackend.model.OnlyfinUserPrincipal;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.Category;
@@ -54,10 +56,10 @@ public class FeedController {
      * @return a list of feed cards
      */
     @GetMapping("/all-the-things")
-    public ResponseEntity<List<FeedCardDTO>> fetchFeedAll(Principal principal) {
-        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedAll(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User fetchingUser = principal.getUser();
 
-        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
+        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(fetchingUser);
         if (subscriptions.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -70,7 +72,7 @@ public class FeedController {
             analystUsernameToIdMap.put(currentAnalyst.getUsername(), currentAnalyst.getId());
         }
 
-        List<FeedCardDTO> feedCardDTOS = craftFeedCardDTOList(analystUsernameToIdMap, feedCards);
+        List<FeedCardDTO> feedCardDTOS = createFeedCardDTOList(analystUsernameToIdMap, feedCards);
 
         return ResponseEntity.ok().body(feedCardDTOS);
     }
@@ -82,8 +84,8 @@ public class FeedController {
      * @return a list of feed cards from the last 7 days
      */
     @GetMapping("/week")
-    public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(Principal principal) {
-        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(@AuthenticationPrincipal OnlyfinUserPrincipal principal) {
+        User userToFetchFeedFor = principal.getUser();
 
         List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
         if (subscriptions.isEmpty()) {
@@ -102,9 +104,9 @@ public class FeedController {
             analystUsernameToId.put(currentAnalyst.getUsername(), currentAnalyst.getId());
         }
 
-        List<FeedCardDTO> feedCardDTOS = craftFeedCardDTOList(analystUsernameToId, feedCards);
+        List<FeedCardDTO> feedCardDTOs = createFeedCardDTOList(analystUsernameToId, feedCards);
 
-        return ResponseEntity.ok().body(feedCardDTOS);
+        return ResponseEntity.ok().body(feedCardDTOs);
     }
 
     /**
@@ -182,8 +184,8 @@ public class FeedController {
 
             Dashboard ownersDashboard = dashboardController.fetchDashboardOrNull(
                     currentSubscription
-                    .getSubscribedTo()
-                    .getId());
+                            .getSubscribedTo()
+                            .getId());
 
             dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
         }
@@ -327,7 +329,7 @@ public class FeedController {
      * @param feedCards              list of feed cards
      * @return a list of feed card DTOs
      */
-    private static List<FeedCardDTO> craftFeedCardDTOList(HashMap<String, Integer> analystUsernameToIdMap, ArrayList<FeedCard> feedCards) {
+    private static List<FeedCardDTO> createFeedCardDTOList(HashMap<String, Integer> analystUsernameToIdMap, ArrayList<FeedCard> feedCards) {
         return feedCards.stream()
                 .map(feedCard -> new FeedCardDTO(
                         new ProfileDTO(feedCard.getAnalystUsername(), analystUsernameToIdMap.get(feedCard.getAnalystUsername())),
