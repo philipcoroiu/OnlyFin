@@ -346,7 +346,7 @@ public class FeedController {
     }
 
     public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
-        Optional<FeedCard> latestInstantOptional = feedCardRepository.findLatestPostDateByAnalystUsername(targetAnalyst.getUsername());
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findFirstByAnalystUsernameOrderByPostDateDesc(targetAnalyst.getUsername());
         if (latestInstantOptional.isPresent()) {
             return latestInstantOptional.get().getPostDate();
         } else {
@@ -355,7 +355,7 @@ public class FeedController {
     }
 
     public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
-        Optional<FeedCard> latestInstantOptional = feedCardRepository.findLatestUpdateDateByAnalystUsername(targetAnalyst.getUsername());
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findFirstByAnalystUsernameOrderByUpdatedDateDesc(targetAnalyst.getUsername());
         if (latestInstantOptional.isPresent()) {
             return latestInstantOptional.get().getPostDate();
         } else {
