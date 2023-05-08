@@ -84,9 +84,9 @@ public class FeedController {
      */
     @GetMapping("/week")
     public ResponseEntity<List<FeedCardDTO>> fetchFeedWeek(Principal principal) {
-        User userToFetchFeedFor = userService.getUserOrException(principal.getName());
+        User fetchingUser = userService.getUserOrException(principal.getName());
 
-        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(userToFetchFeedFor);
+        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(fetchingUser);
         if (subscriptions.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
