@@ -117,11 +117,9 @@ export default function Studio() {
         exporting: {
             chartOptions: {
                 subtitle: {
-                    text: 'Custom export subtitle',
+                    text: 'Created by "username" on OnlyFin',
                     style: {
-                        // Customize the text style during export
-                        fontSize: '12px',
-                        fontWeight: 'bold',
+                        fontSize: '8px',
                         color: '#000'
                     }
                 }
