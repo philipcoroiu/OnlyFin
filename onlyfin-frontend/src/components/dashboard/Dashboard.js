@@ -247,11 +247,22 @@ export default function Dashboard() {
         <div className="dashboard">
             <NavBar />
             <div className="dashboard-content-wrapper">
-                <div className="dashboard-button-underlay"></div>
-                <Link to="/profile_page">
-                    <button className="dashboard-profile-button">
-                    </button>
-                </Link>
+                <div className="dashboard-button-underlay">
+                    <div className="dashboard-profile-corner">
+                        <Link to="/profile_page">
+                            <button className="dashboard-profile-button">
+                            </button>
+                        </Link>
+                        <div>
+                            <p className="dashboard-profile-name">
+                                userName
+                            </p>
+                            <button className="dashboard-profile-subscribe">
+                                hej
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div className="dashboard-stock-tab-container">
                     <div className="dashboard-stock-tab-buttons">
                         {/* --STOCK BUTTONS-- */}
