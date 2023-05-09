@@ -11,11 +11,6 @@ export default function Home() {
                 <h2 className="welcome--navbar--title">OnlyFin</h2>
                 <ul className="navbar--text">
                     <li>
-                        <NavLink to='/'>
-                            Home
-                        </NavLink>
-                    </li>
-                    <li>
                         <NavLink to="Login">
                             Log in
                         </NavLink>
