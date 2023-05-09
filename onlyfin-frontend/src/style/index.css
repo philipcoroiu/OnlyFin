@@ -1093,7 +1093,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     margin-right: 16px;
     margin-left: 16px;
     right: 0;
-    left:var(--container-width);
+    left: var(--container-width);
     border-radius: 20px 20px 0 0;
     background-color: #ffffff;
     z-index: 2;
@@ -1297,6 +1297,15 @@ Profile page
     margin-top: 8%;
 }
 
+.mypage-subscribed {
+    font-size: 20px;
+    margin: 0;
+}
+
+.subscribed-count {
+    border-bottom: 1px solid #b4b4b4;
+    font-weight: bold;
+}
 
 .mypage--bio--container {
     width: 40%;
@@ -1420,6 +1429,7 @@ Profile page
     width: 400px;
     height: 100px;
     text-align: center;
+
     word-wrap: break-word;
     overflow-wrap: break-word;
 }

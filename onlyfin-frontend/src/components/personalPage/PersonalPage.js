@@ -14,6 +14,7 @@ export default function PersonalPage() {
     const [isPosted, setIsPosted] = useState(false);
     const [reviews, setReviews] = useState()
     const [isVisible, setIsVisible] = React.useState(false)
+    const [subscribed, setSubscribed] = React.useState(0)
     const textareaRef = React.useRef()
     const autoscrollRef = React.useRef(null)
 
@@ -28,7 +29,6 @@ export default function PersonalPage() {
             const element = autoscrollRef.current;
             if (element) {
 
-                // Check the direction of scrolling and update the scroll position accordingly
                 if (scrollDir) {
                     if (element.scrollLeft < element.scrollWidth - element.clientWidth) {
                         setScrollPos(scrollPos + 1);
@@ -83,6 +83,8 @@ export default function PersonalPage() {
                 });
 
 
+
+
             } catch (error) {
                 if (error.response && error.response.status === 500) {
                     setIsPosted(false)
@@ -127,6 +129,17 @@ export default function PersonalPage() {
                     setPersonalName(responseUser.data)
 
                 });
+
+
+                const responseSubscribers = await axios.get(`http://localhost:8080/subscriptions/get-subscribe-count?targetUsername=${username}`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then(responseSubscribers => {
+                    setSubscribed(responseSubscribers.data)});
+
 
 
             } catch (error) {
@@ -283,6 +296,7 @@ export default function PersonalPage() {
                     </div>
                     <div className="mypage--text--container">
                         <h2>{username}</h2>
+                        <p className="mypage-subscribed"> <span className="subscribed-count">{subscribed}</span> Subs</p>
                         <div className="mypage--bio--container">
                             <p>{userData.aboutMe}</p>
                             <div className="mypage-buttons">

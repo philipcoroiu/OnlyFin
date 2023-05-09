@@ -11,6 +11,7 @@ export default function PersonalPage() {
     const [username, setUsername] = React.useState();
     const [userData, setUserData] = React.useState();
     const [isVisible, setIsVisible] = React.useState(false)
+    const [subscribed, setSubscribed] = React.useState(0)
     const autoscrollRef = React.useRef(null)
 
     const navigate = useNavigate();
@@ -78,6 +79,17 @@ export default function PersonalPage() {
                 console.log('API response:', response2.data);
                 console.log(username)
                 setUserData(response2.data);
+
+
+                const responseSubscribers = await axios.get(`http://localhost:8080/subscriptions/get-my-subscribe-count`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then(responseSubscribers => {
+                    setSubscribed(responseSubscribers.data)
+                });
 
 
             } catch (error) {
@@ -167,6 +179,7 @@ export default function PersonalPage() {
             </div>
             <div className="mypage--text--container">
                 <h2>{username}</h2>
+                <p className="mypage-subscribed"> <span className="subscribed-count">{subscribed}</span> Subs</p>
                 <div className="mypage--bio--container">
                     {isEditable ? (
                         <textarea
@@ -190,114 +203,6 @@ export default function PersonalPage() {
                  style={{overflowX: "auto", whiteSpace: "nowrap"}}
             >
                 {isVisible && showReviews}
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
-                <div className="personalPage-review-card">
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>test</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>test</p>
-                    </div>
-                </div>
             </div>
         </div>
     )
