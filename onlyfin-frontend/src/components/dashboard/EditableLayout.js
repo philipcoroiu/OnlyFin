@@ -91,7 +91,7 @@ export default function EditableLayout(props) {
                             </Link>
                         }
                         <HighchartsReact
-                            containerProps={{ style: { height: "100%", weight: "100%" } }}
+                            containerProps={{ style: { height: "100%", weight: "100%"} }}
                             highcharts={Highcharts}
                             options={moduleEntity.content}
 
