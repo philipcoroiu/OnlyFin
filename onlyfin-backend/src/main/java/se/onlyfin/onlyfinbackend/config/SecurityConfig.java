@@ -81,7 +81,8 @@ public class SecurityConfig {
                                 "/error",
                                 "/password-update",
                                 "/subscriptions/get-my-subscribe-count",
-                                "/subscriptions/get-subscribe-count"
+                                "/subscriptions/get-subscribe-count",
+                                "/subscriptions/is-user-subscribed-to"
                         )
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

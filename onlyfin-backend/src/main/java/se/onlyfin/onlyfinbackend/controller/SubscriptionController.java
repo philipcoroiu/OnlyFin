@@ -197,6 +197,27 @@ public class SubscriptionController {
     }
 
     /**
+     * Checks if the logged-in user is subscribed to the target user
+     *
+     * @param username  the username of the target user
+     * @param principal the logged-in user
+     * @return if the logged-in user is subscribed to the target user
+     */
+    @GetMapping("/subscriptions/is-user-subscribed-to")
+    public ResponseEntity<Boolean> isUserSubscribedToTarget(@RequestParam String username, Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
+
+        User targetUser = userService.getUserOrNull(username);
+        if (targetUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boolean isUserSubscribed = isUserSubscribedToThisUser(fetchingUser, targetUser);
+
+        return ResponseEntity.ok().body(isUserSubscribed);
+    }
+
+    /**
      * Helper method to craft a profile list from a treemap of instants and users
      *
      * @param analystsLastUpdateTime the treemap of instants and users
