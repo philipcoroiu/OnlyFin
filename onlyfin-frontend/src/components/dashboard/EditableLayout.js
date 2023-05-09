@@ -7,6 +7,8 @@ import HighchartsReact from "highcharts-react-official";
 import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import axios from "axios";
+import Exporting from 'highcharts/modules/exporting';
+Exporting(Highcharts);
 
 
 export default function EditableLayout(props) {
@@ -95,12 +97,10 @@ export default function EditableLayout(props) {
 
                         />
 
-                            <div style={{position: "absolute", padding: "8px", right: 0}}>
+                            <div style={{position: "absolute", padding: "8px"}}>
                                 {props.ownDashboard && <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
                                     <box-icon name='cog'></box-icon>
                                 </Link> }
-                                <box-icon name='download' ></box-icon>
-                                <box-icon name='zoom-in' ></box-icon>
                             </div>
 
 

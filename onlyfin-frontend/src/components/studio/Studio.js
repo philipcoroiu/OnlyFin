@@ -110,7 +110,8 @@ export default function Studio() {
             data: [""],
             borderWidth: 0,
             color: "#39a22a",
-        }]
+        }],
+        
     });
 
     /* messages shown to user */
