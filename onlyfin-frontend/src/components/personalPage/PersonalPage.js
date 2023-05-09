@@ -14,8 +14,41 @@ export default function PersonalPage() {
     const [isPosted, setIsPosted] = useState(false);
     const [reviews, setReviews] = useState()
     const [isVisible, setIsVisible] = React.useState(false)
+    const textareaRef = React.useRef()
+    const autoscrollRef = React.useRef(null)
 
     document.title = `${username}`
+
+    const [scrollPos, setScrollPos] = useState(0);
+    const [scrollDir, setScrollDir] = useState(true); // true for right, false for left
+
+    useEffect(() => {
+        const scrollInterval = setInterval(() => {
+            // Get the reference to the element that needs to be scrolled
+            const element = autoscrollRef.current;
+            if (element) {
+
+                // Check the direction of scrolling and update the scroll position accordingly
+                if (scrollDir) {
+                    if (element.scrollLeft < element.scrollWidth - element.clientWidth) {
+                        setScrollPos(scrollPos + 1);
+                        element.scrollLeft += 1; // scroll to the right
+                    } else {
+                        setScrollDir(false); // change direction to left
+                    }
+                } else {
+                    if (element.scrollLeft > 0) {
+                        setScrollPos(scrollPos - 1);
+                        element.scrollLeft -= 1; // scroll to the left
+                    } else {
+                        setScrollDir(true); // change direction to right
+                    }
+                }
+            }
+        }, 50);
+
+        return () => clearInterval(scrollInterval);
+    }, [scrollPos, scrollDir]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -231,27 +264,10 @@ export default function PersonalPage() {
     }
 
 
-    /*
-        const showReviews = reviews.map(review => {
-            return (
-                <div key={review.id}>
-                    <div className="personalPage-review-card-header">
-                        <img src={Avatar} style={{
-                            width: 50,
-                            height: 50
-                        }}/>
-                        <h3>{review.author}</h3>
-                    </div>
-                    <div className="personalPage-review-card-post-area">
-                        <p>{review.reviewText}</p>
-                    </div>
-                </div>
-            )
-        })
-    */
     const revertIsPosted = () => {
         setIsPosted(false)
     }
+
 
     return (
         <div>
@@ -269,19 +285,30 @@ export default function PersonalPage() {
                         <h2>{username}</h2>
                         <div className="mypage--bio--container">
                             <p>{userData.aboutMe}</p>
-                            <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
+                            <div className="mypage-buttons">
+                                <button
+                                    onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}
+                                </button>
+                                <button onClick={revertIsPosted} className="personalPage-review-card-edit">
+                                    Edit review
+                                </button>
+                            </div>
                         </div>
                     </div>
                     {isPosted ?
                         (
-                            <div className="personalPage-review-section">
+                            <div className="personalPage-review-section"
+                                 ref={autoscrollRef}
+                                 style={{overflowX: "auto", whiteSpace: "nowrap"}}
+                            >
                                 {isVisible && showReviews}
-                                <button onClick={revertIsPosted} className="personalPage-review-card-edit">edit</button>
                             </div>
                         )
                         :
                         (
-                            <div className="personalPage-review-section">
+                            <div className="personalPage-review-section"
+                                 style={{overflowX: "auto", whiteSpace: "nowrap"}}
+                            >
                                 <div className="personalPage-review-card">
 
                                     <div className="personalPage-review-card-header">
@@ -294,17 +321,19 @@ export default function PersonalPage() {
                                     </div>
                                     <div className="personalPage-review-card-post-area">
                                             <textarea
+                                                ref={textareaRef}
                                                 value={reviewText}
                                                 onChange={makeReview}
                                                 rows={5}
                                                 cols={30}
-                                                maxLength={700}
-                                                className=""
+                                                maxLength="150"
+                                                className="review-text-area"
                                             />
-                                        <button onClick={posted}>Post</button>
+                                        <button onClick={posted} >Post</button>
                                     </div>
                                 </div>
                                 {isVisible && showReviews}
+
                             </div>
                         )
                     }

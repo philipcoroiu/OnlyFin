@@ -11,10 +11,42 @@ export default function PersonalPage() {
     const [username, setUsername] = React.useState();
     const [userData, setUserData] = React.useState();
     const [isVisible, setIsVisible] = React.useState(false)
+    const autoscrollRef = React.useRef(null)
 
     const navigate = useNavigate();
 
     document.title = `${username}`
+
+    const [scrollPos, setScrollPos] = useState(0);
+    const [scrollDir, setScrollDir] = useState(true); // true for right, false for left
+
+    useEffect(() => {
+        const scrollInterval = setInterval(() => {
+            // Get the reference to the element that needs to be scrolled
+            const element = autoscrollRef.current;
+            if (element) {
+
+                // Check the direction of scrolling and update the scroll position accordingly
+                if (scrollDir) {
+                    if (element.scrollLeft < element.scrollWidth - element.clientWidth) {
+                        setScrollPos(scrollPos + 1);
+                        element.scrollLeft += 1; // scroll to the right
+                    } else {
+                        setScrollDir(false); // change direction to left
+                    }
+                } else {
+                    if (element.scrollLeft > 0) {
+                        setScrollPos(scrollPos - 1);
+                        element.scrollLeft -= 1; // scroll to the left
+                    } else {
+                        setScrollDir(true); // change direction to right
+                    }
+                }
+            }
+        }, 50);
+
+        return () => clearInterval(scrollInterval);
+    }, [scrollPos, scrollDir]);
 
     useEffect(() => {
 
@@ -142,17 +174,130 @@ export default function PersonalPage() {
                             onChange={handleTextAreaChange}
                             rows={5}
                             cols={30}
-                            maxLength={700}
+                            maxLength="100"
                             className="mypage--bio"
                         />
                     ) : (
                         <p>{userData}</p>
                     )}
-                    <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                    <div className="mypage-buttons">
+                        <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                    </div>
                 </div>
             </div>
-            <div className="personalPage-review-section">
+            <div className="personalPage-review-section"
+                 ref={autoscrollRef}
+                 style={{overflowX: "auto", whiteSpace: "nowrap"}}
+            >
                 {isVisible && showReviews}
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
+                <div className="personalPage-review-card">
+                    <div className="personalPage-review-card-header">
+                        <img src={Avatar} style={{
+                            width: 50,
+                            height: 50
+                        }}/>
+                        <h3>test</h3>
+                    </div>
+                    <div className="personalPage-review-card-post-area">
+                        <p>test</p>
+                    </div>
+                </div>
             </div>
         </div>
     )
