@@ -1332,7 +1332,7 @@ Profile page
     border: none;
     border-bottom: 1px solid #b4b4b4;
     outline: none;
-    padding: 0px;
+    padding: 0;
     margin: 20px;
     height: 80px;
     font-size: 15px;
@@ -1343,33 +1343,30 @@ Profile page
     background-color: #61dafb;
     position: absolute;
     width: 90%;
-    height: 33%;
+    height: 250px;
     top: 65%;
     left: 8%;
-    z-index: -1;
-    overflow-x: auto;
+    overflow-x: scroll;
 }
-
 
 .personalPage-review-card {
     display: flex;
+    position: relative;
     flex-direction: column;
-    margin: 1% 1%;
-    width: 30%;
-    height: 90%;
-    top: 5%;
+    margin: 10px;
+    width: 400px;
     background-color: red;
 }
 
 .personalPage-review-card-header {
     display: flex;
-    padding: 0 2%;
+    padding: 0 10px;
     align-items: center;
     background-color: #3bb273;
 }
 
 .personalPage-review-card-header > h3 {
-    margin-left: 5%;
+    margin-left: 15px;
 }
 
 .personalPage-review-card-post-area {
@@ -1377,7 +1374,7 @@ Profile page
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 75%;
+    height: 180px;
     font-size: 15px;
     background-color: #4d9de0;
 }
