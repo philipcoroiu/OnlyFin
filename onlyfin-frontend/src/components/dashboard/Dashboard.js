@@ -20,6 +20,7 @@ export default function Dashboard() {
     const [userId, setUserId] = useState();
     const [currentStockId, setCurrentStockId] = useState(null);
     const [currentCategoryId, setCurrentCategoryId] = useState(null);
+    const [userName, setUserName] = useState ("n/a")
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -51,6 +52,12 @@ export default function Dashboard() {
         if (!userId) {
             return; // exit early if userId is not yet defined
         }
+
+        console.log(userId)
+
+        axios.get("http://localhost:8080/getNameFromUserId/" + userId, {withCredentials:true}).then((response) => {
+            setUserName(response.data);
+        })
 
         axios.get("http://localhost:8080/dashboard/get/" + userId,
             {withCredentials: true}).then((response) => {
@@ -249,16 +256,16 @@ export default function Dashboard() {
             <div className="dashboard-content-wrapper">
                 <div className="dashboard-button-underlay">
                     <div className="dashboard-profile-corner">
-                        <Link to="/profile_page">
+                        <Link to="../searchpage/pumpndump">
                             <button className="dashboard-profile-button">
                             </button>
                         </Link>
-                        <div>
+                        <div className ="dashboard-profile-name-and-subscribe-container">
                             <p className="dashboard-profile-name">
-                                userName
+                                {userName}'s Dashboard
                             </p>
                             <button className="dashboard-profile-subscribe">
-                                hej
+                                subscribe
                             </button>
                         </div>
                     </div>

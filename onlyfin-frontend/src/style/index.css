@@ -1237,25 +1237,14 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     top: 17px;
     height: 80px;
     border: solid 1px black;
-    width: 250px;
     display: flex;
     justify-content: flex-end;
     flex-direction: row-reverse;
-}
-
-.dashboard-profile-subscribe {
-    border: solid 1px black;
-    display: flex;
-}
-
-.dashboard-profile-name {
-    border: solid 1px black;
-    display: flex;
+    align-items: flex-start;
 }
 
 .dashboard-profile-button {
     position: relative;
-    right: 0px;
     width: 80px;
     height: 80px;
     border-radius: 100px;
@@ -1266,6 +1255,32 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     background-size: 400px 400px;
     animation: gradient 25s ease infinite;
 }
+
+.dashboard-profile-name-and-subscribe-container {
+    align-items: center;
+    flex-direction: row;
+    border: solid 1px black;
+    margin-right: 25px;
+    align-items: center;
+
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.dashboard-profile-subscribe {
+    border: solid 1px black;
+
+}
+
+.dashboard-profile-name {
+    border: solid 1px black;
+    text-align: center;
+
+}
+
+
+
 
 
 .dashboard-is-loading {
