@@ -1558,6 +1558,14 @@ Search Page
 Feed
  */
 
+.feed-no-content{
+    position: absolute;
+    top: 40%;
+    left: 32%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .feed--charts--container {
 }
