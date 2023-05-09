@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, useRef} from "react"
 import {Responsive} from 'react-grid-layout';
 import { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -13,6 +13,8 @@ export default function EditableLayout(props) {
 
     const filteredLayout = props.dashboardLayout.filter(item => item.categoryId === props.category.id);
 
+    const layoutRef = useRef(null);
+
     const [isResizable, setIsResizable] = useState(false);
     const [isDraggable, setIsDraggable] = useState(false);
     const [layout, setLayout] = useState(filteredLayout.map((item, index) => ({
@@ -26,7 +28,7 @@ export default function EditableLayout(props) {
     const handleToggle = () => {
 
         if(isResizable){
-            const updatedLayout = layout.map((item) => ({
+            const updatedLayout = layoutRef.current.map((item) => ({
                 moduleId: parseInt(item.i),
                 categoryId: props.category.id,
                 x: item.x,
@@ -45,8 +47,9 @@ export default function EditableLayout(props) {
                     },
                     withCredentials: true,
                 }
+            ).then(
+                setLayout(layoutRef.current)
             )
-
         }
 
         setIsResizable(!isResizable);
@@ -55,16 +58,8 @@ export default function EditableLayout(props) {
 
     const ResponsiveGridLayout = WidthProvider(Responsive);
 
-    const onLayoutChange = (newLayout, event) => {
-
-        setLayout(newLayout)
-        console.log(newLayout)
-        console.log("dashboardLayout", props.dashboardLayout);
-        console.log(props.category.id
-        )
-
-
-
+    const handleLayoutChange = (newLayout) => {
+        layoutRef.current = newLayout;
     };
 
     return(
@@ -82,7 +77,7 @@ export default function EditableLayout(props) {
                 rowHeight={190}
                 isResizable={isResizable}
                 compactType="vertical"
-                onLayoutChange={(newLayout, event) => onLayoutChange(newLayout, event)}
+                onLayoutChange={(newLayout) => handleLayoutChange(newLayout)}
                 isBounded={true}
                 isDraggable={isDraggable}
                 autoPosition={[0, 0]}
