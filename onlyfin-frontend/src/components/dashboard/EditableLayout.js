@@ -7,6 +7,8 @@ import HighchartsReact from "highcharts-react-official";
 import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import axios from "axios";
+import Exporting from 'highcharts/modules/exporting';
+Exporting(Highcharts);
 
 
 export default function EditableLayout(props) {
@@ -81,21 +83,27 @@ export default function EditableLayout(props) {
                 isBounded={true}
                 isDraggable={isDraggable}
                 autoPosition={[0, 0]}
+                style={{margin: "15px"}}
+
             >
 
                 {props.category.moduleEntities.map((moduleEntity) => (
                     <div key={moduleEntity.id} className="dashboard-module-container">
-                        {props.ownDashboard &&
-                            <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                                <button>edit</button>
-                            </Link>
-                        }
+
                         <HighchartsReact
-                            containerProps={{ style: { height: "100%", weight: "100%" } }}
+                            containerProps={{ style: { height: "100%", weight: "100%"} }}
                             highcharts={Highcharts}
                             options={moduleEntity.content}
 
                         />
+
+                            <div style={{position: "absolute", padding: "8px"}}>
+                                {props.ownDashboard && <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
+                                    <box-icon name='cog'></box-icon>
+                                </Link> }
+                            </div>
+
+
                     </div>
                 ))}
             </ResponsiveGridLayout>
