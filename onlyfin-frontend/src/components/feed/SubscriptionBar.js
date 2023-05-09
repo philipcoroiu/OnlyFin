@@ -1,6 +1,7 @@
 import React, {useEffect} from "react"
 import axios from "axios";
 import SubscriptionProfile from "./SubscriptionProfile";
+import Avatar from "../../assets/images/avatar.png";
 
 export default function SubscriptionBar() {
 
@@ -58,36 +59,51 @@ export default function SubscriptionBar() {
 
     }, [])
 
+    const showSubs = []
+    if (subData) {
+        for (let i = 0; i < subData.length; i++) {
+            const suggestion = subData[i]
+            showSubs.push(
+                <div>
+                    <SubscriptionProfile key={i} username={subData[i].username}/>
+                </div>
+            )
+        }
+    }
+
+    const showSuggest = []
+    if (suggestedData) {
+        for (let i = 0; i < suggestedData.length; i++) {
+            const suggestion = suggestedData[i]
+            showSuggest.push(
+                <div>
+                    <SubscriptionProfile
+                        key={i}
+                        username={suggestedData[i].profileDTO.username}
+                        relatedStock={suggestedData[i].stock}
+                    />
+                </div>
+            )
+        }
+    }
+
+
     return (
         <div>
             <div className="subBar">
-                <h3>Subscriptions</h3>
-                {subData === null || suggestedData === null ? (
-                    <div>Loading</div>
-                ) : (
+                {subData ?
                     <div>
-                        {subData.map((data, index) => (
-                            <div>
-                                <SubscriptionProfile key={index} username={data.username}/>
-                            </div>
-
-                        ))}
+                        <h3>Subscriptions</h3>
+                        {showSubs}
 
                         <div className="suggestionBar">
                             <h3>Suggested</h3>
-                            {suggestedData.map((data, index) => (
-                                <div>
-                                    <SubscriptionProfile
-                                        key={index}
-                                        username={data.profileDTO.username}
-                                        relatedStock={data.stock}
-                                    />
-                                </div>
-
-                            ))}
+                            {showSuggest}
                         </div>
                     </div>
-                )}
+                    :
+                    <h1>Your subscriptions will appear here</h1>
+                }
             </div>
         </div>
     )
