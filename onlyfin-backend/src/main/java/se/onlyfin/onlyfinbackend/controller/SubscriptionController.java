@@ -47,6 +47,9 @@ public class SubscriptionController {
         if (userToSubscribeTo == null) {
             return ResponseEntity.notFound().build();
         }
+        if (Objects.equals(subscribingUser, userToSubscribeTo)) {
+            return ResponseEntity.badRequest().build();
+        }
 
         if (isUserSubscribedToThisUser(subscribingUser, userToSubscribeTo)) {
             return ResponseEntity.badRequest().body("Already subscribed");
