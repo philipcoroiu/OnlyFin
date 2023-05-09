@@ -5,6 +5,9 @@ import axios from "axios"
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import NavBar from "../navBar/NavBar";
+import Exporting from 'highcharts/modules/exporting';
+
+Exporting(Highcharts);
 
 export default function Studio() {
     document.title = "Studio"
@@ -111,7 +114,19 @@ export default function Studio() {
             borderWidth: 0,
             color: "#39a22a",
         }],
-        
+        exporting: {
+            chartOptions: {
+                subtitle: {
+                    text: 'Custom export subtitle',
+                    style: {
+                        // Customize the text style during export
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        color: '#000'
+                    }
+                }
+            }
+        }
     });
 
     /* messages shown to user */
