@@ -10,9 +10,11 @@ import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.PasswordUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
+import se.onlyfin.onlyfinbackend.repository.UserRepository;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
+import java.util.Optional;
 
 /**
  * This class is responsible for handling requests related to user management.
@@ -22,11 +24,13 @@ import java.security.Principal;
 public class UserController {
     private final SubscriptionController subscriptionController;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(SubscriptionController subscriptionController, UserService userService) {
+    public UserController(SubscriptionController subscriptionController, UserService userService, UserRepository userRepository) {
         this.subscriptionController = subscriptionController;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -224,6 +228,27 @@ public class UserController {
         }
 
         return ResponseEntity.ok().body("Updated password");
+    }
+
+    @GetMapping("/getNameFromUserId/{id}")
+    public ResponseEntity<String> getNameFromUserId(@PathVariable Integer id){
+
+        System.out.println(id);
+
+
+        if(userRepository.existsById(id)){
+
+            System.out.println("if is true");
+
+            Optional<User> userOpt = userRepository.findById(id);
+            User user = userOpt.orElse(null);
+
+            String userName = user.getUsername();
+
+            return ResponseEntity.ok(userName);
+        }
+
+        else return ResponseEntity.badRequest().build();
     }
 
 }

@@ -29,7 +29,7 @@ export default function EditableLayout(props) {
 
     const handleToggle = () => {
 
-        if(isResizable){
+        if(isResizable && layoutRef.current != null){
             const updatedLayout = layoutRef.current.map((item) => ({
                 moduleId: parseInt(item.i),
                 categoryId: props.category.id,
