@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,7 @@ public class SubscriptionController {
      * @return response entity with the username of the subscribed-to user if successful
      */
     @PostMapping("/subscribe")
+    @Transactional
     public ResponseEntity<String> addSubscription(@RequestParam("username") String username, Principal principal) {
         User subscribingUser = userService.getUserOrException(principal.getName());
 
@@ -71,6 +73,7 @@ public class SubscriptionController {
      * @return response entity with the username of the unsubscribed-from user if successful
      */
     @DeleteMapping("/unsubscribe")
+    @Transactional
     public ResponseEntity<String> removeSubscription(@RequestParam("username") String username, Principal principal) {
         User userWantingToUnsubscribe = userService.getUserOrException(principal.getName());
 
