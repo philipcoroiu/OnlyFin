@@ -85,17 +85,18 @@ export default function EditableLayout(props) {
 
                 {props.category.moduleEntities.map((moduleEntity) => (
                     <div key={moduleEntity.id} className="dashboard-module-container">
-                        {props.ownDashboard &&
-                            <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                                <button>edit</button>
-                            </Link>
-                        }
-                        <HighchartsReact
-                            containerProps={{ style: { height: "100%", weight: "100%"} }}
+
+                        <HighchartsReact className="testHej"
+                            containerProps={{ style: { height: "100%", weight: "100%", transition: "all 10s ease"} }}
                             highcharts={Highcharts}
                             options={moduleEntity.content}
 
                         />
+                        {props.ownDashboard &&
+                            <Link style={{position: "absolute"}} to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
+                                <button>edit</button>
+                            </Link>
+                        }
                     </div>
                 ))}
             </ResponsiveGridLayout>
