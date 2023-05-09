@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 export default function DashboardProfile(props){
 
     const [subscribed, setSubscribed] = useState(null);
+    const navigate = useNavigate();
 
     useEffect( () => {
 
         axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`
-            ,{withCredentials : true}
         ).then((response) => {
             setSubscribed(response.data)
         })
@@ -26,7 +26,7 @@ export default function DashboardProfile(props){
         }
         console.log(subscribed)
         await axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`
-            ,{withCredentials : true}
+
         ).then((response) => {
             setSubscribed(response.data)
         })
@@ -35,7 +35,6 @@ export default function DashboardProfile(props){
     const onSubscribe = async (username) => {
 
         try {
-            console.log('Subscribing to:', props.userName);
 
             await axios.post(
                 `http://localhost:8080/subscribe?username=${props.userName}`,
@@ -48,7 +47,7 @@ export default function DashboardProfile(props){
                 }
             )
         } catch(error) {
-            console.log("onSubscribe",error)
+            navigate(`../Login?Redirect=Dashboard?User=${props.userId}`)
         }
 
     };
@@ -89,6 +88,7 @@ export default function DashboardProfile(props){
                                 <h2>{props.name}</h2>
                             </Link>
                             {<button
+                                className="dashboard-profile-subscribe"
                                 onClick={handleSubscription}
                                 style={
                                     subscribed ?

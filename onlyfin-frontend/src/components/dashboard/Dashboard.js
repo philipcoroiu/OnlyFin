@@ -262,6 +262,7 @@ export default function Dashboard() {
                     <DashboardProfile
                         userName={userName}
                         ownDashboard={ownDashboard}
+                        userId={userId}
                     />
                 </div>
                 <div className="dashboard-stock-tab-container">

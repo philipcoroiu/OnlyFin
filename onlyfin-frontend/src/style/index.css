@@ -1250,7 +1250,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     right: 17px;
     top: 17px;
     height: 80px;
-    border: solid 1px black;
+
     display: flex;
     justify-content: flex-end;
     flex-direction: row-reverse;
@@ -1273,7 +1273,6 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 .dashboard-profile-name-and-subscribe-container {
     align-items: center;
     flex-direction: row;
-    border: solid 1px black;
     margin-right: 25px;
     align-items: center;
 
@@ -1283,13 +1282,15 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 }
 
 .dashboard-profile-subscribe {
-    border: solid 1px black;
+    margin-top: -22px;
 
 }
 
 .dashboard-profile-name {
-    border: solid 1px black;
+
+    font-family: Tahoma;
     text-align: center;
+    font-size: 18px;
 
 }
 
@@ -1718,4 +1719,8 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.switch {
+    margin-left: 20px;
 }

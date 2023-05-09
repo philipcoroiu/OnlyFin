@@ -75,7 +75,7 @@ export default function EditableLayout(props) {
             <ResponsiveGridLayout
                 className="layout"
                 layouts={{ lg: layout }}
-                cols={{ lg: 8, md: 6, sm: 4, xs: 2, xxs: 1 }}
+                cols={{ lg: 8, md: 6, sm: 1, xs: 1, xxs: 1 }}
                 rowHeight={190}
                 isResizable={isResizable}
                 compactType="vertical"

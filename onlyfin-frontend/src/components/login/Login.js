@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import {useLocation, useNavigate} from "react-router-dom";
 
 export default function Login() {
     document.title="Login"
@@ -7,6 +8,11 @@ export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const redirect = searchParams.get("Redirect") || null;
+    const navigate = useNavigate();
 
     function handleUsernameChange(event) {
         setUsername(event.target.value);
@@ -19,9 +25,7 @@ export default function Login() {
     function handleSubmit(event) {
         event.preventDefault();
         setError(null);
-
-        axios
-            .post(
+        axios.post(
                 'http://localhost:8080/plz',
                 `username=${username}&password=${password}`,
                 {
@@ -32,11 +36,18 @@ export default function Login() {
                 }
             )
             .then(() => {
-                window.location.href = 'http://localhost:3000/Dashboard';
+                if(redirect == null){
+                    navigate('../Dashboard')
+                }
+                else{
+                    navigate(`../${redirect}`)
+                }
+
             })
             .catch((error) => {
                 setError(error.response.data.error);
             });
+        console.log(redirect)
     }
 
     return (
