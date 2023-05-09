@@ -10,6 +10,7 @@ import EditableLayout from "./EditableLayout"
 import {wait} from "@testing-library/user-event/dist/utils";
 import icon from "../../assets/images/web-design.gif";
 import emptyCat from "../../assets/images/emptyCharts.gif"
+import DashboardProfile from "./DashboardProfile";
 
 /*import { SearchBox } from 'react-search-box';*/
 
@@ -258,20 +259,10 @@ export default function Dashboard() {
             <NavBar />
             <div className="dashboard-content-wrapper">
                 <div className="dashboard-button-underlay">
-                    <div className="dashboard-profile-corner">
-                        <Link to="../searchpage/pumpndump">
-                            <button className="dashboard-profile-button">
-                            </button>
-                        </Link>
-                        <div className ="dashboard-profile-name-and-subscribe-container">
-                            <p className="dashboard-profile-name">
-                                {userName}'s Dashboard
-                            </p>
-                            <button className="dashboard-profile-subscribe">
-                                subscribe
-                            </button>
-                        </div>
-                    </div>
+                    <DashboardProfile
+                        userName={userName}
+                        ownDashboard={ownDashboard}
+                    />
                 </div>
                 <div className="dashboard-stock-tab-container">
                     <div className="dashboard-stock-tab-buttons">
