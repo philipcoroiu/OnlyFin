@@ -45,6 +45,104 @@ public class UserSuggestionAlgorithm {
      * @return No-content if no suggestions can be made or List if suggestions can be made
      */
     @GetMapping("/by-stocks-covered-weighed-by-post-amount")
+    public ResponseEntity<List<UserRecommendationStringDTO>> algoV2(Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
+
+        //subscription objects
+        List<Subscription> subscriptions = new ArrayList<>(fetchingUser.getSubscriptions());
+        if (subscriptions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        //all subscriptions
+        List<User> subscribedToAnalysts = new ArrayList<>();
+        for (Subscription subscription : subscriptions) {
+            User subscribedTo = subscription.getSubscribedTo();
+            subscribedToAnalysts.add(subscribedTo);
+        }
+
+        //subscribed-to analysts stock coverage times
+        HashMap<String, Integer> commonalityMap = new HashMap<>();
+        for (User currentAnalyst : subscribedToAnalysts) {
+            List<FeedCard> analystsFeedCards = feedCardRepository.findByAnalystUsername(currentAnalyst.getUsername());
+            for (FeedCard currentFeedCard : analystsFeedCards) {
+                String stockName = currentFeedCard.getStockName();
+                Integer count = commonalityMap.getOrDefault(stockName, 0);
+                commonalityMap.put(stockName, count + 1);
+            }
+        }
+
+        //sort the stocks by occurrences
+        List<Map.Entry<String, Integer>> toSort = new ArrayList<>(commonalityMap.entrySet());
+        toSort.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
+        LinkedHashMap<String, Integer> sortedStockOccurrencesForSubscribedAnalysts = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : toSort) {
+            sortedStockOccurrencesForSubscribedAnalysts.put(entry.getKey(), entry.getValue());
+        }
+
+        //All not-subscribed-to analysts. Will be a bottleneck when scaling
+        List<User> notSubscribedToAnalysts = new ArrayList<>(userService.getAllAnalysts());
+        notSubscribedToAnalysts.removeIf(subscribedToAnalysts::contains);
+        notSubscribedToAnalysts.remove(fetchingUser);
+        if (notSubscribedToAnalysts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        //map with available coverage by not-subscribed-to analysts that is also covered by some subscribed-to analyst
+        HashMap<String, HashMap<User, Integer>> matches = new HashMap<>();
+        for (User currentAnalyst : notSubscribedToAnalysts) {
+            for (FeedCard currentFeedCard : feedCardRepository.findByAnalystUsername(currentAnalyst.getUsername())) {
+                matches.putIfAbsent(currentFeedCard.getStockName(), new HashMap<>());
+                HashMap<User, Integer> mapUnderStockRef = matches.get(currentFeedCard.getStockName());
+                Integer currentCountOfCoverage = mapUnderStockRef.getOrDefault(currentAnalyst, 0);
+                mapUnderStockRef.put(currentAnalyst, currentCountOfCoverage + 1);
+            }
+        }
+
+        //suggestion list based on matches between subscribed-to analysts coverage and available coverage
+        Set<UserRecommendationStringDTO> suggestions = new HashSet<>();
+        for (String currentStockRef : sortedStockOccurrencesForSubscribedAnalysts.keySet()) {
+            if (matches.containsKey(currentStockRef)) {
+                HashMap<User, Integer> occurrenceMap = matches.get(currentStockRef);
+
+                int highestAmountOfPostsForThisStockRef = -1;
+                User winningUser = null;
+
+                for (User currentAnalystThatCoversThisStock : occurrenceMap.keySet()) {
+                    if (occurrenceMap.get(currentAnalystThatCoversThisStock) > highestAmountOfPostsForThisStockRef) {
+                        highestAmountOfPostsForThisStockRef = occurrenceMap.get(currentAnalystThatCoversThisStock);
+                        winningUser = currentAnalystThatCoversThisStock;
+                    }
+                }
+
+                if (highestAmountOfPostsForThisStockRef != -1) {
+                    suggestions.add(new UserRecommendationStringDTO(
+                            currentStockRef,
+                            new ProfileDTO(winningUser.getUsername(), winningUser.getId())));
+                }
+
+            }
+        }
+
+        if (suggestions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok().body(suggestions.stream().toList());
+    }
+
+    /**
+     * This algorithm returns user profiles that the logged-in user could be interested in.
+     * Tries to give the user a list that includes the most active non-subscribed analysts for all stocks the user's
+     * subscriptions have.
+     * A limitation with this algorithm is that it can't recommend anything if the user isn't subscribed to anyone,
+     * and it can't recommend analysts that don't cover at least one stock that the user's subscriptions cover.
+     *
+     * @param principal the logged-in user
+     * @return No-content if no suggestions can be made or List if suggestions can be made
+     */
+    @GetMapping("/v1-by-stocks-covered-weighed-by-post-amount")
+    @Deprecated
     public ResponseEntity<List<UserRecommendationDTO>> suggestAnalystsBasedOnCommonStock(Principal principal) {
         //fetch logged-in user
         User fetchingUser = userService.getUserOrException(principal.getName());
@@ -139,93 +237,6 @@ public class UserSuggestionAlgorithm {
                 }
                 if (highestAmountOfPostsForThisStockRef != -1) {
                     suggestions.add(new UserRecommendationDTO(
-                            currentStockRef,
-                            new ProfileDTO(winningUser.getUsername(), winningUser.getId())));
-                }
-
-            }
-        }
-
-        if (suggestions.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok().body(suggestions.stream().toList());
-    }
-
-    @GetMapping("/experimental")
-    public ResponseEntity<?> algoV2(Principal principal) {
-        User fetchingUser = userService.getUserOrException(principal.getName());
-
-        //subscription objects
-        List<Subscription> subscriptions = new ArrayList<>(fetchingUser.getSubscriptions());
-        if (subscriptions.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        //all subscriptions
-        List<User> subscribedToAnalysts = new ArrayList<>();
-        for (Subscription subscription : subscriptions) {
-            User subscribedTo = subscription.getSubscribedTo();
-            subscribedToAnalysts.add(subscribedTo);
-        }
-
-        //subscribed-to analysts stock coverage times
-        HashMap<String, Integer> commonalityMap = new HashMap<>();
-        for (User currentAnalyst : subscribedToAnalysts) {
-            List<FeedCard> analystsFeedCards = feedCardRepository.findByAnalystUsername(currentAnalyst.getUsername());
-            for (FeedCard currentFeedCard : analystsFeedCards) {
-                String stockName = currentFeedCard.getStockName();
-                Integer count = commonalityMap.getOrDefault(stockName, 0);
-                commonalityMap.put(stockName, count + 1);
-            }
-        }
-
-        //sort the stocks by occurrences
-        List<Map.Entry<String, Integer>> toSort = new ArrayList<>(commonalityMap.entrySet());
-        toSort.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
-        LinkedHashMap<String, Integer> sortedStockOccurrencesForSubscribedAnalysts = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : toSort) {
-            sortedStockOccurrencesForSubscribedAnalysts.put(entry.getKey(), entry.getValue());
-        }
-
-        //All not-subscribed-to analysts. Will be a bottleneck when scaling
-        List<User> notSubscribedToAnalysts = new ArrayList<>(userService.getAllAnalysts());
-        notSubscribedToAnalysts.removeIf(subscribedToAnalysts::contains);
-        notSubscribedToAnalysts.remove(fetchingUser);
-        if (notSubscribedToAnalysts.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        //map with available coverage by not-subscribed-to analysts that is also covered by some subscribed-to analyst
-        HashMap<String, HashMap<User, Integer>> matches = new HashMap<>();
-        for (User currentAnalyst : notSubscribedToAnalysts) {
-            for (FeedCard currentFeedCard : feedCardRepository.findByAnalystUsername(currentAnalyst.getUsername())) {
-                matches.putIfAbsent(currentFeedCard.getStockName(), new HashMap<>());
-                HashMap<User, Integer> mapUnderStockRef = matches.get(currentFeedCard.getStockName());
-                Integer currentCountOfCoverage = mapUnderStockRef.getOrDefault(currentAnalyst, 0);
-                mapUnderStockRef.put(currentAnalyst, currentCountOfCoverage + 1);
-            }
-        }
-
-        //suggestion list based on matches between subscribed-to analysts coverage and available coverage
-        Set<UserRecommendationStringDTO> suggestions = new HashSet<>();
-        for (String currentStockRef : sortedStockOccurrencesForSubscribedAnalysts.keySet()) {
-            if (matches.containsKey(currentStockRef)) {
-                HashMap<User, Integer> occurrenceMap = matches.get(currentStockRef);
-
-                int highestAmountOfPostsForThisStockRef = -1;
-                User winningUser = null;
-
-                for (User currentAnalystThatCoversThisStock : occurrenceMap.keySet()) {
-                    if (occurrenceMap.get(currentAnalystThatCoversThisStock) > highestAmountOfPostsForThisStockRef) {
-                        highestAmountOfPostsForThisStockRef = occurrenceMap.get(currentAnalystThatCoversThisStock);
-                        winningUser = currentAnalystThatCoversThisStock;
-                    }
-                }
-
-                if (highestAmountOfPostsForThisStockRef != -1) {
-                    suggestions.add(new UserRecommendationStringDTO(
                             currentStockRef,
                             new ProfileDTO(winningUser.getUsername(), winningUser.getId())));
                 }

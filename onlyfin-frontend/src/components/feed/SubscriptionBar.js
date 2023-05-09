@@ -80,7 +80,7 @@ export default function SubscriptionBar() {
                                     <SubscriptionProfile
                                         key={index}
                                         username={data.profileDTO.username}
-                                        relatedStock={data.stock.name}
+                                        relatedStock={data.stock}
                                     />
                                 </div>
 
