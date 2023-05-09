@@ -158,7 +158,7 @@ public class StudioController {
         return "Removed module successfully";
     }
 
-    @GetMapping("getStocksAndCategories/{id}")
+    @GetMapping("/getStocksAndCategories/{id}")
     public ResponseEntity<?> getStocksAndCategories(@PathVariable Integer id) {
         Dashboard dashboard;
         if (dashboardRepository.existsById(id)) {
@@ -175,9 +175,9 @@ public class StudioController {
         return ResponseEntity.badRequest().body("cant find dashboard");
     }
 
-    @GetMapping("getModuleFromId/{id}")
+    @GetMapping("/getModuleFromId/{id}")
     public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id) {
-        System.out.println(id);
+        //System.out.println(id);
 
         if (moduleRepository.existsById(id)) {
             Optional<ModuleEntity> moduleOptional = moduleRepository.findById(id);
@@ -203,7 +203,7 @@ public class StudioController {
 
     @PutMapping("/updateDashboardLayout")
     public ResponseEntity<?> updateDashboardLayout(@RequestBody List<LayoutDTO> layoutDTOList) {
-        System.out.println(layoutDTOList);
+        //System.out.println(layoutDTOList);
 
         List<DashboardLayout> responseLayout = new ArrayList<>();
         for (LayoutDTO tempLayout : layoutDTOList) {
