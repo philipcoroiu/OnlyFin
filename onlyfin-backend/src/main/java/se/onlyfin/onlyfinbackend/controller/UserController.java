@@ -10,11 +10,9 @@ import se.onlyfin.onlyfinbackend.DTO.AboutMeUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.PasswordUpdateDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
-import se.onlyfin.onlyfinbackend.repository.UserRepository;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This class is responsible for handling requests related to user management.
@@ -24,13 +22,11 @@ import java.util.Optional;
 public class UserController {
     private final SubscriptionController subscriptionController;
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(SubscriptionController subscriptionController, UserService userService, UserRepository userRepository) {
+    public UserController(SubscriptionController subscriptionController, UserService userService) {
         this.subscriptionController = subscriptionController;
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -230,25 +226,20 @@ public class UserController {
         return ResponseEntity.ok().body("Updated password");
     }
 
+    /**
+     * Returns the username of the user with the given id.
+     *
+     * @param id The id of the user
+     * @return The username of the user with the given id if the user exists, otherwise a bad request.
+     */
     @GetMapping("/getNameFromUserId/{id}")
-    public ResponseEntity<String> getNameFromUserId(@PathVariable Integer id){
-
-        System.out.println(id);
-
-
-        if(userRepository.existsById(id)){
-
-            System.out.println("if is true");
-
-            Optional<User> userOpt = userRepository.findById(id);
-            User user = userOpt.orElse(null);
-
-            String userName = user.getUsername();
-
-            return ResponseEntity.ok(userName);
+    public ResponseEntity<String> getUsernameFromUserId(@PathVariable Integer id) {
+        User targetUser = userService.getUserOrNull(id);
+        if (targetUser == null) {
+            return ResponseEntity.badRequest().build();
         }
 
-        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(targetUser.getUsername());
     }
 
 }
