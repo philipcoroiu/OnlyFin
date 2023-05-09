@@ -45,7 +45,8 @@ public class SecurityConfig {
                                 "/plz",
                                 "/login",
                                 "/assets/**",
-                                "/dashboard/get/**"
+                                "/dashboard/get/**",
+                                "/getNameFromUserId/**"
                         )
                         .permitAll()
                         .requestMatchers(
