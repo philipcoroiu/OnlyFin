@@ -16,11 +16,6 @@ export default function Home() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="Dashboard">
-                            Dashboard
-                        </NavLink>
-                    </li>
-                    <li>
                         <NavLink to="Login">
                             Log in
                         </NavLink>
