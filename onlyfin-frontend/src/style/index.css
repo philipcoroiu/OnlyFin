@@ -1557,7 +1557,12 @@ Search Page
 Feed
  */
 
-.feed-no-content{
+.feed {
+    height: 100vh;
+    background-color: white;
+}
+
+.feed-no-content {
     position: absolute;
     top: 40%;
     left: 32%;

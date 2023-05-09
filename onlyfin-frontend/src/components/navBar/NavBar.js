@@ -30,6 +30,7 @@ async function logout() {
 }
 
 export default function NavBar() {
+
     return (
         <div className="navbar-container">
             <Link to="/mypage">

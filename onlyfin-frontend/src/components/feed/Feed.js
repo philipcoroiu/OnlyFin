@@ -4,7 +4,7 @@ import FeedModule from "./FeedModule"
 import SubscriptionBar from "../feed/SubscriptionBar"
 import NavBar from "../navBar/NavBar";
 import SubscriptionProfile from "./SubscriptionProfile";
-import icon from "../../assets/images/noContent.png"
+import icon from "../../assets/images/web-design.gif"
 
 
 export default function Feed() {
@@ -24,8 +24,7 @@ export default function Feed() {
                         withCredentials: true,
                     });
 
-                console.log("Feed charts: " + response.data)
-
+                console.log(response.data)
                 setFeedData(response.data)
 
             } catch (error) {
@@ -55,18 +54,6 @@ export default function Feed() {
         }
     }
 
-    /*feedData.map(data => (
-                        <div className="feed--new--charts">
-                            <FeedModule
-                                posterOfContent={data.posterOfContent.username}
-                                chart={data.content}
-                                postDate={data.postDate}
-                                stock={data.stock.name}
-                            />
-                        </div>
-
-                    ))*/
-
     return (
         <div className="feed">
             <NavBar/>
@@ -76,7 +63,7 @@ export default function Feed() {
                 <div className="feed--charts">
                     {feedData ? showFeed :
                         <div className="feed-no-content">
-                            <img src={icon}/>
+                            <img width="100px" src={icon}/>
                             <h1>Nothing here yet</h1>
                         </div>
                     }
