@@ -90,13 +90,18 @@ public class UserController {
     }
 
     /**
+     * WARNING DISABLED AS IT COULD CAUSE SIDE EFFECTS
      * Makes an analyst a regular user. If the user is not an analyst, a bad request is returned.
      *
      * @param principal Logged-in analyst that wants to become a regular user.
      * @return ResponseEntity with status code 200 if the analyst was successfully made a regular user.
      */
+    @Deprecated
     @PutMapping("/disable-analyst")
-    public ResponseEntity<String> disableAnalyst(Principal principal) {
+    public ResponseEntity<String> disableAnalyst(Principal principal) throws Exception {
+        if (true) {
+            throw new Exception();
+        }
         User targetUser = userService.getUserOrException(principal.getName());
         boolean succeeded = userService.disableAnalyst(targetUser);
 

@@ -154,4 +154,14 @@ public class AnalystReviewController {
         return ResponseEntity.ok().body(reviewDTOs);
     }
 
+    /**
+     * Deletes all reviews related to the target user
+     *
+     * @param targetUser the target user
+     */
+    public void deleteAllReviewsRelatedToUser(User targetUser) {
+        analystReviewRepository.deleteAllByAuthorUsername(targetUser.getUsername());
+        analystReviewRepository.deleteAllByTargetUser(targetUser);
+    }
+
 }
