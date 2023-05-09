@@ -1213,8 +1213,6 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 }
 
 .dashboard-empty-module {
-    padding: 0px;
-    display: inline-grid;
     margin: 15px;
     background-color: var(--light-color);
     border-radius: var(--dashboard-module-border-radius);
@@ -1222,13 +1220,29 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     width: 350px;
     height: 350px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
-    font-weight: bold;
-    font-size: 72px;
-    color: black;
-    text-decoration: none;
+}
+
+.dashboard-empty-module-button {
     border: none;
+    background-color: transparent;
+    font-size: 20px;
+    transition: all 0.5s ease-in-out;
+}
+
+.dashboard-empty-module-button-here {
+    border-bottom: 1px solid #61dafb;
+}
+
+.dashboard-empty-module-button:hover {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+    transition: all 0.5s ease-in-out;
 }
 
 .dashboard-profile-corner {
@@ -1263,7 +1277,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     margin-right: 25px;
     align-items: center;
 
-    display:flex;
+    display: flex;
     justify-content: center;
     flex-direction: column;
 }
@@ -1278,9 +1292,6 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     text-align: center;
 
 }
-
-
-
 
 
 .dashboard-is-loading {

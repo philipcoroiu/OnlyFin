@@ -8,6 +8,9 @@ import CategoryDropdownMenu from "./CategoryDropdownMenu";
 import StockDropdownMenu from "./StockDropdownMenu";
 import EditableLayout from "./EditableLayout"
 import {wait} from "@testing-library/user-event/dist/utils";
+import icon from "../../assets/images/web-design.gif";
+import emptyCat from "../../assets/images/emptyCharts.gif"
+
 /*import { SearchBox } from 'react-search-box';*/
 
 export default function Dashboard() {
@@ -336,8 +339,9 @@ export default function Dashboard() {
                                         button to create a module appears */}
                                         {ownDashboard && category.moduleEntities.length === 0 ? (
                                             <div className="dashboard-empty-module">
+                                                    <img width="100px" src={emptyCat}/>
                                                 <Link to={`/Studio?stockIndex=${currentStockId}&categoryIndex=${currentCategoryId}`}>
-                                                    <button>+</button>
+                                                    <button className="dashboard-empty-module-button">Create your first chart <span className="dashboard-empty-module-button-here">here</span>!</button>
                                                 </Link>
                                             </div>
                                         ) : (
