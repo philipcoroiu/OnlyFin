@@ -48,6 +48,7 @@ export default function Feed() {
                         chart={feedData[i].content}
                         postDate={feedData[i].postDate}
                         stock={feedData[i].stock.name}
+                        category={feedData[i].category.name}
                     />
                 </div>
             )
@@ -57,20 +58,20 @@ export default function Feed() {
     return (
         <div className="feed">
             <NavBar/>
-            <div className="feed--charts--container">{feedData === null ? (
-                <div>Loading</div>
-            ) : (
-                <div className="feed--charts">
-                    {feedData ? showFeed :
-                        <div className="feed-no-content">
-                            <img width="100px" src={icon}/>
-                            <h1>Nothing here yet</h1>
-                        </div>
-                    }
-                </div>)}
-                <div>
-                    <SubscriptionBar/>
-                </div>
+            <div className="feed--charts--container">
+                {feedData === null ?
+                    (
+                        <div>Loading</div>
+                    ) : (
+                        <div className="feed--charts">
+                            {feedData ? showFeed :
+                                <div className="feed-no-content">
+                                    <img width="100px" src={icon}/>
+                                    <h1>Nothing here yet...</h1>
+                                </div>
+                            }
+                        </div>)}
+                <SubscriptionBar/>
             </div>
         </div>
     )

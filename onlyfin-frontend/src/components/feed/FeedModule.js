@@ -11,6 +11,7 @@ export default function FeedModule(props) {
             <p>{props.posterOfContent}</p>
             <p>{props.postDate}</p>
             <p>{props.stock}</p>
+            <p>{props.category}</p>
             <HighchartsReact
                 highcharts={Highcharts}
                 options={props.chart}

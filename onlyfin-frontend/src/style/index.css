@@ -25,7 +25,6 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: rgba(232, 232, 232, 0.32);
 }
 
 /**
@@ -1221,19 +1220,20 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     height: 350px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
 }
 
 .dashboard-empty-module-button {
     border: none;
     background-color: transparent;
-    font-size: 20px;
+    font-size: 25px;
+    font-weight: bold;
     transition: all 0.5s ease-in-out;
 }
 
 .dashboard-empty-module-button-here {
-    border-bottom: 1px solid #61dafb;
+    border-bottom: 2px solid #61dafb;
 }
 
 .dashboard-empty-module-button:hover {
@@ -1605,8 +1605,9 @@ Feed
  */
 
 .feed {
-    height: 100vh;
-    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-self: center;
 }
 
 .feed-no-content {
@@ -1619,6 +1620,7 @@ Feed
 }
 
 .feed--charts--container {
+    background-color: red;
 }
 
 .feed--charts {
