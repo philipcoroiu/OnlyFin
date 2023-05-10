@@ -9,6 +9,8 @@ import icon from "../../assets/images/web-design.gif"
 
 export default function Feed() {
 
+    document.title = "Feed"
+
     const [feedData, setFeedData] = React.useState(null)
 
     useEffect(() => {
@@ -42,15 +44,13 @@ export default function Feed() {
         for (let i = 0; i < feedData.length; i++) {
             const suggestion = feedData[i]
             showFeed.push(
-                <div className="feed--new--charts">
-                    <FeedModule
-                        posterOfContent={feedData[i].posterOfContent.username}
-                        chart={feedData[i].content}
-                        postDate={feedData[i].postDate}
-                        stock={feedData[i].stock.name}
-                        category={feedData[i].category.name}
-                    />
-                </div>
+                <FeedModule
+                    posterOfContent={feedData[i].posterOfContent}
+                    chart={feedData[i].content}
+                    postDate={feedData[i].postDate}
+                    stock={feedData[i].stock.name}
+                    category={feedData[i].category}
+                />
             )
         }
     }

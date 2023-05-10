@@ -89,22 +89,20 @@ export default function SubscriptionBar() {
 
 
     return (
-        <div>
-            <div className="subBar">
-                {subData ?
-                    <div>
-                        <h3>Subscriptions</h3>
-                        {showSubs}
+        <div className="subBar">
+            {subData ?
+                <div>
+                    <h3>Subscriptions</h3>
+                    {showSubs}
 
-                        <div className="suggestionBar">
-                            <h3>Suggested</h3>
-                            {showSuggest}
-                        </div>
+                    <div className="suggestionBar">
+                        <h3>Suggested</h3>
+                        {showSuggest}
                     </div>
-                    :
-                    <h1>Your subscriptions will appear here</h1>
-                }
-            </div>
+                </div>
+                :
+                <h1>Your subscriptions will appear here</h1>
+            }
         </div>
     )
 }
