@@ -44,10 +44,11 @@ export default function Feed() {
             showFeed.push(
                 <div className="feed--new--charts">
                     <FeedModule
-                        posterOfContent={feedData[i].posterOfContent.username}
+                        posterOfContent={feedData[i].posterOfContent}
                         chart={feedData[i].content}
                         postDate={feedData[i].postDate}
                         stock={feedData[i].stock.name}
+                        category={feedData[i].category}
                     />
                 </div>
             )

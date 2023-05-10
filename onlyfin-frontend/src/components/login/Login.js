@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, Link} from "react-router-dom";
 
 export default function Login() {
     document.title="Login"
@@ -81,6 +81,9 @@ export default function Login() {
                 <button type="submit" className="login--submit">
                     Log in
                 </button>
+                <Link to={"../Register"}>
+                    Not a user? Register here.
+                </Link>
             </form>
         </div>
     );
