@@ -3,10 +3,7 @@ package se.onlyfin.onlyfinbackend.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.CategoryDTO;
 import se.onlyfin.onlyfinbackend.DTO.FeedCardDTO;
 import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
@@ -103,6 +100,36 @@ public class FeedController {
                     feedCardRepository.findByAnalystUsernameAndPostDateAfterOrderByPostDateDesc(
                             currentAnalyst.getUsername(),
                             cutoffDate));
+            analystUsernameToId.put(currentAnalyst.getUsername(), currentAnalyst.getId());
+        }
+
+        List<FeedCardDTO> feedCardDTOs = createFeedCardDTOList(analystUsernameToId, feedCards);
+
+        return ResponseEntity.ok().body(feedCardDTOs);
+    }
+
+    /**
+     * @param days      the number of days to fetch feed cards from
+     * @param principal the user that is logged in
+     * @return a list of feed cards from the last x days
+     */
+    @GetMapping("/days-cutoff")
+    public ResponseEntity<List<FeedCardDTO>> fetchFeedCutoffDays(@RequestParam Integer days, Principal principal) {
+        User fetchingUser = userService.getUserOrException(principal.getName());
+
+        List<Subscription> subscriptions = subscriptionRepository.findBySubscriber(fetchingUser);
+        if (subscriptions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        Instant cutoffDate = Instant.now().minus(days, ChronoUnit.DAYS);
+        HashMap<String, Integer> analystUsernameToId = new HashMap<>();
+        ArrayList<FeedCard> feedCards = new ArrayList<>();
+        for (Subscription subscription : subscriptions) {
+            User currentAnalyst = subscription.getSubscribedTo();
+            feedCards.addAll(feedCardRepository.findByAnalystUsernameAndPostDateAfterOrderByPostDateDesc(
+                    currentAnalyst.getUsername(),
+                    cutoffDate));
             analystUsernameToId.put(currentAnalyst.getUsername(), currentAnalyst.getId());
         }
 
