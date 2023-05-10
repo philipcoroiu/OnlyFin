@@ -8,7 +8,7 @@ export default function DashboardProfile(props){
 
     useEffect( () => {
 
-        axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`
+        axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`, {withCredentials: true}
         ).then((response) => {
             setSubscribed(response.data)
         })
@@ -26,7 +26,7 @@ export default function DashboardProfile(props){
         }
         console.log(subscribed)
         await axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`
-
+        ,{withCredentials:true}
         ).then((response) => {
             setSubscribed(response.data)
         })

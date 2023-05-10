@@ -37,7 +37,7 @@ export default function Login() {
             )
             .then(() => {
                 if(redirect == null){
-                    navigate('../Dashboard')
+                    navigate('../Feed')
                 }
                 else{
                     navigate(`../${redirect}`)
