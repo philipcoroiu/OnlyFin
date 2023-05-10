@@ -28,18 +28,42 @@ export default function Studio() {
     const moduleIndex = searchParams.get("moduleIndex") || null;
     const [moduleId, setModuleId] = useState(null);
     const navigate = useNavigate();
+    const [username, setUsername] = useState()
+    const [loading, setLoading] = useState(true);
 
-    React.useEffect(() => {
+    React.useEffect( () => {
 
-        if(editModule && moduleIndex != null){
-            axios.get("http://localhost:8080/studio/getModuleFromId/" + moduleIndex,
-                {withCredentials:true}).then((response) =>{
-                console.log(response.data.content)
-                setStudioChart(response.data.content)
-                setModuleId(response.data.id)
-                setCategoryId(response.data.category_id)
-            })
+        const fetchData = async() => {
+            try {
+
+                const response = await axios.get(`http://localhost:8080/principal-username`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then((response) => {
+                        handleUserNameChange(response.data)
+                })
+
+                if (editModule && moduleIndex != null) {
+                    await axios.get("http://localhost:8080/studio/getModuleFromId/" + moduleIndex,
+                        {withCredentials: true}).then((response) => {
+                        console.log(response.data.content)
+                        setStudioChart(response.data.content)
+                        setModuleId(response.data.id)
+                        setCategoryId(response.data.category_id)
+                    })
+                }
+
+            } catch(error) {
+                console.log("whyyyyyyyy: ", error)
+            } finally {
+                setLoading(false);
+            }
         }
+
+        fetchData().then();
 
     }, []);
 
@@ -114,17 +138,6 @@ export default function Studio() {
             borderWidth: 0,
             color: "#39a22a",
         }],
-        exporting: {
-            chartOptions: {
-                subtitle: {
-                    text: 'Created by "username" on OnlyFin',
-                    style: {
-                        fontSize: '8px',
-                        color: '#000'
-                    }
-                }
-            }
-        }
     });
 
     /* messages shown to user */
@@ -146,6 +159,24 @@ export default function Studio() {
     function putChartToInitState() {
         /*setStudioChart(studioChartInitState)*/
     }
+
+    const handleUserNameChange = (name) => {
+        setStudioChart(prevState => ({
+            ...prevState,
+            exporting: {
+                chartOptions: {
+                    subtitle: {
+                        text: `Created by ${name} on OnlyFin`,
+                        style: {
+                            fontSize: '8px',
+                            color: '#000'
+                        }
+                    }
+                }
+            }
+        }))
+    };
+
     function checkForError() {
 
         /* Starts with assuming there are no errors by setting hasError to false and creates an empty table
@@ -188,6 +219,8 @@ export default function Studio() {
     }
 
     function showErrorMessageForDuration(duration) {
+
+        console.log(username)
 
         /* sets the showErrorMessage to true to show the error messages */
         setShowErrorMessage(true);
@@ -276,6 +309,21 @@ export default function Studio() {
         )
     }
 
+    const getChartOptions = (username) => ({
+        studioChartInitState,
+        exporting: {
+            chartOptions: {
+                subtitle: {
+                    text: `Created by ${username} on OnlyFin`,
+                    style: {
+                        fontSize: '8px',
+                        color: '#000'
+                    }
+                }
+            }
+        }
+    });
+
     return (
 
         <div className="studio">
@@ -288,11 +336,15 @@ export default function Studio() {
                      className="studio--chart"
                 >
                     {/* --HIGHCHART-- */}
-                    <HighchartsReact
-                        containerProps={{ style: { height: "100%", weight: "100%" } }}
-                        highcharts={Highcharts}
-                        options={studioChart}
-                    />
+                    {loading ? (
+                        <HighchartsReact
+                            containerProps={{ style: { height: '100%', weight: '100%' } }}
+                            highcharts={Highcharts}
+                            options={studioChart}
+                        />
+                    ) : (
+                        <div className="spinner"></div>
+                    )}
                 </div>
                 <div className="studio--toolbar">
 
