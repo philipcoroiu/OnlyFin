@@ -272,4 +272,8 @@ public class SubscriptionController {
         subscriptionRepository.deleteAllBySubscribedTo(targetUser);
     }
 
+    public List<String> getTop7MostSubscribedUsernames() {
+        return subscriptionRepository.find7MostSubscribedUsernames();
+    }
+
 }

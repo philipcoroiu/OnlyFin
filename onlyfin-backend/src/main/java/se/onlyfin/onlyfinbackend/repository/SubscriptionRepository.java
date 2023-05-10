@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import se.onlyfin.onlyfinbackend.model.Subscription;
 import se.onlyfin.onlyfinbackend.model.User;
@@ -64,5 +65,11 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
      * @param targetUser the target user
      */
     void deleteAllBySubscribedTo(User targetUser);
+
+    @Query("SELECT subscription.subscriber.username " +
+            "FROM Subscription subscription " +
+            "GROUP BY subscription.subscriber.username " +
+            "ORDER BY COUNT(subscription.subscriber) DESC")
+    List<String> find7MostSubscribedUsernames();
 
 }

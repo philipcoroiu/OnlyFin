@@ -7,12 +7,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import se.onlyfin.onlyfinbackend.DTO.ProfileDTO;
 import se.onlyfin.onlyfinbackend.DTO.UserDTO;
 import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class is responsible for handling operations regarding user entities.
@@ -205,6 +205,19 @@ public class UserService {
         if (targetUser != null) {
             userRepository.delete(targetUser);
         }
+    }
+
+    public Set<ProfileDTO> getProfilesFromUsernames(List<String> usernames) {
+        Set<ProfileDTO> profiles = new HashSet<>();
+
+        for (String username : usernames) {
+            User userOrNull = getUserOrNull(username);
+            if (userOrNull != null) {
+                profiles.add(new ProfileDTO(userOrNull.getUsername(), userOrNull.getId()));
+            }
+        }
+
+        return profiles;
     }
 
 }
