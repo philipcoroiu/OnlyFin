@@ -246,6 +246,10 @@ public class SubscriptionController {
         return subscriptionRepository.existsBySubscriberAndSubscribedTo(subscriber, subscribedTo);
     }
 
+    /**
+     * @param targetUser the target user
+     * @return a list of profiles with the users that the target user is subscribed to
+     */
     public List<ProfileDTO> getUserSubscriptionsAsProfiles(@NonNull User targetUser) {
         List<Subscription> subscriptions = new ArrayList<>(subscriptionRepository.findBySubscriber(targetUser));
 
@@ -256,6 +260,16 @@ public class SubscriptionController {
         );
 
         return profiles;
+    }
+
+    /**
+     * Removes all subscriptions related to a user
+     *
+     * @param targetUser the target user
+     */
+    public void removeAllSubscriptionsRelatedToUser(User targetUser) {
+        subscriptionRepository.deleteAllBySubscriber(targetUser);
+        subscriptionRepository.deleteAllBySubscribedTo(targetUser);
     }
 
 }

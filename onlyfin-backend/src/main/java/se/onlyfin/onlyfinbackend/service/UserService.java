@@ -194,4 +194,17 @@ public class UserService {
     public List<User> findAnalystWithUsernameStartingWith(String search) {
         return userRepository.findTop7ByisAnalystIsTrueAndUsernameStartsWith(search);
     }
+
+    /**
+     * TEST METHOD: ONLY USE THIS METHOD FOR TESTING PURPOSES AS THERE MAY BE SIDE EFFECTS WHEN DELETING USERS
+     *
+     * @param targetUser The user to be deleted.
+     */
+    @Deprecated
+    public void deleteUser(User targetUser) {
+        if (targetUser != null) {
+            userRepository.delete(targetUser);
+        }
+    }
+
 }
