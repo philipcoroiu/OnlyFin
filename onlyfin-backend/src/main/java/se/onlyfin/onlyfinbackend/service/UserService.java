@@ -196,17 +196,9 @@ public class UserService {
     }
 
     /**
-     * TEST METHOD: ONLY USE THIS METHOD FOR TESTING PURPOSES AS THERE MAY BE SIDE EFFECTS WHEN DELETING USERS
-     *
-     * @param targetUser The user to be deleted.
+     * @param usernames The usernames of the profiles to be returned.
+     * @return A set of profiles with the given usernames.
      */
-    @Deprecated
-    public void deleteUser(User targetUser) {
-        if (targetUser != null) {
-            userRepository.delete(targetUser);
-        }
-    }
-
     public Set<ProfileDTO> getProfilesFromUsernames(List<String> usernames) {
         Set<ProfileDTO> profiles = new HashSet<>();
 
@@ -219,5 +211,18 @@ public class UserService {
 
         return profiles;
     }
+
+    /**
+     * TEST METHOD: ONLY USE THIS METHOD FOR TESTING PURPOSES AS THERE MAY BE SIDE EFFECTS WHEN DELETING USERS
+     *
+     * @param targetUser The user to be deleted.
+     */
+    @Deprecated
+    public void deleteUser(User targetUser) {
+        if (targetUser != null) {
+            userRepository.delete(targetUser);
+        }
+    }
+
 
 }
