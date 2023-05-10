@@ -9,6 +9,8 @@ import icon from "../../assets/images/web-design.gif"
 
 export default function Feed() {
 
+    document.title = "Feed"
+
     const [feedData, setFeedData] = React.useState(null)
 
     useEffect(() => {
@@ -42,15 +44,13 @@ export default function Feed() {
         for (let i = 0; i < feedData.length; i++) {
             const suggestion = feedData[i]
             showFeed.push(
-                <div className="feed--new--charts">
-                    <FeedModule
-                        posterOfContent={feedData[i].posterOfContent}
-                        chart={feedData[i].content}
-                        postDate={feedData[i].postDate}
-                        stock={feedData[i].stock.name}
-                        category={feedData[i].category}
-                    />
-                </div>
+                <FeedModule
+                    posterOfContent={feedData[i].posterOfContent}
+                    chart={feedData[i].content}
+                    postDate={feedData[i].postDate}
+                    stock={feedData[i].stock.name}
+                    category={feedData[i].category}
+                />
             )
         }
     }
@@ -58,20 +58,20 @@ export default function Feed() {
     return (
         <div className="feed">
             <NavBar/>
-            <div className="feed--charts--container">{feedData === null ? (
-                <div>Loading</div>
-            ) : (
-                <div className="feed--charts">
-                    {feedData ? showFeed :
-                        <div className="feed-no-content">
-                            <img width="100px" src={icon}/>
-                            <h1>Nothing here yet</h1>
-                        </div>
-                    }
-                </div>)}
-                <div>
-                    <SubscriptionBar/>
-                </div>
+            <div className="feed--charts--container">
+                {feedData === null ?
+                    (
+                        <div>Loading</div>
+                    ) : (
+                        <div className="feed--charts">
+                            {feedData ? showFeed :
+                                <div className="feed-no-content">
+                                    <img width="100px" src={icon}/>
+                                    <h1>Nothing here yet...</h1>
+                                </div>
+                            }
+                        </div>)}
+                <SubscriptionBar/>
             </div>
         </div>
     )

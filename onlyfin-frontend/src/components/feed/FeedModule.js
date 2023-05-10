@@ -6,23 +6,27 @@ import {Link} from "react-router-dom";
 
 export default function FeedModule(props) {
 
-    useEffect( () => {
-        console.log(props)
-    }, []
+    useEffect(() => {
+            console.log(props)
+        }, []
     )
 
-    return(
-        <div>
-            <p>{props.posterOfContent.username}</p>
-            <p>{props.postDate}</p>
-            <p>{props.stock}</p>
+    return (
+        <div className="feed--new--charts">
+            <div className="feed-chart-titel">
+                <h1>{props.posterOfContent.username}</h1>
+                <h5>Published: {props.postDate}</h5>
+            </div>
+            <div className="feed-chart-stocks-name">
+            <h3>{props.stock}</h3>
+            <Link to={`../Dashboard?User=${props.posterOfContent.id}&CategoryId=${props.category.id}`}>
+                <p>{props.category.name}</p>
+            </Link>
+            </div>
             <HighchartsReact
                 highcharts={Highcharts}
                 options={props.chart}
             />
-            <Link to={`../Dashboard?User=${props.posterOfContent.id}&CategoryId=${props.category.id}`}>
-                <p>Check out this Dashboard</p>
-            </Link>
         </div>
 
     )
