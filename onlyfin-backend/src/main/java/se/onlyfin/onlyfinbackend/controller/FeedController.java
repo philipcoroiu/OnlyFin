@@ -72,6 +72,9 @@ public class FeedController {
         }
 
         List<FeedCardDTO> feedCardDTOS = createFeedCardDTOList(analystUsernameToIdMap, feedCards);
+        if (feedCards.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
 
         return ResponseEntity.ok().body(feedCardDTOS);
     }
