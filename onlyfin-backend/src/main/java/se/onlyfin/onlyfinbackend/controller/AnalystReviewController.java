@@ -159,6 +159,7 @@ public class AnalystReviewController {
      *
      * @param targetUser the target user
      */
+    @Transactional
     public void deleteAllReviewsRelatedToUser(User targetUser) {
         analystReviewRepository.deleteAllByAuthorUsername(targetUser.getUsername());
         analystReviewRepository.deleteAllByTargetUser(targetUser);
