@@ -36,7 +36,7 @@ export default function Studio() {
         const fetchData = async() => {
             try {
 
-                const response = await axios.get(`http://localhost:8080/principal-username`,
+                await axios.get(`http://localhost:8080/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -57,7 +57,7 @@ export default function Studio() {
                 }
 
             } catch(error) {
-                console.log("whyyyyyyyy: ", error)
+                console.log(error);
             } finally {
                 setLoading(false);
             }
@@ -309,21 +309,6 @@ export default function Studio() {
         )
     }
 
-    const getChartOptions = (username) => ({
-        studioChartInitState,
-        exporting: {
-            chartOptions: {
-                subtitle: {
-                    text: `Created by ${username} on OnlyFin`,
-                    style: {
-                        fontSize: '8px',
-                        color: '#000'
-                    }
-                }
-            }
-        }
-    });
-
     return (
 
         <div className="studio">
@@ -337,13 +322,13 @@ export default function Studio() {
                 >
                     {/* --HIGHCHART-- */}
                     {loading ? (
+                        <div className="spinner"></div>
+                    ) : (
                         <HighchartsReact
                             containerProps={{ style: { height: '100%', weight: '100%' } }}
                             highcharts={Highcharts}
                             options={studioChart}
                         />
-                    ) : (
-                        <div className="spinner"></div>
                     )}
                 </div>
                 <div className="studio--toolbar">
