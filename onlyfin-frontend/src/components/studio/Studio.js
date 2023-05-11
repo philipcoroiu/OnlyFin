@@ -36,7 +36,7 @@ export default function Studio() {
         const fetchData = async() => {
             try {
 
-                await axios.get(`http://localhost:8080/principal-username`,
+                await axios.get(process.env.REACT_APP_BACKEND_URL+`/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -47,7 +47,7 @@ export default function Studio() {
                 })
 
                 if (editModule && moduleIndex != null) {
-                    await axios.get("http://localhost:8080/studio/getModuleFromId/" + moduleIndex,
+                    await axios.get(process.env.REACT_APP_BACKEND_URL+"/studio/getModuleFromId/" + moduleIndex,
                         {withCredentials: true}).then((response) => {
                         console.log(response.data.content)
                         setStudioChart(response.data.content)
@@ -233,7 +233,7 @@ export default function Studio() {
 
     function handlePostChart(postChart){
         /* posts the chart to the database */
-        axios.post("http://localhost:8080/studio/createModule", postChart, {withCredentials: true})
+        axios.post(process.env.REACT_APP_BACKEND_URL+"/studio/createModule", postChart, {withCredentials: true})
 
         /* shows success message*/
         showSuccessMessageForDuration(2000);
@@ -246,7 +246,7 @@ export default function Studio() {
 
         console.log("postedChart: ", postChart)
         await axios.put(
-            "http://localhost:8080/studio/updateModuleContent",
+            process.env.REACT_APP_BACKEND_URL+"/studio/updateModuleContent",
             postChart
             ,{
                 headers: {
@@ -298,7 +298,7 @@ export default function Studio() {
     async function deleteChart(){
         await setSuccessMessage("SUCCESS: Your chart has been deleted\nRedirecting...")
         await axios.delete(
-            `http://localhost:8080/studio/deleteModule/` + moduleId,
+            process.env.REACT_APP_BACKEND_URL+`/studio/deleteModule/` + moduleId,
             {
                 headers: {
                     'Content-type': 'application/json'

@@ -8,7 +8,7 @@ export default function DashboardProfile(props){
 
     useEffect( () => {
 
-        axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`, {withCredentials: true}
+        axios.get(process.env.REACT_APP_BACKEND_URL+`/subscriptions/is-user-subscribed-to?username=${props.userName}`, {withCredentials: true}
         ).then((response) => {
             setSubscribed(response.data)
         })
@@ -25,7 +25,7 @@ export default function DashboardProfile(props){
             await onSubscribe(props.name)
         }
         console.log(subscribed)
-        await axios.get(`http://localhost:8080/subscriptions/is-user-subscribed-to?username=${props.userName}`
+        await axios.get(process.env.REACT_APP_BACKEND_URL+`/subscriptions/is-user-subscribed-to?username=${props.userName}`
         ,{withCredentials:true}
         ).then((response) => {
             setSubscribed(response.data)
@@ -37,7 +37,7 @@ export default function DashboardProfile(props){
         try {
 
             await axios.post(
-                `http://localhost:8080/subscribe?username=${props.userName}`,
+                process.env.REACT_APP_BACKEND_URL+`/subscribe?username=${props.userName}`,
                 {},
                 {
                     headers: {
@@ -57,7 +57,7 @@ export default function DashboardProfile(props){
             console.log('Unsubscribing to:', props.userName);
 
             await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${props.userName}`,
+                process.env.REACT_APP_BACKEND_URL+`/unsubscribe?username=${props.userName}`,
                 {
                     headers: {
                         'Content-type': 'application/json'

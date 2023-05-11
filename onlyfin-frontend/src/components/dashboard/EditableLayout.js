@@ -41,7 +41,7 @@ export default function EditableLayout(props) {
 
             console.log(JSON.stringify({layoutDTO: updatedLayout}));
             axios.put(
-                "http://localhost:8080/studio/updateDashboardLayout",
+                process.env.REACT_APP_BACKEND_URL+"/studio/updateDashboardLayout",
                 updatedLayout,
                 {
                     headers: {

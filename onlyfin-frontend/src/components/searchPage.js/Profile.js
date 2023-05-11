@@ -19,7 +19,7 @@ export default function Profile(props) {
 
     async function updateSearchData() {
         try {
-            const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/search-all-analysts-include-sub-info`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -38,7 +38,7 @@ export default function Profile(props) {
             console.log('Subscribing to:', username);
 
             await axios.post(
-                `http://localhost:8080/subscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL+`/subscribe?username=${username}`,
                 {},
                 {
                     headers: {
@@ -58,7 +58,7 @@ export default function Profile(props) {
             console.log('Unsubscribing to:', username);
 
             await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL+`/unsubscribe?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'

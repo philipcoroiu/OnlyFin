@@ -53,7 +53,7 @@ export default function PersonalPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseReviews = await axios.get(`http://localhost:8080/reviews/fetch-all?targetUsername=${username}`,
+                const responseReviews = await axios.get(process.env.REACT_APP_BACKEND_URL+`/reviews/fetch-all?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -70,7 +70,7 @@ export default function PersonalPage() {
                     }
                 });
 
-                const responseIsPosted = await axios.get(`http://localhost:8080/reviews/get-my-review?targetUsername=${username}`,
+                const responseIsPosted = await axios.get(process.env.REACT_APP_BACKEND_URL+`/reviews/get-my-review?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -106,7 +106,7 @@ export default function PersonalPage() {
 
         const fetchData = async () => {
             try {
-                const responseTargetUser = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
+                const responseTargetUser = await axios.get(process.env.REACT_APP_BACKEND_URL+`/fetch-about-me-with-sub-info?username=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -117,7 +117,7 @@ export default function PersonalPage() {
                     setUserData(responseTargetUser.data);
                 });
 
-                const responseUser = await axios.get(`http://localhost:8080/principal-username`,
+                const responseUser = await axios.get(process.env.REACT_APP_BACKEND_URL+`/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -131,7 +131,7 @@ export default function PersonalPage() {
                 });
 
 
-                const responseSubscribers = await axios.get(`http://localhost:8080/subscriptions/get-subscribe-count?targetUsername=${username}`,
+                const responseSubscribers = await axios.get(process.env.REACT_APP_BACKEND_URL+`/subscriptions/get-subscribe-count?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -172,7 +172,7 @@ export default function PersonalPage() {
             console.log('Subscribing to:', username);
 
             await axios.post(
-                `http://localhost:8080/subscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL+`/subscribe?username=${username}`,
                 {},
                 {
                     headers: {
@@ -191,7 +191,7 @@ export default function PersonalPage() {
             console.log('Unsubscribing to:', username);
 
             await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL+`/unsubscribe?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -206,7 +206,7 @@ export default function PersonalPage() {
 
     async function updateUserData() {
         try {
-            const response = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/fetch-about-me-with-sub-info?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -239,7 +239,7 @@ export default function PersonalPage() {
             console.log('Posting review to:', username);
 
             await axios.put(
-                `http://localhost:8080/reviews/post`,
+                process.env.REACT_APP_BACKEND_URL+`/reviews/post`,
                 {targetUsername: username, reviewText: reviewText},
                 {
                     headers: {

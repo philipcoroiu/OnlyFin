@@ -25,7 +25,7 @@ export default function Register() {
         event.preventDefault();
         setError(null);
 
-        axios.post('http://localhost:8080/register', {
+        axios.post(process.env.REACT_APP_BACKEND_URL+'/register', {
             email: email,
             username: username,
             password: password
@@ -36,7 +36,7 @@ export default function Register() {
             withCredentials: true
         })
             .then(response => {
-                window.location.href = 'http://localhost:3000/Login/';
+                window.location.href = process.env.REACT_APP_FRONTEND_URL+'/Login/';
             })
             .catch(error => {
                 setError(error.response.data.error);

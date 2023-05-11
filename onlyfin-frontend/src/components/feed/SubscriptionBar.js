@@ -14,7 +14,7 @@ export default function SubscriptionBar() {
             try {
 
                 const response = await
-                    axios.get(`http://localhost:8080/user-subscription-list-sorted-by-postdate`,
+                    axios.get(process.env.REACT_APP_BACKEND_URL+`/user-subscription-list-sorted-by-postdate`,
                         {
                             headers: {
                                 'Content-type': 'application/json'
@@ -35,7 +35,7 @@ export default function SubscriptionBar() {
             try {
 
                 const response = await
-                    axios.get(`http://localhost:8080/algo/by-stocks-covered-weighed-by-post-amount`,
+                    axios.get(process.env.REACT_APP_BACKEND_URL+`/algo/by-stocks-covered-weighed-by-post-amount`,
                         {
                             headers: {
                                 'Content-type': 'application/json'

@@ -26,7 +26,7 @@ export default function Login() {
         event.preventDefault();
         setError(null);
         axios.post(
-                'http://localhost:8080/plz',
+            process.env.REACT_APP_BACKEND_URL+'/plz',
                 `username=${username}&password=${password}`,
                 {
                     headers: {
