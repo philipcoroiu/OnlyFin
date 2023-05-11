@@ -8,8 +8,8 @@ import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import axios from "axios";
 import Exporting from 'highcharts/modules/exporting';
-Exporting(Highcharts);
 
+Exporting(Highcharts);
 
 export default function EditableLayout(props) {
 
