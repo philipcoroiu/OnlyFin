@@ -39,7 +39,7 @@ public class UserControllerTests {
         UserDTO userDTO = new UserDTO("testuser", "testpassword", "testemail@test.com");
 
         Mockito.when(userRepository.existsByEmail(userDTO.email())).thenReturn(false);
-        Mockito.when(userRepository.existsByUsername(userDTO.username())).thenReturn(false);
+        Mockito.when(userRepository.existsByUsernameIgnoreCase(userDTO.username())).thenReturn(false);
 
         ResponseEntity<String> response = userController.registerNewUser(userDTO);
 
@@ -74,7 +74,7 @@ public class UserControllerTests {
         UserDTO userDTO = new UserDTO("testuser", "testpassword", "testemail@test.com");
 
         Mockito.when(userRepository.existsByEmail(userDTO.email())).thenReturn(false);
-        Mockito.when(userRepository.existsByUsername(userDTO.username())).thenReturn(true);
+        Mockito.when(userRepository.existsByUsernameIgnoreCase(userDTO.username())).thenReturn(true);
 
         ResponseEntity<String> response = userController.registerNewUser(userDTO);
 
