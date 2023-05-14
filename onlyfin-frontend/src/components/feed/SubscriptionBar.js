@@ -1,7 +1,6 @@
 import React, {useEffect} from "react"
 import axios from "axios";
 import SubscriptionProfile from "./SubscriptionProfile";
-import Avatar from "../../assets/images/avatar.png";
 
 export default function SubscriptionBar() {
 
@@ -63,9 +62,14 @@ export default function SubscriptionBar() {
     if (subData) {
         for (let i = 0; i < subData.length; i++) {
             const suggestion = subData[i]
+            console.log(suggestion.id)
             showSubs.push(
                 <div>
-                    <SubscriptionProfile key={i} username={subData[i].username}/>
+                    <SubscriptionProfile
+                        key={i}
+                        username={subData[i].username}
+                        id={suggestion.id}
+                    />
                 </div>
             )
         }
@@ -79,8 +83,9 @@ export default function SubscriptionBar() {
                 <div>
                     <SubscriptionProfile
                         key={i}
-                        username={suggestedData[i].profileDTO.username}
-                        relatedStock={suggestedData[i].stock}
+                        username={suggestion.profileDTO.username}
+                        relatedStock={suggestion.stock}
+                        id={suggestion.profileDTO.id}
                     />
                 </div>
             )
