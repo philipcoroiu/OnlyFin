@@ -106,7 +106,11 @@ export default function SubscriptionBar() {
                     </div>
                 </div>
                 :
-                <h1>Your subscriptions will appear here</h1>
+                <div>
+                    <h2>No subscriptions found</h2>
+                    <p>Browse our amazing content and start following what interests you!</p>
+                </div>
+
             }
         </div>
     )
