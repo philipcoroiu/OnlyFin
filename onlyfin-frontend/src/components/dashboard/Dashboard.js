@@ -271,10 +271,10 @@ export default function Dashboard() {
                         {stocks && stocks.map((stock, index) => (
                             <button
                                 key={stock.id}
-                                className={index === activeStockTab ? "active" : ""}
+                                className={"dashboard-button " + (index === activeStockTab ? "active" : "")}
                                 onClick={() => handleStockTabClick(index)}
                             >
-                                {stock.stock_ref_id.name}
+                                <p className="dashboard-text">{stock.stock_ref_id.name}</p>
                             </button>
                         ))}
                         {/* --STOCK DROPDOWN MENU-- */}
@@ -294,7 +294,7 @@ export default function Dashboard() {
                                     stocks[activeStockTab].categories.map((category, index) => (
                                     <button
                                         key={category.id}
-                                        className={index === activeCategoryTab ? "active" : ""}
+                                        className={"dashboard-button " + (index === activeCategoryTab ? "active" : "")}
                                         onClick={() => handleCategoryTabClick(index, activeStockTab)}
                                     >
                                         {category.name}
@@ -333,7 +333,11 @@ export default function Dashboard() {
                                             <div className="dashboard-empty-module">
                                                     <img width="100px" src={emptyCat}/>
                                                 <Link to={`/Studio?stockIndex=${currentStockId}&categoryIndex=${currentCategoryId}`}>
-                                                    <button className="dashboard-empty-module-button">Create your first chart <span className="dashboard-empty-module-button-here">here</span>!</button>
+                                                    <button className="dashboard-empty-module-button">
+                                                        Create your first chart
+                                                        <span className="dashboard-empty-module-button-here">here</span>
+                                                        !
+                                                    </button>
                                                 </Link>
                                             </div>
                                         ) : (

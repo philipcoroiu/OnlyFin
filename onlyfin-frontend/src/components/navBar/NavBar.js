@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import {Link} from "react-router-dom";
 import homeIcon from "../../assets/icons/home.png"
 import Profile from "../../assets/icons/profile-user-svgrepo-com.svg"
@@ -10,6 +10,8 @@ import 'boxicons'
 /*
 Make logout function (POST / logout)
  */
+
+
 
 async function logout() {
     try {
@@ -31,39 +33,84 @@ async function logout() {
 
 export default function NavBar() {
 
-    return (
-        <div className="navbar-container">
-            <Link to="/mypage">
+    const [loggedIn, setLoggedIn] = useState(false)
+    const [userId, setUserId] = useState(null)
+
+    useEffect(() => {
+        try{
+            axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials:true}).then((response) => {
+                setLoggedIn(true)
+                setUserId(response.data)
+            })
+        }
+        catch(e){
+
+        }
+    }, []);
+
+    if(loggedIn){
+        return (
+            <div className="navbar-container">
+                <Link to="/mypage">
                 <span className="navbar--img--line">
                         <box-icon name='user'/>
                 </span>
-            </Link>
-            <Link to="/feed">
+                </Link>
+                <Link to="/feed">
+                    <div className="navbar--icon">
+                        <box-icon name='home'></box-icon>
+                    </div>
+                </Link>
+                <Link to="/searchpage">
+                    <div className="navbar--icon">
+                        <box-icon name='search'></box-icon>
+                    </div>
+                </Link>
+                <Link to="../Dashboard">
+                    <div className="navbar--icon">
+                        <box-icon name='news'></box-icon>
+                    </div>
+                </Link>
+                <Link to="/Studio">
+                    <div className="navbar--icon">
+                        <box-icon name='add-to-queue'></box-icon>
+                    </div>
+                </Link>
                 <div className="navbar--icon">
-                    <box-icon name='home'></box-icon>
+                    <box-icon name='exit' onClick={logout}></box-icon>
                 </div>
-
-            </Link>
-            <Link to="/searchpage">
-                <div className="navbar--icon">
-                    <box-icon name='search'></box-icon>
-                </div>
-            </Link>
-            <Link to="../Dashboard">
-                <div className="navbar--icon">
-                    <box-icon name='news'></box-icon>
-                </div>
-            </Link>
-            <Link to="/Studio">
-                <div className="navbar--icon">
-                    <box-icon name='add-to-queue'></box-icon>
-                </div>
-            </Link>
-            <div className="navbar--icon">
-                <box-icon name='exit' onClick={logout}></box-icon>
             </div>
-
-
-        </div>
-    )
+        )
+    }
+    else{
+        return (
+            <div className="navbar-container">
+                <Link to="/Login">
+                <span className="navbar--img--line">
+                        <box-icon name='user'/>
+                </span>
+                </Link>
+                <Link to="/Login">
+                    <div className="navbar--icon">
+                        <box-icon name='home'></box-icon>
+                    </div>
+                </Link>
+                <Link to="/searchpage">
+                    <div className="navbar--icon">
+                        <box-icon name='search'></box-icon>
+                    </div>
+                </Link>
+                <Link to="../Login">
+                    <div className="navbar--icon">
+                        <box-icon name='news'></box-icon>
+                    </div>
+                </Link>
+                <Link to="/Studio">
+                    <div className="navbar--icon">
+                        <box-icon name='add-to-queue'></box-icon>
+                    </div>
+                </Link>
+            </div>
+        )
+    }
 }

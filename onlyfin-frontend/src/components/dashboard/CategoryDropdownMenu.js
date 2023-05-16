@@ -65,26 +65,24 @@ export default function CategoryDropdownMenu(props) {
 
 
     return (
+        <>
         <div ref={dropdownRef}>
-            <button onClick={handleToggleMenu}>...</button>
+            <button
+                className="dashboard-button-round"
+                onClick={handleToggleMenu}
+            >
+                <p className="dashboard-button-small-text">+</p>
+            </button>
             {
                 showMenu &&
                 (
-                    <div style={{
-
-                        // >>>> OBS – TA BORT DETTA VID DESIGN <<<<<
-
-                        border: "1px solid #ccc",
-                        borderRadius: "5px",
-                        boxShadow: "0 0 5px rgba(0,0,0,0.3)",
-                        backgroundColor: "#fff",
-                        padding: "10px",
-                        position: "absolute"
-
-                        // >>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
-                    }}>
+                    <div
+                        className="dashboard-drop-down-container"
+                        >
+                        <p className="dashboard-text">Modify your categories</p>
                         <form onSubmit={handleOnSubmit}>
                             <input
+                                className="dashboard-input"
                                 type="text"
                                 placeholder="Category Name"
                                 value={inputValue}
@@ -92,12 +90,29 @@ export default function CategoryDropdownMenu(props) {
                             />
                         </form>
 
-                        <button onClick={ (e) => handleAddCategory(e, inputValue)}>Add Category</button>
-                        <button onClick={ (e) => handleRemoveCategory(e)}>Remove Category</button>
-                        <button onClick={(e) => handleCangeCategoryName(e, inputValue)}>Change name</button>
+                        <button
+                            onClick={ (e) => handleAddCategory(e, inputValue)}
+                            className="dashboard-button"
+                        >
+                            Add Category
+                        </button>
+                        <button
+                            onClick={ (e) => handleRemoveCategory(e)}
+                            className="dashboard-button"
+                        >
+                           Remove selected category
+                        </button>
+                        <button
+                            className="dashboard-button"
+                            onClick={(e) => handleCangeCategoryName(e, inputValue)}
+                        >
+                            Change selected name
+                        </button>
                     </div>
                 )
             }
         </div>
+            {/*<p>hej</p>*/}
+        </>
     )
 }
