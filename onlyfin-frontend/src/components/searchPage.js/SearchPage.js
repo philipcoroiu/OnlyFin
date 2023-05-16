@@ -73,7 +73,9 @@ export default function SearchPage() {
             <SearchBar onSearch={onSearch} classname="search--search"/>
 
             {searchData === null ? (
-                <div>Failed to get search result</div>
+                    <div className="loader-container">
+                        <div className="loader"></div>
+                    </div>
             ) : (
                 <div
                     className="search--profile--container"
