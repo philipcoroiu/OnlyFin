@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 export default function Register() {
     document.title = "Registration"
@@ -129,6 +130,9 @@ export default function Register() {
                 </div>
                 {error && <div>{error}</div>}
                 <button type="submit" className="register--submit">Sign up</button>
+                <Link to={"../Login"}>
+                    Already have an account? Login here!
+                </Link>
             </form>
             {showErrorMessage && (
                 <div className="register-error-message">
