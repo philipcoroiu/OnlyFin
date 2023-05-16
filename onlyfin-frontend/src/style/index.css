@@ -763,6 +763,10 @@ Login
     font-size: 40px;
 }
 
+.login--titel > h1:hover, .login--titel > p {
+    cursor: default;
+}
+
 .login--inputs {
     display: flex;
     flex-direction: column;
