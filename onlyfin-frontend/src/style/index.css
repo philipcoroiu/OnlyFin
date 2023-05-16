@@ -662,6 +662,17 @@ Register
     box-shadow: 5px 5px 10px #bebebe;
 }
 
+.register-error-message{
+    position: absolute;
+    top: 80%;
+    left:40.5%;
+    padding: 10px;
+}
+
+.register-error-message > p {
+    color: #ff0000;
+}
+
 .register--title {
     background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 400% 400%;
@@ -671,9 +682,17 @@ Register
     font-size: 23px;
 }
 
+.register--title:hover{
+    cursor: default;
+}
+
 .register--title > p {
     color: #282c34;
     font-size: 18px;
+}
+
+.register--title > p:hover{
+    cursor: default;
 }
 
 .register--inputs--container {
@@ -693,12 +712,14 @@ Register
     outline: none;
     font-size: 17px;
     text-align: center;
-    width: 290px;
+    width: 300px;
     height: 30px;
 }
 
-.register--inputs--container > input::placeholder {
-    color: #282c34;
+.register-whitespace{
+    margin: 10px;
+    width: 50px;
+    border-bottom: 0.5px solid #8d8d8d;
 }
 
 .register--submit {
