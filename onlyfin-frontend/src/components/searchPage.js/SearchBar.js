@@ -9,15 +9,18 @@ export default function SearchBar(props) {
         setSearchTerm(event.target.value);
 
         handleDropdownResults(event.target.value);
-
-
     };
 
     const handleFormSubmit = (event) => {
-        event.preventDefault();
-        props.onSearch(searchTerm);
-        setSearchTerm('');
-        setDropdownResult([]);
+        try {
+            event.preventDefault();
+            props.onSearch(searchTerm);
+            setSearchTerm('');
+            setDropdownResult([]);
+        } catch (error) {
+            console.log("handleFormSubmit error: ", error)
+        }
+
     };
 
     async function handleDropdownResults(searchTerm) {
@@ -40,27 +43,33 @@ export default function SearchBar(props) {
 
 
         } catch (error) {
-            //setDropdownResult([]);
+            console.log("Dropdown error: ", error)
         }
     }
 
     function handleButtonSubmit(username) {
-        props.onSearch(username)
-        setDropdownResult([]);
-        setSearchTerm('');
+        try {
+            props.onSearch(username)
+            setDropdownResult([]);
+            setSearchTerm('');
+        } catch (error) {
+            console.log("handleButtonSubmit error: ", error);
+        }
+
     }
 
 
     return (
         <div className="dropdown-container">
-            <div className="search--form">
+            <form className="search--form" onSubmit={handleFormSubmit}>
+
                 <input
                     className="search--search"
                     type="text"
                     placeholder="Search..."
                     value={searchTerm}
                     onInput={handleChange}
-                    onSubmit={handleFormSubmit}
+                    
                 />
                 {<div>
                     <ul className="search-bar-dropdown-menu">
@@ -75,7 +84,7 @@ export default function SearchBar(props) {
                         ))}
                     </ul>
                 </div>}
-            </div>
+            </form>
 
 
         </div>

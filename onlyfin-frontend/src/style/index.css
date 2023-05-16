@@ -1702,6 +1702,17 @@ Search Page
     border-bottom: 1px solid #ccc;
 }
 
+.user-not-found {
+    font-size: 16px;
+    color: #888888;
+    text-align: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
 
 /**
 Feed
