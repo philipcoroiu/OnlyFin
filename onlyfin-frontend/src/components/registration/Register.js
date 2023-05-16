@@ -131,7 +131,7 @@ export default function Register() {
                 {error && <div>{error}</div>}
                 <button type="submit" className="register--submit">Sign up</button>
                 <Link to={"../Login"}>
-                    Already have an account? Login here!
+                    Already have an account? Login here.
                 </Link>
             </form>
             {showErrorMessage && (
