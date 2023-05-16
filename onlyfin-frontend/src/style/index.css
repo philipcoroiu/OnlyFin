@@ -743,6 +743,17 @@ Login
     }
 }
 
+.login-error-message {
+    position: absolute;
+    top: 70%;
+    left:36%;
+    padding: 10px;
+}
+
+.login-error-message > p {
+    color: #ff0000;
+}
+
 .login--holder {
     display: flex;
     flex-direction: column;
@@ -774,7 +785,7 @@ Login
 }
 
 .login--inputs > input {
-    margin: 20px;
+    margin: 10px;
     border: none;
     border-radius: 10px;
     backdrop-filter: blur(50px);
