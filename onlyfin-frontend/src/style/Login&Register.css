@@ -80,6 +80,7 @@
 Login
  */
 
+
 .login {
     display: flex;
     justify-content: center;
@@ -97,6 +98,17 @@ Login
     100% {
         background-position: bottom left;
     }
+}
+
+.login-error-message {
+    position: absolute;
+    top: 70%;
+    left:36%;
+    padding: 10px;
+}
+
+.login-error-message > p {
+    color: #ff0000;
 }
 
 .login--holder {
@@ -119,6 +131,10 @@ Login
     font-size: 40px;
 }
 
+.login--titel > h1:hover, .login--titel > p {
+    cursor: default;
+}
+
 .login--inputs {
     display: flex;
     flex-direction: column;
@@ -126,7 +142,7 @@ Login
 }
 
 .login--inputs > input {
-    margin: 20px;
+    margin: 10px;
     border: none;
     border-radius: 10px;
     backdrop-filter: blur(50px);
