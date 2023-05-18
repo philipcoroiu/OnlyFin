@@ -9,8 +9,6 @@ import icon from "../../assets/images/web-design.gif"
 
 export default function Feed() {
 
-    document.title = "Feed"
-
     const [feedData, setFeedData] = React.useState(null)
 
     useEffect(() => {
@@ -30,7 +28,15 @@ export default function Feed() {
                 setFeedData(response.data)
 
             } catch (error) {
-                console.log(error)
+                console.log("All-the-things error")
+                console.log(error.response)
+                if(error.response && error.response.status === 403) {
+                    console.log("User not logged in")
+                    console.log("error.response: ", error.response)
+                    //setUserNotFound(true);
+                } else {
+                    console.error('Error:', error.message);
+                }
             }
         }
 
