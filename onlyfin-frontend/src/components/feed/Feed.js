@@ -30,10 +30,9 @@ export default function Feed() {
             } catch (error) {
                 console.log("All-the-things error")
                 console.log(error.response)
-                if(error.response && error.response.status === 403) {
+                if(error.response && error.response.status === 401) {
                     console.log("User not logged in")
                     console.log("error.response: ", error.response)
-                    //setUserNotFound(true);
                 } else {
                     console.error('Error:', error.message);
                 }
