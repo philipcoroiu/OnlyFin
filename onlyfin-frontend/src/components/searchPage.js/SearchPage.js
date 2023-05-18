@@ -89,6 +89,7 @@ export default function SearchPage() {
                             <Profile
                                 key={index}
                                 name={data.profile.username}
+                                id={data.profile.id}
                                 isSubscribed={data.subscribed}
                             >
                             </Profile>
