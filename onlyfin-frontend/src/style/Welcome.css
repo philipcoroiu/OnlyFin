@@ -49,6 +49,11 @@ Welcome
     padding-left: 80px;
 }
 
+.welcome--navbar--title span {
+    font-weight: lighter;
+    color: #8a8a8a;
+}
+
 .welcome--navbar--title:hover {
     cursor: default;
 }
@@ -62,16 +67,23 @@ Welcome
 }
 
 .welcome--hero > h1 {
-    font-size: 50px;
+    font-size: 80px;
     padding: 30px 30px 0px 30px;
 }
 
 .welcome--hero--fin {
+    text-align: center;
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
     background-clip: text;
     color: transparent;
     animation: gradient 5s ease infinite;
+}
+
+.welcome--hero--p {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 100px;
 }
 
 .welcome--hero--image {
