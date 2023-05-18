@@ -30,6 +30,7 @@
     background-color: rgba(180, 180, 180, 0.35);
     box-shadow: 1px 1px 10px #afafaf;
     transition: all 0.1s ease-in-out;
+    cursor: default;
 }
 
 .navbar--img--line {
