@@ -24,7 +24,7 @@ export default function Dashboard() {
     const [userId, setUserId] = useState();
     const [currentStockId, setCurrentStockId] = useState(null);
     const [currentCategoryId, setCurrentCategoryId] = useState(null);
-    const [userName, setUserName] = useState ("n/a")
+    const [userName, setUserName] = useState ("n/a");
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -125,6 +125,16 @@ export default function Dashboard() {
             setIsLoading(false);
         });
     }, [userId]);
+
+    function getCategorySelected() {
+        console.log("test",activeCategoryTab);
+        if(activeCategoryTab != null){
+            return true
+        }
+        else{
+            return false;
+        }
+    }
 
     const handleStockTabClick = (index) => {
         //changes the button index from the input
@@ -314,6 +324,7 @@ export default function Dashboard() {
                                         addCategory={handleAddCategory}
                                         removeCategory={handleRemoveCategory}
                                         changeCategoryName={handleChangeCategoryName}
+                                        getCategorySelected={getCategorySelected}
                                     />
                                 )}
                             </div>

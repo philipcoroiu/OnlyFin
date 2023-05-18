@@ -1,10 +1,13 @@
-import React, {useEffect, useRef} from "react"
+import React, {useEffect, useRef, useState} from "react"
 
 export default function CategoryDropdownMenu(props) {
 
-    const [showMenu, setShowMenu] = React.useState(false);
-    const [inputValue, setInputValue] = React.useState("");
+    const [showMenu, setShowMenu] = useState(false);
+    const [inputValue, setInputValue] = useState("");
     const dropdownRef = useRef(null);
+    const categorySelected = useState(
+        props.getCategorySelected()
+    )
 
     /**
      * The menu closes when clicked outside the dropdown menu
@@ -26,6 +29,7 @@ export default function CategoryDropdownMenu(props) {
      */
     function handleToggleMenu() {
         setShowMenu(!showMenu);
+        console.log(categorySelected, "category SElected")
     }
 
 
@@ -34,12 +38,9 @@ export default function CategoryDropdownMenu(props) {
         handleOnSubmit(event)
     }
 
-    function handleAddCategory(event, inputValue){
-        if(inputValue !== ""){
-            props.addCategory(inputValue)
-            handleOnSubmit(event)
-        }
-
+    function handleAddCategory(event){
+        props.addCategory("New Category")
+        handleOnSubmit(event)
     }
 
     function handleCangeCategoryName(event, inputValue){
@@ -80,6 +81,22 @@ export default function CategoryDropdownMenu(props) {
                         className="dashboard-drop-down-container"
                         >
                         <p className="dashboard-text">Modify your categories</p>
+                        <div className="dashboard-category-drop-down-button-container">
+                            <button
+                                onClick={ (e) => handleAddCategory(e)}
+                                className="dashboard-button"
+                            >
+                                Add Category
+                            </button>
+                            {categorySelected && (<button
+                                onClick={ (e) => handleRemoveCategory(e)}
+                                className="dashboard-button"
+
+                            >
+                                Remove selected category
+                            </button>
+                            )}
+                        </div>
                         <form onSubmit={handleOnSubmit}>
                             <input
                                 className="dashboard-input"
@@ -89,19 +106,7 @@ export default function CategoryDropdownMenu(props) {
                                 onChange={(e) => setInputValue(e.target.value)}
                             />
                         </form>
-                        <div className="dashboard-category-drop-down-button-container">
-                            <button
-                                onClick={ (e) => handleAddCategory(e, inputValue)}
-                                className="dashboard-button"
-                            >
-                                Add Category
-                            </button>
-                            <button
-                                onClick={ (e) => handleRemoveCategory(e)}
-                                className="dashboard-button"
-                            >
-                                Remove selected category
-                            </button>
+                        <div>
                             <button
                                 className="dashboard-button"
                                 onClick={(e) => handleCangeCategoryName(e, inputValue)}
