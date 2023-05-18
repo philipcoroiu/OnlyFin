@@ -36,6 +36,7 @@
 .navbar--img--line {
     border-bottom: 1px solid #b4b4b4;
     padding: 10px;
+    background-color: red;
 }
 
 .navbar--img--line > box-icon {
