@@ -65,12 +65,12 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className="welcome-section-two">
-                    <div className="welcome-section-two-content-left">
-                        <h2>Discover <span>world-class</span> analysts</h2>
-                        <p>Find and follow world-class stock market analysts. Access strategies and insights from brilliant analysts with a proven track record of success.</p>
+                <div className="welcome-section-four">
+                    <div className="welcome-section-four-content-left">
+                        <h2>Monetize Your Analysis <span>Coming Soon</span></h2>
+                        <p>Soon, we will introduce the option for analysts to monetize their analysis. Giving you the ability to earn a substantial income doing what you love most—analyzing the stock market.</p>
                     </div>
-                    <div className="welcome-section-two-content-right">
+                    <div className="welcome-section-four-content-right">
                         <img src={Monetize} alt="Monetize" />
                     </div>
                 </div>

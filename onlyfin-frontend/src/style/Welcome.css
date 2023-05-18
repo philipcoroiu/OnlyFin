@@ -221,5 +221,58 @@ Welcome
     }
 }
 
+/* Section four */
+.welcome-section-four {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 250px;
+    gap: 200px;
+}
 
+.welcome-section-four-content-left > h2 {
+    font-size: 50px;
+}
+
+.welcome-section-four-content-left > p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.welcome-section-four-content-left span {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome-section-four img {
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.welcome-section-four-content-left {
+    flex: 1;
+    padding-right: 20px;
+    max-width: 350px;
+}
+
+.welcome-section-four-content-right {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .welcome-section-four {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-section-four-content-left {
+        margin-bottom: 20px;
+        padding-right: 0;
+    }
+}
 
