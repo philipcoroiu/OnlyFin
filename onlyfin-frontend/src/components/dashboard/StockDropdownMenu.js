@@ -91,38 +91,42 @@ export default function StockDropdownMenu(props) {
 
             {showMenu && (
                 <div className="dashboard-drop-down-container dashboard-stock-dropdown">
+                    <div className="dashboard-stock-dropdown-top-container">
+                        <input
+                            className="dashboard-input"
+                            type="text"
+                            placeholder="Search for a stock"
+                            value={searchText}
+                            onChange={(e) =>handleSearchTextChange(e.target.value)}
+                        />
+                        <button
+                            onClick={() => handleRemoveStock()}
+                            className="dashboard-button"
+                        >
+                            Remove
+                        </button>
+                        <p> --- Add a new stock ---</p>
 
-                    <input
-                        className="dashboard-input"
-                        type="text"
-                        placeholder="Search for a stock"
-                        value={searchText}
-                        onChange={(e) =>handleSearchTextChange(e.target.value)}
-                    />
-                    <button
-                        onClick={() => handleRemoveStock()}
-                        className="dashboard-button"
-                    >
-                        Remove
-                    </button>
-                    <p>---- Add a new stock ----</p>
+                    </div>
+                    <div className="dashboard-add-stock-container">
                     <ul>
                         {refStocksToShow != null &&
                         refStocksToShow.map((stock) => (
-                        <div classname="dashboard-add-stock-container">
-                            <li>{stock.name}
-                                [{stock.ticker}]
-                            </li>
-                            <button
-                                className="dashboard-button"
-                                value={stock.id}
-                                onClick={() => handleAddStock(stock.id)}
-                            >
-                                <p>Add</p>
-                            </button>
-                        </div>
+                        <li>
+                            <div>
+                                <p>{stock.name} [{stock.ticker}]</p>
+                                <button
+                                    className="dashboard-button"
+                                    value={stock.id}
+                                    onClick={() => handleAddStock(stock.id)}
+                                >
+                                    <p>Add</p>
+                                </button>
+                            </div>
+                        </li>
                     ))}
-                </ul>
+                    </ul>
+                    </div>
                 </div>
                 )
             }

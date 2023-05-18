@@ -89,25 +89,26 @@ export default function CategoryDropdownMenu(props) {
                                 onChange={(e) => setInputValue(e.target.value)}
                             />
                         </form>
-
-                        <button
-                            onClick={ (e) => handleAddCategory(e, inputValue)}
-                            className="dashboard-button"
-                        >
-                            Add Category
-                        </button>
-                        <button
-                            onClick={ (e) => handleRemoveCategory(e)}
-                            className="dashboard-button"
-                        >
-                           Remove selected category
-                        </button>
-                        <button
-                            className="dashboard-button"
-                            onClick={(e) => handleCangeCategoryName(e, inputValue)}
-                        >
-                            Change selected name
-                        </button>
+                        <div className="dashboard-category-drop-down-button-container">
+                            <button
+                                onClick={ (e) => handleAddCategory(e, inputValue)}
+                                className="dashboard-button"
+                            >
+                                Add Category
+                            </button>
+                            <button
+                                onClick={ (e) => handleRemoveCategory(e)}
+                                className="dashboard-button"
+                            >
+                                Remove selected category
+                            </button>
+                            <button
+                                className="dashboard-button"
+                                onClick={(e) => handleCangeCategoryName(e, inputValue)}
+                            >
+                                Change selected name
+                            </button>
+                        </div>
                     </div>
                 )
             }

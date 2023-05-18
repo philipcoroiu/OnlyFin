@@ -66,7 +66,7 @@ export default function NavBar() {
                         <box-icon name='search'></box-icon>
                     </div>
                 </Link>
-                <Link to="../Dashboard">
+                <Link to={`../Dashboard?User=${userId}`}>
                     <div className="navbar--icon">
                         <box-icon name='news'></box-icon>
                     </div>

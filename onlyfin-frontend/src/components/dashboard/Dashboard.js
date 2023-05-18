@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation,useNavigate} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
@@ -26,6 +26,7 @@ export default function Dashboard() {
     const [currentCategoryId, setCurrentCategoryId] = useState(null);
     const [userName, setUserName] = useState ("n/a")
 
+    const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const categoryIndexId = searchParams.get("CategoryId") || null;
@@ -34,23 +35,28 @@ export default function Dashboard() {
 
 
     useEffect(() => {
+        setIsLoading(true)
 
-        if(otherUserID == null) {
-            axios.get(process.env.REACT_APP_BACKEND_URL+"/fetch-current-user-id", {withCredentials: true}).then(
-                (response) => {
-                    if (parseInt(otherUserID) === response.data || otherUserID == null) {
-                        setUserId(response.data)
-                        setOwnDashboard(true)
-                    } else {
-                        setUserId(otherUserID)
-                        setOwnDashboard(false)
-                    }
-                })
-        }
-        else{
-            setUserId(otherUserID)
-        }
-    }, []);
+        console.log(otherUserID)
+        axios.get(process.env.REACT_APP_BACKEND_URL+"/fetch-current-user-id", {withCredentials: true}).then(
+            (response) => {
+                if (parseInt(otherUserID) === response.data || otherUserID == null) {
+                    setUserId(response.data)
+                    setOwnDashboard(true)
+                } else {
+                    setUserId(otherUserID)
+                    setOwnDashboard(false)
+                }
+            }
+        ).catch(() => {
+            if(otherUserID != null){
+                setUserId(otherUserID)
+            }
+            else{
+                navigate("/Dashboard")
+            }
+        })
+    }, [otherUserID]);
 
     useEffect(() => {
         if (!userId) {

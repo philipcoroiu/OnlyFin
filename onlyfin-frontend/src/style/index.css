@@ -1077,6 +1077,23 @@ Dashboard
 variabler så att det inte ska påverka något annat.
 behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 
+.dashboard-category-drop-down-button-container{
+    border-top: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
+    padding-top: 7px;
+}
+
+dashboard-stock-dropdown-top-container{
+    border-bottom: 1px solid;
+    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
+    padding-bottom: 5px;
+}
+
+.dashboard-add-stock-container{
+    margin: 7px;
+    border: 1px solid black;
+}
+
 .dashboard-dropdown-menu-text {
     font-family: Tahoma;
     text-align: center;
@@ -1201,8 +1218,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 }
 
 .dashboard-drop-down-container button.dashboard-button {
-    flex-grow: 1;
-    height: auto;
+
 }
 
 .dashboard-stock-dropdown ul{
