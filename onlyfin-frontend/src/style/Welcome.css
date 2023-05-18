@@ -7,14 +7,10 @@ Welcome
     width: 100%;
     top: 0;
     display: flex;
-    position: fixed;
     justify-content: space-between;
-    box-shadow: 0px 0px 25px #b7b7b7;
     padding: 5px 25px;
-    border-bottom: 1px solid;
-    border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    border-image-slice: 1;
     background-color: #fff;
+
 }
 
 .welcome--navbar > ul {
@@ -63,11 +59,11 @@ Welcome
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    margin-top: 120px;
+    margin-top: 20px;
 }
 
 .welcome--hero > h1 {
-    font-size: 80px;
+    font-size: 90px;
     padding: 30px 30px 0px 30px;
 }
 
@@ -83,30 +79,36 @@ Welcome
 .welcome--hero--p {
     text-align: center;
     font-size: 25px;
-    margin-bottom: 100px;
+    margin-bottom: 70px;
+    margin-top: 0;
 }
 
 .welcome--hero--image {
     width: 50%;
 }
 
-.welcome--hero--button {
-    margin: 50px;
-    padding: 50px;
-    width: 400px;
-    font-size: 50px;
-    font-weight: bold;
-    border: none;
-    background-color: transparent;
+.welcome--hero--buttons--container {
+    display: flex;
+    gap: 50px;
 }
 
-.welcome--hero--button:hover {
-    cursor: pointer;
-    border-bottom: 1px solid;
-    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    background-size: 400% 400%;
-    background-clip: text;
-    color: transparent;
-    animation: gradient 5s ease infinite;
-    transition: all 0.5s ease-in-out;
+
+.welcome--hero--buttons > button {
+    width: 100px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(217, 217, 217, 0.34);
+    font-size: 13px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px 4px #d2d2d2;
+    transition: all 0.1s ease-in-out;
+    margin-bottom: 100px;
 }
+
+.welcome--hero--buttons button:hover {
+    background-color: rgba(138, 138, 138, 0.34);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+
