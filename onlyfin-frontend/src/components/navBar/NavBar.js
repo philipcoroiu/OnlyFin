@@ -12,10 +12,9 @@ Make logout function (POST / logout)
  */
 
 
-
 async function logout() {
     try {
-        await axios.post(process.env.REACT_APP_BACKEND_URL+`/logout`,
+        await axios.post(process.env.REACT_APP_BACKEND_URL + `/logout`,
             {},
             {
                 headers: {
@@ -37,52 +36,53 @@ export default function NavBar() {
     const [userId, setUserId] = useState(null)
 
     useEffect(() => {
-        try{
-            axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials:true}).then((response) => {
+        try {
+            axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
                 setLoggedIn(true)
                 setUserId(response.data)
             })
-        }
-        catch(e){
+        } catch (e) {
 
         }
     }, []);
 
-    if(loggedIn){
+    if (loggedIn) {
         return (
             <div className="navbar-container">
                 <Link to="/mypage">
-                <span className="navbar--img--line">
+                    <span className="navbar--img--line">
                         <box-icon name='user'/>
-                </span>
+                    </span>
                 </Link>
-                <Link to="/feed">
+
+                <div className="navbar-icon-container">
+                    <Link to="/feed">
+                        <div className="navbar--icon">
+                            <box-icon name='home'></box-icon>
+                        </div>
+                    </Link>
+                    <Link to="/searchpage">
+                        <div className="navbar--icon">
+                            <box-icon name='search'></box-icon>
+                        </div>
+                    </Link>
+                    <Link to={`../Dashboard?User=${userId}`}>
+                        <div className="navbar--icon">
+                            <box-icon name='news'></box-icon>
+                        </div>
+                    </Link>
+                    <Link to="/Studio">
+                        <div className="navbar--icon">
+                            <box-icon name='add-to-queue'></box-icon>
+                        </div>
+                    </Link>
                     <div className="navbar--icon">
-                        <box-icon name='home'></box-icon>
+                        <box-icon name='exit' onClick={logout}></box-icon>
                     </div>
-                </Link>
-                <Link to="/searchpage">
-                    <div className="navbar--icon">
-                        <box-icon name='search'></box-icon>
-                    </div>
-                </Link>
-                <Link to={`../Dashboard?User=${userId}`}>
-                    <div className="navbar--icon">
-                        <box-icon name='news'></box-icon>
-                    </div>
-                </Link>
-                <Link to="/Studio">
-                    <div className="navbar--icon">
-                        <box-icon name='add-to-queue'></box-icon>
-                    </div>
-                </Link>
-                <div className="navbar--icon">
-                    <box-icon name='exit' onClick={logout}></box-icon>
                 </div>
             </div>
         )
-    }
-    else{
+    } else {
         return (
             <div className="navbar-container">
                 <Link to="/Login">
@@ -90,26 +90,28 @@ export default function NavBar() {
                         <box-icon name='user'/>
                 </span>
                 </Link>
-                <Link to="/Login">
-                    <div className="navbar--icon">
-                        <box-icon name='home'></box-icon>
-                    </div>
-                </Link>
-                <Link to="/searchpage">
-                    <div className="navbar--icon">
-                        <box-icon name='search'></box-icon>
-                    </div>
-                </Link>
-                <Link to="../Login">
-                    <div className="navbar--icon">
-                        <box-icon name='news'></box-icon>
-                    </div>
-                </Link>
-                <Link to="/Studio">
-                    <div className="navbar--icon">
-                        <box-icon name='add-to-queue'></box-icon>
-                    </div>
-                </Link>
+                <div className="navbar-icon-container">
+                    <Link to="/Login">
+                        <div className="navbar--icon">
+                            <box-icon name='home'></box-icon>
+                        </div>
+                    </Link>
+                    <Link to="/searchpage">
+                        <div className="navbar--icon">
+                            <box-icon name='search'></box-icon>
+                        </div>
+                    </Link>
+                    <Link to="../Login">
+                        <div className="navbar--icon">
+                            <box-icon name='news'></box-icon>
+                        </div>
+                    </Link>
+                    <Link to="/Studio">
+                        <div className="navbar--icon">
+                            <box-icon name='add-to-queue'></box-icon>
+                        </div>
+                    </Link>
+                </div>
             </div>
         )
     }
