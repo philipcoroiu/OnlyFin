@@ -50,7 +50,11 @@ public class SecurityConfig {
                                 "/dashboard/get/**",
                                 "/getNameFromUserId/**",
                                 "/tests/**",
-                                "/search-analyst-include-sub-info"
+                                "/search-analyst-include-sub-info",
+                                "/search-all-analysts-include-sub-info",
+                                "/reviews/fetch-all",
+                                "/fetch-about-me",
+                                "/fetch-about-me-with-sub-info"
                         )
                         .permitAll()
                         .requestMatchers(
@@ -63,7 +67,6 @@ public class SecurityConfig {
                                 "/enable-analyst",
                                 "/disable-analyst",
                                 "/fetch-current-user-id",
-                                "/fetch-about-me",
                                 "/update-about-me",
                                 "/dashboard/**",
                                 "/studio/**",
@@ -75,8 +78,6 @@ public class SecurityConfig {
                                 "/feed/**",
                                 "/fetch-current-user-subscriptions",
                                 "/stonks/**",
-                                "/search-all-analysts-include-sub-info",
-                                "/fetch-about-me-with-sub-info",
                                 "/user-subscription-list-sorted-by-postdate",
                                 "/user-subscription-list-sorted-by-update-date",
                                 "/algo/**",

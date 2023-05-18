@@ -42,7 +42,7 @@ public class AnalystReviewController {
      */
     @PutMapping("/post")
     @Transactional
-    public ResponseEntity<String> addReviewForUser(@RequestBody @NotNull AnalystReviewPostDTO analystReviewPostDTO, Principal principal) {
+    public ResponseEntity<String> addReviewForUser(@RequestBody AnalystReviewPostDTO analystReviewPostDTO, Principal principal) {
         if (analystReviewPostDTO.reviewText() == null || analystReviewPostDTO.targetUsername() == null) {
             return ResponseEntity.badRequest().build();
         }

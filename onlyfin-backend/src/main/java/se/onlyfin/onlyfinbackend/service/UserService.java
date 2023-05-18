@@ -175,6 +175,20 @@ public class UserService {
     }
 
     /**
+     * @return A list of all analysts as profiles
+     */
+    public List<ProfileDTO> getAllAnalystsAsProfiles() {
+        List<ProfileDTO> profiles = new ArrayList<>();
+
+        List<User> analysts = userRepository.findByisAnalystIsTrue();
+        for (User analyst : analysts) {
+            profiles.add(new ProfileDTO(analyst.getUsername(), analyst.getId()));
+        }
+
+        return profiles;
+    }
+
+    /**
      * Returns an analyst with the given username if it exists else null.
      *
      * @param username The username of the analyst to be returned.

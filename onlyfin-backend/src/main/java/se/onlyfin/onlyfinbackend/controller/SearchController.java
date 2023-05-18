@@ -102,8 +102,8 @@ public class SearchController {
      */
     @GetMapping("/search-analyst-include-sub-info")
     public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> searchForAnalystsWithSubsIncluded(@RequestParam String search, Principal principal) {
-        User fetchingUser = userService.getUserOrNull(principal.getName());
-        if (fetchingUser == null) {
+        boolean notLoggedIn = (principal == null);
+        if (notLoggedIn) {
             List<User> foundUsers = new ArrayList<>(userService.findAnalystWithUsernameStartingWith(search));
             if (foundUsers.isEmpty()) {
                 return ResponseEntity.notFound().build();
@@ -112,6 +112,8 @@ public class SearchController {
             List<ProfileDTO> foundProfiles = createProfileList(foundUsers);
             return ResponseEntity.ok().body(getProfilesWithSubscribingFalse(foundProfiles));
         }
+
+        User fetchingUser = userService.getUserOrNull(principal.getName());
 
         List<User> foundUsers = new ArrayList<>(userService.findAnalystWithUsernameStartingWith(search));
         foundUsers.remove(fetchingUser);
@@ -139,7 +141,17 @@ public class SearchController {
      */
     @GetMapping("/search-all-analysts-include-sub-info")
     public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> fetchAllAnalystsWithSubsIncluded(Principal principal) {
-        User fetchingUser = userService.getUserOrException(principal.getName());
+        boolean notLoggedIn = (principal == null);
+        if (notLoggedIn) {
+            List<ProfileDTO> analysts = new ArrayList<>(userService.getAllAnalystsAsProfiles());
+            if (analysts.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok().body(getProfilesWithSubscribingFalse(analysts));
+        }
+
+        User fetchingUser = userService.getUserOrNull(principal.getName());
 
         List<User> analysts = new ArrayList<>(userService.getAllAnalysts());
         analysts.remove(fetchingUser);
