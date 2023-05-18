@@ -168,7 +168,6 @@ public class UserService {
     }
 
     /**
-     *
      * @return A list of all analysts.
      */
     public List<User> getAllAnalysts() {

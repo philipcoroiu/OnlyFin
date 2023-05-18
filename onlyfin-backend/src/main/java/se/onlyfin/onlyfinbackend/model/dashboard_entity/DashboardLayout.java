@@ -7,11 +7,10 @@ import jakarta.persistence.Id;
 @Entity
 public class DashboardLayout {
 
-    public DashboardLayout (){
-
+    public DashboardLayout() {
     }
 
-    public DashboardLayout(int moduleId, int categoryId){
+    public DashboardLayout(int moduleId, int categoryId) {
         this.moduleId = moduleId;
         this.categoryId = categoryId;
         w = 2;
@@ -19,19 +18,19 @@ public class DashboardLayout {
     }
 
     @Id
-    @Column(name="module_id")
+    @Column(name = "module_id")
     private int moduleId;
 
-    @Column(name="category_id")
+    @Column(name = "category_id")
     private int categoryId;
 
-    @Column(name="h")
+    @Column(name = "h")
     private int h;
 
-    @Column(name="w")
+    @Column(name = "w")
     private int w;
 
-    @Column(name="x")
+    @Column(name = "x")
     private int x;
 
     public int getModuleId() {
@@ -82,7 +81,7 @@ public class DashboardLayout {
         this.y = y;
     }
 
-    @Column(name="y")
+    @Column(name = "y")
     private int y;
 
 }

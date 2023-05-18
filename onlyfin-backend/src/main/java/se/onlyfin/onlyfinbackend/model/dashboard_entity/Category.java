@@ -10,7 +10,6 @@ import java.util.List;
 public class Category {
 
     public Category() {
-
     }
 
     public Category(int id) {
@@ -53,6 +52,10 @@ public class Category {
 
     public int getStock_id() {
         return stock_id.getId();
+    }
+
+    public Stock getStock() {
+        return stock_id;
     }
 
     public void setStock_id(Stock stock_id) {
