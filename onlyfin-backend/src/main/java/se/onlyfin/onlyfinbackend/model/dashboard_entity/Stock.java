@@ -12,7 +12,6 @@ import java.util.List;
 public class Stock {
 
     public Stock() {
-
     }
 
     public Stock(int id) {

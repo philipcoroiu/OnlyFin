@@ -10,7 +10,6 @@ import java.util.List;
 public class Category {
 
     public Category() {
-
     }
 
     public Category(int id) {

@@ -19,7 +19,6 @@ import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/algo")

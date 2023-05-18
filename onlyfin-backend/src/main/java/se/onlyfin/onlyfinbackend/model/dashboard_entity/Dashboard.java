@@ -10,7 +10,6 @@ import java.util.List;
 public class Dashboard {
 
     public Dashboard() {
-
     }
 
     public Dashboard(int id) {

@@ -5,5 +5,5 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.DashboardLayout;
 
 import java.util.List;
 
-public record DashboardWithLayoutDTO (Dashboard dashboard, List<DashboardLayout> dashboardLayout) {
+public record DashboardWithLayoutDTO(Dashboard dashboard, List<DashboardLayout> dashboardLayout) {
 }
