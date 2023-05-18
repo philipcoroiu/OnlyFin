@@ -1067,9 +1067,11 @@ variabler så att det inte ska påverka något annat.
 behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 
 .dashboard-category-drop-down-button-container{
-    border-top: 1px solid;
+    border-bottom: 1px solid;
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
-    padding-top: 7px;
+    padding-top: 0px;
+    margin-bottom: 10px;
+    margin-top: 5px;
 }
 
 dashboard-stock-dropdown-top-container{
