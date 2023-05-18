@@ -62,7 +62,9 @@ export default function Feed(props) {
             <div className="feed--charts--container">
                 {feedData === null ?
                     (
-                        <div>Loading</div>
+                        <div className="loader-container">
+                            <div className="loader"></div>
+                        </div>
                     ) : (
                         <div className="feed--charts">
                             {feedData ? showFeed :
