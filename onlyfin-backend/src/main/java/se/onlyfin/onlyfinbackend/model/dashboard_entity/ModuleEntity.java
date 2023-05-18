@@ -42,6 +42,10 @@ public class ModuleEntity {
         return category_id.getId();
     }
 
+    public Category getCategory() {
+        return category_id;
+    }
+
     public JsonNode getContent() {
         return content;
     }
