@@ -1,7 +1,9 @@
 import React from "react"
 import {Link, NavLink} from "react-router-dom";
 import Dashboard from "../../assets/images/Dashboard.png";
-import studioPic from "../../assets/images/studio.png";
+import Discover from "../../assets/images/Discover.png";
+import Visualize from "../../assets/images/Visualize.png";
+import Monetize from "../../assets/images/Monetize.jpg";
 
 export default function Home() {
     document.title = "OnlyFin"
@@ -43,7 +45,36 @@ export default function Home() {
 
                 <img className="welcome--hero--image" src={Dashboard}/>
 
-                <h2>Discover world-class analysts</h2>
+                <div className="welcome-section-two">
+                    <div className="welcome-section-two-content-left">
+                        <h2>Discover <span>world-class</span> analysts</h2>
+                        <p>Find and follow world-class stock market analysts. Access strategies and insights from brilliant analysts with a proven track record of success.</p>
+                    </div>
+                    <div className="welcome-section-two-content-right">
+                        <img src={Discover} alt="Discover" />
+                    </div>
+                </div>
+
+                <div className="welcome-section-three">
+                    <div className="welcome-section-three-content-left">
+                        <img src={Visualize} alt="Discover" />
+                    </div>
+                    <div className="welcome-section-three-content-right">
+                        <h2><span>Visualize</span> and Share Your Analysis</h2>
+                        <p>Visualize and share your stock market analysis with unprecedented power. Gain recognition, build your expert reputation, and empower yourself with data-driven insights.</p>
+                    </div>
+                </div>
+
+                <div className="welcome-section-two">
+                    <div className="welcome-section-two-content-left">
+                        <h2>Discover <span>world-class</span> analysts</h2>
+                        <p>Find and follow world-class stock market analysts. Access strategies and insights from brilliant analysts with a proven track record of success.</p>
+                    </div>
+                    <div className="welcome-section-two-content-right">
+                        <img src={Monetize} alt="Monetize" />
+                    </div>
+                </div>
+
             </div>
         </div>
 
