@@ -6,12 +6,12 @@ export default function SubscriptionBar() {
 
     const [subData, setSubData] = React.useState(null);
     const [suggestedData, setSuggestedData] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
 
         const getSubData = async () => {
             try {
-
                 const response = await
                     axios.get(process.env.REACT_APP_BACKEND_URL+`/user-subscription-list-sorted-by-postdate`,
                         {
@@ -24,6 +24,7 @@ export default function SubscriptionBar() {
                 console.log("Subscription bar data: ", response.data)
 
                 setSubData(response.data)
+                setLoading(false)
 
             } catch (error) {
                 console.log("Get sub data error: ", error)
@@ -93,6 +94,8 @@ export default function SubscriptionBar() {
     }
 
 
+
+
     return (
         <div className="subBar">
             {subData ?
@@ -107,8 +110,24 @@ export default function SubscriptionBar() {
                 </div>
                 :
                 <div>
-                    <h2>No subscriptions found</h2>
-                    <p>Browse our amazing content and start following what interests you!</p>
+                    {loading ? (
+
+                        <div>
+                            <h3>Subscriptions</h3>
+                            <div className="loading-list">
+                                <div className="loading-list-item"></div>
+                            </div>
+                        </div>
+
+                           ) : (
+
+                        <div>
+                            <h2>No subscriptions found</h2>
+                            <p>Browse our amazing content and start following what interests you!</p>
+                        </div>
+                    )}
+
+
                 </div>
 
             }
