@@ -48,7 +48,7 @@ export default function SubscriptionBar() {
                 setSuggestedData(response.data)
 
             } catch (error) {
-                console.log(error)
+                console.log("GetSuggestedData error: ", error)
             }
         }
 

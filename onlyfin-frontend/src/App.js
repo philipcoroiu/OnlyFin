@@ -10,6 +10,15 @@ import MyPage from "./components/personalPage/MyPage";
 import UserNotFound from "./components/personalPage/UserNotFound"
 import Register from "./components/registration/Register";
 import Feed from "./components/feed/Feed";
+import "./style/index.css";
+import "./style/Studio.css";
+import "./style/Navbar.css";
+import "./style/Feed.css";
+import "./style/PersonalPage.css";
+import "./style/Login&Register.css";
+import "./style/SearchPage.css";
+import "./style/Welcome.css";    
+import "./style/Dashboard.css";
 
 function App() {
     return (
