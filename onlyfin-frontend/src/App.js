@@ -9,7 +9,7 @@ import PersonalPage from "./components/personalPage/PersonalPage";
 import MyPage from "./components/personalPage/MyPage";
 import UserNotFound from "./components/personalPage/UserNotFound"
 import Register from "./components/registration/Register";
-import Feed from "./components/feed/Feed";
+import Feed from "./components/feed/FeedPage";
 import "./style/index.css";
 import "./style/Studio.css";
 import "./style/Navbar.css";
