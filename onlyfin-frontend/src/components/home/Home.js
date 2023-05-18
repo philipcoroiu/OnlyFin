@@ -84,7 +84,7 @@ export default function Home() {
                     <div className="welcome-section-five-content-right">
                         <h2>Get ahead of<br/>the curve</h2>
                         <p>Start building your name and reputation today by trying our platform and sharing your valuable insights on social media.
-                            
+
                             Together, we're revolutionizing the way we understand and profit from the stock market.</p>
                     </div>
                 </div>
