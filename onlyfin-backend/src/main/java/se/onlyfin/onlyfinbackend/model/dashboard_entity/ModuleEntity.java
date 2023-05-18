@@ -43,7 +43,7 @@ public class ModuleEntity {
     }
 
     public Category getCategory() {
-        return category_id;
+        return null;
     }
 
     public JsonNode getContent() {

@@ -55,7 +55,7 @@ public class Category {
     }
 
     public Stock getStock() {
-        return stock_id;
+        return null;
     }
 
     public void setStock_id(Stock stock_id) {
