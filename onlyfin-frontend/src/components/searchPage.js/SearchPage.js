@@ -8,6 +8,7 @@ export default function SearchPage() {
     document.title = "Search"
 
     const [searchData, setSearchData] = React.useState(null);
+    const [userNotFound, setUserNotFound] = React.useState(false);
 
 
     useEffect(() => {
@@ -54,27 +55,32 @@ export default function SearchPage() {
 
                 //console.log('API response:', response.data[0].username);
                 setSearchData(response.data)
-
+                setUserNotFound(false);
             })
             .catch(error => {
 
-                console.error('API error:', error);
-
+                if(error.response && error.response.status === 404) {
+                    console.log("User not found")
+                    setUserNotFound(true);
+                } else {
+                    console.error('Error:', error.message);
+                }
             });
     };
 
-
-    return(
-        <div className="search--body">
-            <NavBar/>
-            <div className="search--header">
-                <h1>Discover analysts</h1>
+    function renderComponents() {
+        if(searchData === null) {
+            return (
+            <div className="loader-container">
+                <div className="loader"></div>
             </div>
-            <SearchBar onSearch={onSearch} classname="search--search"/>
-
-            {searchData === null ? (
-                <div>Failed to get search result</div>
-            ) : (
+            )
+        } else if(userNotFound) {
+            return (
+                <div className="user-not-found">User not found</div>
+            )
+        } else {
+            return (
                 <div
                     className="search--profile--container"
                 >
@@ -90,7 +96,20 @@ export default function SearchPage() {
 
                     ))}
                 </div>
-            )}
+            )
+        }
+    }
+
+
+    return(
+        <div className="search--body">
+            <NavBar/>
+            <div className="search--header">
+                <h1>Discover analysts</h1>
+            </div>
+            <SearchBar onSearch={onSearch} classname="search--search"/>
+
+            {renderComponents()}
         </div>
 
     )
