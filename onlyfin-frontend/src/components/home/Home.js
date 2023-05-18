@@ -4,6 +4,7 @@ import Dashboard from "../../assets/images/Dashboard.png";
 import Discover from "../../assets/images/Discover.png";
 import Visualize from "../../assets/images/Visualize.png";
 import Monetize from "../../assets/images/Monetize.jpg";
+import GetAhead from "../../assets/images/GetAhead.jpg";
 
 export default function Home() {
     document.title = "OnlyFin"
@@ -68,10 +69,24 @@ export default function Home() {
                 <div className="welcome-section-four">
                     <div className="welcome-section-four-content-left">
                         <h2>Monetize Your Analysis <span>Coming Soon</span></h2>
-                        <p>Soon, we will introduce the option for analysts to monetize their analysis. Giving you the ability to earn a substantial income doing what you love most—analyzing the stock market.</p>
+                        <p>Soon, we will introduce the option for analysts to monetize their analysis.
+                             Giving you the ability to earn a substantial income doing what you love most—analyzing the stock market.</p>
                     </div>
                     <div className="welcome-section-four-content-right">
                         <img src={Monetize} alt="Monetize" />
+                    </div>
+                </div>
+
+                <div className="welcome-section-five">
+                    <div className="welcome-section-five-content-left">
+                        <img src={GetAhead} alt="GetAhead" />
+                    </div>
+                    <div className="welcome-section-five-content-right">
+                        <h2>Get ahead of<br/>the curve</h2>
+                        <p>Start building your name and reputation today by trying our platform and sharing your valuable insights on social media.
+                            <br/>
+                            <br/>
+                            Together, we're revolutionizing the way we understand and profit from the stock market.</p>
                     </div>
                 </div>
 
