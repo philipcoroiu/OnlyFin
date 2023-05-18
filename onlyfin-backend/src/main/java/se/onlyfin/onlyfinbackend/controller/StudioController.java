@@ -3,22 +3,21 @@ package se.onlyfin.onlyfinbackend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.LayoutDTO;
-import se.onlyfin.onlyfinbackend.DTO.NameChangeDTO;
+import se.onlyfin.onlyfinbackend.DTO.NameChangeDT;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
-import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
-import se.onlyfin.onlyfinbackend.service.UserService;
 
-import java.security.Principal;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/studio")
 public class StudioController {
-    private final UserService userService;
     private final StockRepository stockRepository;
     private final CategoryRepository categoryRepository;
     private final ModuleRepository moduleRepository;
@@ -26,13 +25,12 @@ public class StudioController {
     private final StockRefRepository stockRefRepository;
     private final DashboardLayoutRepository dashboardLayoutRepository;
 
-    public StudioController(UserService userService, StockRepository stockRepository,
+    public StudioController(StockRepository stockRepository,
                             CategoryRepository categoryRepository,
                             ModuleRepository moduleRepository,
                             DashboardRepository dashboardRepository,
                             StockRefRepository stockRefRepository,
                             DashboardLayoutRepository dashboardLayoutRepository) {
-        this.userService = userService;
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
@@ -42,19 +40,13 @@ public class StudioController {
     }
 
     @PostMapping("/createStock")
-    public ResponseEntity<String> createStock(@RequestBody StockRefDTO stockRefDTO, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
-        if (!Objects.equals(actingUser.getId(), stockRefDTO.dashboardId())) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElse(null);
-        if (stockRef == null) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<String> createStock(@RequestBody StockRefDTO stockRefDTO) {
+        StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElseThrow(() ->
+                new NoSuchElementException("Stock ref not found"));
 
         Stock stockToSave = new Stock();
         stockToSave.setStock_ref_id(stockRef);
+
         stockToSave.setDashboard_id(new Dashboard(stockRefDTO.dashboardId()));
 
         stockRepository.save(stockToSave);
@@ -62,40 +54,22 @@ public class StudioController {
     }
 
     @DeleteMapping("/deleteStock/{id}")
-    public ResponseEntity<?> deleteStock(@PathVariable Integer id, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
+    public String deleteStock(@PathVariable String id) {
 
-        Stock targetStock = stockRepository.findById(id).orElse(null);
-        if (targetStock == null) {
-            return ResponseEntity.notFound().build();
+        int intId = Integer.parseInt(id);
+        if (!stockRepository.existsById(intId)) {
+            return "There is no stock with that id";
         }
-
-        if (actingUser.getId() != targetStock.getDashboard_id()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        stockRepository.deleteById(id);
-
-        return ResponseEntity.ok().body("stock deleted successfully");
+        stockRepository.deleteById(intId);
+        return "Removed stock successfully";
     }
 
     @PostMapping("/createCategory")
-    public ResponseEntity<?> createCategory(@RequestBody Category category, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
-
-        if (category.getName().isBlank()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        int targetDashboardId = category.getStock().getDashboard_id();
-        if (actingUser.getId() != targetDashboardId) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> createCategory(@RequestBody Category category) {
 
         if (!stockRepository.existsById(category.getStock_id())) {
             return ResponseEntity.badRequest().body("there is no stock for that id");
         }
-
         categoryRepository.save(category);
         return ResponseEntity.ok(categoryRepository.getReferenceById(category.getId()));
     }
@@ -108,21 +82,14 @@ public class StudioController {
      * @return name of new category if successful
      */
     @PostMapping("/createCategoryUsingStockId")
-    public ResponseEntity<String> createCategoryUsingStockId(Integer stockId, String nameOfNewCategory, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
-
+    @Deprecated
+    public ResponseEntity<String> createCategoryUsingStockId(Integer stockId, String nameOfNewCategory) {
         if (nameOfNewCategory.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Stock targetStock = stockRepository.findById(stockId).orElse(null);
-        if (targetStock == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (actingUser.getId() != targetStock.getDashboard_id()) {
-            return ResponseEntity.badRequest().build();
-        }
+        Stock targetStock = stockRepository.findById(stockId).orElseThrow(() ->
+                new NoSuchElementException("No such stock!"));
 
         List<Category> currentCategories = new ArrayList<>(targetStock.getCategories());
 
@@ -137,46 +104,36 @@ public class StudioController {
     }
 
     @DeleteMapping("/deleteCategory/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer id, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
+    public String deleteCategory(@PathVariable String id) {
 
-        Category targetCategory = categoryRepository.findById(id).orElse(null);
-        if (targetCategory == null) {
-            return ResponseEntity.badRequest().build();
+        try {
+            int intId = Integer.parseInt(id);
+            if (!categoryRepository.existsById(intId)) {
+                return "There is no category with that id";
+            }
+            categoryRepository.deleteById(intId);
+            return "Removed category successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        int targetDashboardId = targetCategory.getStock().getDashboard_id();
-        if (actingUser.getId() != targetDashboardId) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        categoryRepository.deleteById(id);
-
-        return ResponseEntity.ok().body("Removed category successfully");
+        return "Could not remove category";
     }
 
     @PutMapping("/updateCategoryName")
-    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDTO nameChangeRequest, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
+    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDT nameChangeRequest) {
 
-        if (nameChangeRequest.name().isBlank()) {
-            return ResponseEntity.badRequest().build();
+        Category category;
+
+        if (categoryRepository.existsById(nameChangeRequest.id())) {
+
+            Optional<Category> optionalCategory = categoryRepository.findById(nameChangeRequest.id());
+            category = optionalCategory.orElse(null);
+            assert category != null;
+            category.setName(nameChangeRequest.name());
+            categoryRepository.save(category);
+            return ResponseEntity.ok().body(category);
         }
-
-        Category category = categoryRepository.findById(nameChangeRequest.id()).orElse(null);
-        if (category == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        int targetDashboardId = category.getStock().getDashboard_id();
-        if (actingUser.getId() != targetDashboardId) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        category.setName(nameChangeRequest.name());
-        categoryRepository.save(category);
-
-        return ResponseEntity.ok().body(category);
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createModule")
@@ -192,92 +149,77 @@ public class StudioController {
     }
 
     @DeleteMapping("/deleteModule/{id}")
-    public ResponseEntity<?> deleteModule(@PathVariable Integer id, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
+    public String deleteModule(@PathVariable Integer id) {
 
-        ModuleEntity targetModuleEntity = moduleRepository.findById(id).orElse(null);
-        if (targetModuleEntity == null) {
-            return ResponseEntity.notFound().build();
+        if (!moduleRepository.existsById(id)) {
+            return "There is no module with that id";
         }
-
-        Category modulesCategory = targetModuleEntity.getCategory();
-        int targetDashboardId = modulesCategory.getStock().getDashboard_id();
-        if (actingUser.getId() != targetDashboardId) {
-            return ResponseEntity.badRequest().build();
-        }
-
         moduleRepository.deleteById(id);
-
-        return ResponseEntity.ok().body("Removed module successfully");
+        return "Removed module successfully";
     }
 
     @GetMapping("/getStocksAndCategories/{id}")
     public ResponseEntity<?> getStocksAndCategories(@PathVariable Integer id) {
-        Dashboard dashboard = dashboardRepository.findById(id).orElse(null);
-        if (dashboard == null) {
-            return ResponseEntity.badRequest().body("can't find dashboard");
-        }
-
-        for (int i = 0; i < dashboard.getStocks().size(); i++) {
-            for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++) {
-                dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
+        Dashboard dashboard;
+        if (dashboardRepository.existsById(id)) {
+            Optional<Dashboard> dashboardOptional = dashboardRepository.findById(id);
+            dashboard = dashboardOptional.orElse(null);
+            assert dashboard != null;
+            for (int i = 0; i < dashboard.getStocks().size(); i++) {
+                for (int j = 0; j < dashboard.getStocks().get(i).getCategories().size(); j++) {
+                    dashboard.getStocks().get(i).getCategories().get(j).setModuleEntities(null);
+                }
             }
+            return ResponseEntity.ok(dashboard);
         }
-        return ResponseEntity.ok(dashboard);
+        return ResponseEntity.badRequest().body("cant find dashboard");
     }
 
     @GetMapping("/getModuleFromId/{id}")
     public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id) {
-        ModuleEntity targetModule = moduleRepository.findById(id).orElse(null);
-        if (targetModule == null) {
-            return ResponseEntity.notFound().build();
-        }
+        //System.out.println(id);
 
-        return ResponseEntity.ok(targetModule);
+        if (moduleRepository.existsById(id)) {
+            Optional<ModuleEntity> moduleOptional = moduleRepository.findById(id);
+            ModuleEntity module = moduleOptional.orElse(null);
+            return ResponseEntity.ok(module);
+        } else return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/updateModuleContent")
-    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
-        int targetDashboardId = module.getCategory().getStock().getDashboard_id();
-        if (actingUser.getId() != targetDashboardId) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module) {
+
+        if (moduleRepository.existsById(module.getId())) {
+            Optional<ModuleEntity> moduleOptional = moduleRepository.findById(module.getId());
+            ModuleEntity moduleToSave = moduleOptional.orElse(null);
+            assert moduleToSave != null;
+            moduleToSave.setContent(module.getContent());
+            moduleToSave.setUpdatedDate(Instant.now());
+            moduleRepository.save(moduleToSave);
+            return ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
         }
-
-        ModuleEntity moduleToUpdate = moduleRepository.findById(module.getId()).orElse(null);
-        if (moduleToUpdate == null) {
-            return ResponseEntity.badRequest().body("module id does not exist");
-        }
-
-        moduleToUpdate.setContent(module.getContent());
-        moduleToUpdate.setUpdatedDate(Instant.now());
-        moduleRepository.save(moduleToUpdate);
-
-        return ResponseEntity.ok(moduleRepository.getReferenceById(module.getId()));
+        return ResponseEntity.badRequest().body("module id does not exist");
     }
 
     @PutMapping("/updateDashboardLayout")
-    public ResponseEntity<List<DashboardLayout>> updateDashboardLayout(@RequestBody List<LayoutDTO> layoutDTOList, Principal principal) {
-        User actingUser = userService.getUserOrException(principal.getName());
+    public ResponseEntity<?> updateDashboardLayout(@RequestBody List<LayoutDTO> layoutDTOList) {
+        //System.out.println(layoutDTOList);
 
         List<DashboardLayout> responseLayout = new ArrayList<>();
         for (LayoutDTO tempLayout : layoutDTOList) {
-            DashboardLayout currentDashboardLayout = dashboardLayoutRepository.findById(tempLayout.moduleId()).orElse(null);
-            Category currentTargetCategory = categoryRepository.findById(tempLayout.categoryId()).orElse(null);
-            if (currentDashboardLayout != null && currentTargetCategory != null) {
-                int currentTargetDashboardId = currentTargetCategory.getStock().getDashboard_id();
-                if (actingUser.getId() == currentTargetDashboardId) {
-                    currentDashboardLayout.setH(tempLayout.h());
-                    currentDashboardLayout.setW(tempLayout.w());
-                    currentDashboardLayout.setY(tempLayout.y());
-                    currentDashboardLayout.setX(tempLayout.x());
+            if (dashboardLayoutRepository.existsById(tempLayout.moduleId())) {
+                Optional<DashboardLayout> optionalLayout = dashboardLayoutRepository.findById(tempLayout.moduleId());
+                DashboardLayout dashboardLayout = optionalLayout.orElse(null);
+                assert dashboardLayout != null;
+                dashboardLayout.setH(tempLayout.h());
+                dashboardLayout.setW(tempLayout.w());
+                dashboardLayout.setY(tempLayout.y());
+                dashboardLayout.setX(tempLayout.x());
 
-                    responseLayout.add(dashboardLayoutRepository.save(currentDashboardLayout));
-                }
+                responseLayout.add(dashboardLayoutRepository.save(dashboardLayout));
             }
         }
 
         return ResponseEntity.ok(responseLayout);
     }
-
 }

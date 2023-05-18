@@ -34,8 +34,10 @@ public class DashboardController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<DashboardWithLayoutDTO> getDashboard(@PathVariable Integer id) {
-        Dashboard dashboard = dashboardRepository.findById(id).orElse(null);
+        Optional<Dashboard> optionalDashboard = dashboardRepository.findById(id);
+        Dashboard dashboard = optionalDashboard.orElse(null);
         if (dashboard == null) {
+            System.out.println("is null");
             return ResponseEntity.notFound().build();
         }
 
@@ -56,7 +58,6 @@ public class DashboardController {
     }
 
     @GetMapping("/getStockRef")
-    @Deprecated
     public ResponseEntity<List<StockRef>> getStockRef() {
         List<StockRef> stockRefs = stockRefRepository.findAll();
 
