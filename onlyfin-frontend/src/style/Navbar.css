@@ -36,13 +36,12 @@
 .navbar--img--line {
     border-bottom: 1px solid #b4b4b4;
     padding: 10px;
-    background-color: red;
 }
 
 .navbar--img--line > box-icon {
     height: 30px;
     width: 30px;
-    margin: 35px 0px;
+    margin: 25px 0 10px 0;
     border: none;
     fill: #565656;
 }
