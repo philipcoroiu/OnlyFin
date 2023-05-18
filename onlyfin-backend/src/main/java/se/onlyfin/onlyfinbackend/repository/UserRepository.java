@@ -79,5 +79,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      * @param search the search term
      * @return up to 7 analysts that start with the given search term
      */
-    List<User> findTop7ByisAnalystIsTrueAndUsernameIgnoreCaseStartsWith(String search);
+    List<User> findByisAnalystIsTrueAndUsernameIgnoreCaseStartsWith(String search);
 }

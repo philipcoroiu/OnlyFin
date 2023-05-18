@@ -102,7 +102,16 @@ public class SearchController {
      */
     @GetMapping("/search-analyst-include-sub-info")
     public ResponseEntity<List<ProfileWithSubInfoForLoggedInUserDTO>> searchForAnalystsWithSubsIncluded(@RequestParam String search, Principal principal) {
-        User fetchingUser = userService.getUserOrException(principal.getName());
+        User fetchingUser = userService.getUserOrNull(principal.getName());
+        if (fetchingUser == null) {
+            List<User> foundUsers = new ArrayList<>(userService.findAnalystWithUsernameStartingWith(search));
+            if (foundUsers.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            List<ProfileDTO> foundProfiles = createProfileList(foundUsers);
+            return ResponseEntity.ok().body(getProfilesWithSubscribingFalse(foundProfiles));
+        }
 
         List<User> foundUsers = new ArrayList<>(userService.findAnalystWithUsernameStartingWith(search));
         foundUsers.remove(fetchingUser);

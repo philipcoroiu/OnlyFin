@@ -49,21 +49,12 @@ Navbar
     border-radius: 50px;
 }
 
-.navbar--img {
-    height: 60px;
-    width: 60px;
-    margin: 15px 0px;
-    border: none;
-    fill: #9569b9;
-}
-
 .navbar--icon {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 30px;
     height: 30px;
-    margin: 35px 0;
     padding: 10px;
     border-radius: 15px;
     transition: all 0.1s ease-in-out;
@@ -97,12 +88,14 @@ Navbar
 .navbar-container {
     position: fixed;
     width: 5rem;
+    height: 97%;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    top: 1rem;
-    bottom: 1rem;
+    overflow: auto;
+
+    top: 1.5%;
     left: 1rem;
 
     border-radius: 15px;
@@ -111,53 +104,17 @@ Navbar
     background-color: rgba(255, 255, 255, 0.66);
 }
 
+.navbar-icon-container {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
 /**
 Studio
  */
-/*
-.studio--navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 100px;
-    box-shadow: 0px 0px 10px #e0e0e0;
-    background-color: #ffffff;
-}
-.studio--navbar > h1 {
-    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    background-size: 400% 400%;
-    background-clip: text;
-    color: transparent;
-    animation: gradient 5s ease infinite;
-}
-
-.studio--navbar > h1:hover {
-    cursor: default;
-}
-
-.studio--navbar--button {
-    font-size: 18px;
-    width: 95px;
-    height: 19px;
-    border: none;
-    background-color: #b4b4b4;
-    background-clip: text;
-    color: transparent;
-    cursor: pointer;
-    padding: 0px;
-    margin: 0px;
-    font-weight: bold;
-}
-
-.studio--navbar--button:hover {
-    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    background-size: 400px 400px;
-    animation: gradient 5s ease infinite;
-    background-clip: text;
-    color: transparent;
-}
-*/
-
 
 .studio--container {
     display: flex;
@@ -662,6 +619,17 @@ Register
     box-shadow: 5px 5px 10px #bebebe;
 }
 
+.register-error-message {
+    position: absolute;
+    top: 82%;
+    left: 40.5%;
+    padding: 10px;
+}
+
+.register-error-message > p {
+    color: #ff0000;
+}
+
 .register--title {
     background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 400% 400%;
@@ -671,9 +639,17 @@ Register
     font-size: 23px;
 }
 
+.register--title:hover {
+    cursor: default;
+}
+
 .register--title > p {
     color: #282c34;
     font-size: 18px;
+}
+
+.register--title > p:hover {
+    cursor: default;
 }
 
 .register--inputs--container {
@@ -693,12 +669,14 @@ Register
     outline: none;
     font-size: 17px;
     text-align: center;
-    width: 290px;
+    width: 300px;
     height: 30px;
 }
 
-.register--inputs--container > input::placeholder {
-    color: #282c34;
+.register-whitespace {
+    margin: 10px;
+    width: 50px;
+    border-bottom: 0.5px solid #8d8d8d;
 }
 
 .register--submit {
@@ -743,6 +721,17 @@ Login
     }
 }
 
+.login-error-message {
+    position: absolute;
+    top: 70%;
+    left: 36%;
+    padding: 10px;
+}
+
+.login-error-message > p {
+    color: #ff0000;
+}
+
 .login--holder {
     display: flex;
     flex-direction: column;
@@ -774,7 +763,7 @@ Login
 }
 
 .login--inputs > input {
-    margin: 20px;
+    margin: 10px;
     border: none;
     border-radius: 10px;
     backdrop-filter: blur(50px);
@@ -1130,7 +1119,7 @@ dashboard-stock-dropdown-top-container{
     border-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4) 1;
 }
 
-.dashboard-button-round{
+.dashboard-button-round {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1142,12 +1131,13 @@ dashboard-stock-dropdown-top-container{
     width: 30px;
     height: 30px;
 }
-.dashboard-button-round:hover{
+
+.dashboard-button-round:hover {
     background-color: #c0c0c0;
     transition: background-color 0.2s ease-in-out;
 }
 
-.dashboard-button-small-text{
+.dashboard-button-small-text {
     font-size: 25px;
     padding-top: 3px;
 
@@ -1163,7 +1153,7 @@ dashboard-stock-dropdown-top-container{
     height: 35px;
 }
 
-.dashboard-button{
+.dashboard-button {
     border-radius: 100px;
     border: none;
     padding-left: 14px;
@@ -1179,19 +1169,19 @@ dashboard-stock-dropdown-top-container{
 }
 
 
-.dashboard-button:hover{
+.dashboard-button:hover {
     background-color: #c0c0c0;
     transition: background-color 0.2s ease-in-out;
 }
 
-.dashboard-button.active{
+.dashboard-button.active {
     background-image: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400px 400px;
     animation: gradient 25s ease infinite;
     transition: background-image 3s ease-in-out;
 }
 
-.dashboard-input{
+.dashboard-input {
     border-radius: 100px;
     border: none;
     padding-left: 14px;
@@ -1204,7 +1194,7 @@ dashboard-stock-dropdown-top-container{
     background-color: #d2d2d2;
 }
 
-.dashboard-drop-down-container{
+.dashboard-drop-down-container {
     margin-top: 10px;
     padding: 10px;
     background-color: white;
@@ -1221,32 +1211,32 @@ dashboard-stock-dropdown-top-container{
 
 }
 
-.dashboard-stock-dropdown ul{
+.dashboard-stock-dropdown ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.dashboard-stock-dropdown li{
+.dashboard-stock-dropdown li {
     margin-bottom: 5px;
 }
 
-.dashboard-text{
+.dashboard-text {
     font-family: Tahoma;
     font-size: 14px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
-.dashboard-add-stock-container{
+.dashboard-add-stock-container {
     height: 20px;
 }
 
-.dashboard-stock-dropdown{
+.dashboard-stock-dropdown {
     height: 500px;
 }
 
-.dashboard-drop-down-container button,input{
+.dashboard-drop-down-container button, input {
     margin-bottom: 10px;
 }
 
@@ -1455,7 +1445,6 @@ dashboard-stock-dropdown-top-container{
     transform: translate(-50%, -50%);
 
 }
-
 
 
 /**

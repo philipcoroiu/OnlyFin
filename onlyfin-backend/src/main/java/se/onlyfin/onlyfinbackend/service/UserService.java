@@ -192,7 +192,7 @@ public class UserService {
      * @return A list of analysts with usernames starting with the given search string.
      */
     public List<User> findAnalystWithUsernameStartingWith(String search) {
-        return userRepository.findTop7ByisAnalystIsTrueAndUsernameIgnoreCaseStartsWith(search);
+        return userRepository.findByisAnalystIsTrueAndUsernameIgnoreCaseStartsWith(search);
     }
 
     /**
