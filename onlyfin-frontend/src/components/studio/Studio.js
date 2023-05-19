@@ -31,23 +31,23 @@ export default function Studio() {
     const [username, setUsername] = useState()
     const [loading, setLoading] = useState(true);
 
-    React.useEffect( () => {
+    React.useEffect(() => {
 
-        const fetchData = async() => {
+        const fetchData = async () => {
             try {
 
-                await axios.get(process.env.REACT_APP_BACKEND_URL+`/principal-username`,
+                await axios.get(process.env.REACT_APP_BACKEND_URL + `/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
                         },
                         withCredentials: true,
                     }).then((response) => {
-                        handleUserNameChange(response.data)
+                    handleUserNameChange(response.data)
                 })
 
                 if (editModule && moduleIndex != null) {
-                    await axios.get(process.env.REACT_APP_BACKEND_URL+"/studio/getModuleFromId/" + moduleIndex,
+                    await axios.get(process.env.REACT_APP_BACKEND_URL + "/studio/getModuleFromId/" + moduleIndex,
                         {withCredentials: true}).then((response) => {
                         console.log(response.data.content)
                         setStudioChart(response.data.content)
@@ -56,7 +56,7 @@ export default function Studio() {
                     })
                 }
 
-            } catch(error) {
+            } catch (error) {
                 console.log(error);
             } finally {
                 setLoading(false);
@@ -126,8 +126,8 @@ export default function Studio() {
             }
         },
         plotOptions: {
-            series:{
-                animation:{
+            series: {
+                animation: {
                     duration: 0
                 }
             }
@@ -153,7 +153,6 @@ export default function Studio() {
     const [categoryId, setCategoryId] = useState(null);
     const [chartType, setChartType] = useState("column");
     const [studioChart, setStudioChart] = useState(studioChartInitState);
-
 
 
     function putChartToInitState() {
@@ -231,31 +230,31 @@ export default function Studio() {
         }, duration);
     }
 
-    function handlePostChart(postChart){
+    function handlePostChart(postChart) {
         /* posts the chart to the database */
-        axios.post(process.env.REACT_APP_BACKEND_URL+"/studio/createModule", postChart, {withCredentials: true})
+        axios.post(process.env.REACT_APP_BACKEND_URL + "/studio/createModule", postChart, {withCredentials: true})
 
         /* shows success message*/
         showSuccessMessageForDuration(2000);
     }
 
-    async function handleUpdateChart(postChart){
+    async function handleUpdateChart(postChart) {
 
         postChart.id = moduleId;
         /* posts the chart to the database */
 
         console.log("postedChart: ", postChart)
         await axios.put(
-            process.env.REACT_APP_BACKEND_URL+"/studio/updateModuleContent",
+            process.env.REACT_APP_BACKEND_URL + "/studio/updateModuleContent",
             postChart
-            ,{
+            , {
                 headers: {
                     'Content-type': 'application/json',
                 },
                 withCredentials: true,
             }
         ).then((response) => {
-            console.log("response: ",response.data)
+            console.log("response: ", response.data)
         })
 
         /* shows success message*/
@@ -277,15 +276,12 @@ export default function Studio() {
                 content: chartToSubmit
             };
 
-            if(editModule){
+            if (editModule) {
                 setSuccessMessage("SUCCESS: Your chart has been updated");
                 handleUpdateChart(postChart)
-            }
-
-            else{
+            } else {
                 handlePostChart(postChart)
             }
-
 
 
         }
@@ -295,10 +291,10 @@ export default function Studio() {
         }
     }
 
-    async function deleteChart(){
+    async function deleteChart() {
         await setSuccessMessage("SUCCESS: Your chart has been deleted\nRedirecting...")
         await axios.delete(
-            process.env.REACT_APP_BACKEND_URL+`/studio/deleteModule/` + moduleId,
+            process.env.REACT_APP_BACKEND_URL + `/studio/deleteModule/` + moduleId,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -318,14 +314,14 @@ export default function Studio() {
             {/* --STUDIO CONTAINER-- */}
             <div className="studio--container">
                 <div
-                     className="studio--chart"
+                    className="studio--chart"
                 >
                     {/* --HIGHCHART-- */}
                     {loading ? (
                         <div className="spinner"></div>
                     ) : (
                         <HighchartsReact
-                            containerProps={{ style: { height: '100%', weight: '100%' } }}
+                            containerProps={{style: {height: '100%', weight: '100%'}}}
                             highcharts={Highcharts}
                             options={studioChart}
                         />
