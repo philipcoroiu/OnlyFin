@@ -56,7 +56,7 @@ export default function PersonalPage() {
 
                 //await axios.get("http://localhost:8080/test-login")
 
-                const response1 = await axios.get(process.env.REACT_APP_BACKEND_URL+`/principal-username`,
+                const response1 = await axios.get(process.env.REACT_APP_BACKEND_URL + `/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -68,7 +68,7 @@ export default function PersonalPage() {
                 setUsername(response1.data);
                 console.log(username)
 
-                const response2 = await axios.get(process.env.REACT_APP_BACKEND_URL+`/fetch-about-me?username=${response1.data}`,
+                const response2 = await axios.get(process.env.REACT_APP_BACKEND_URL + `/fetch-about-me?username=${response1.data}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -81,7 +81,7 @@ export default function PersonalPage() {
                 setUserData(response2.data);
 
 
-                const responseSubscribers = await axios.get(process.env.REACT_APP_BACKEND_URL+`/subscriptions/get-my-subscribe-count`,
+                const responseSubscribers = await axios.get(process.env.REACT_APP_BACKEND_URL + `/subscriptions/get-my-subscribe-count`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -97,7 +97,7 @@ export default function PersonalPage() {
                 navigate("/Login")
             }
 
-            const responseReviews = await axios.get(process.env.REACT_APP_BACKEND_URL+`/reviews/fetch-all?targetUsername=${username}`,
+            const responseReviews = await axios.get(process.env.REACT_APP_BACKEND_URL + `/reviews/fetch-all?targetUsername=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -132,7 +132,7 @@ export default function PersonalPage() {
 
     const updateUserText = async () => {
         try {
-            await axios.put(process.env.REACT_APP_BACKEND_URL+`/update-about-me`,
+            await axios.put(process.env.REACT_APP_BACKEND_URL + `/update-about-me`,
                 {text: userData},
                 {
                     headers: {
@@ -178,8 +178,10 @@ export default function PersonalPage() {
                 />
             </div>
             <div className="mypage--text--container">
-                <h2>{username}</h2>
-                <p className="mypage-subscribed"> <span className="subscribed-count">{subscribed}</span> Subs</p>
+                <div className="name-and-subs">
+                    <h2>{username}</h2>
+                    <p className="mypage-subscribed"><span className="subscribed-count">{subscribed}</span> Subs</p>
+                </div>
                 <div className="mypage--bio--container">
                     {isEditable ? (
                         <textarea
@@ -194,7 +196,7 @@ export default function PersonalPage() {
                         <p>{userData}</p>
                     )}
                     <div className="mypage-buttons">
-                        <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                        <button className="personalPage-review-card-edit" onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
                     </div>
                 </div>
             </div>
