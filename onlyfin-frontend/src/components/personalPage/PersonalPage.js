@@ -311,9 +311,16 @@ export default function PersonalPage() {
                         <div className="mypage--bio--container">
                             <p>{userData.aboutMe}</p>
                             <div className="mypage-buttons">
-                                <button
-                                    onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}
-                                </button>
+                                {<button
+                                    onClick={handleClick}
+                                    className="personalPage-review-card-edit"
+                                    style={
+                                        userData.subscribed ?
+                                            {background: "#f5f3f4"}
+                                            :
+                                            {background: "#adb5bd", fontWeight: "bold", color: "white"}
+                                    }
+                                >{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>}
                                 <button onClick={revertIsPosted} className="personalPage-review-card-edit">
                                     Edit review
                                 </button>
@@ -356,7 +363,7 @@ export default function PersonalPage() {
                                                 maxLength="150"
                                                 className="review-text-area"
                                             />
-                                        <button onClick={posted}>Post</button>
+                                        <button className="personalPage-review-card-edit" onClick={posted}>Post</button>
                                     </div>
                                 </div>
                                 {isVisible && showReviews}

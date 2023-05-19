@@ -56,7 +56,9 @@
     justify-content: space-around;
 }
 
-.mypage-buttons > button {
+
+
+.personalPage-review-card-edit{
     width: 20%;
     margin-top: 5px;
     border: none;
@@ -68,7 +70,7 @@
     transition: all 0.1s ease-in-out;
 }
 
-.mypage-buttons > button:hover {
+.personalPage-review-card-edit:hover{
     background-color: rgba(138, 138, 138, 0.34);
     transition: all 0.1s ease-in-out;
     cursor: pointer;
@@ -91,6 +93,10 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
+
+/*
+    Personal Page
+ */
 
 .personalPage-review-section {
     display: flex;
