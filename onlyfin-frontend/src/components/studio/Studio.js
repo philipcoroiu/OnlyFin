@@ -177,13 +177,10 @@ export default function Studio() {
     };
 
     function checkForError() {
-
         /* Starts with assuming there are no errors by setting hasError to false and creates an empty table
         of error message*/
         let hasError = false;
         setErrorMessage([])
-
-        /* -- ERROR CHECKS -- */
 
         /* Checks if a category is selected */
         if (categoryId === null) {
@@ -192,15 +189,13 @@ export default function Studio() {
         }
 
         /* Chekcs if every dataset has atleast one point of data */
-        studioChart.series.forEach((serie) => {
+        for (const serie of studioChart.series) {
             if (serie.data.filter((data) => data !== "").length === 0) {
-                setErrorMessage(prevState => [...prevState, "Pay attention, at least one DATASET has NO DATA"])
+                setErrorMessage(prevState => [...prevState, "Pay attention, at least one DATASET has NO DATA"]);
                 hasError = true;
+                break;
             }
-        });
-
-        /* --MORE ERROR CHECKS CAN BE ADDED HERE-- */
-
+        }
         return hasError;
     }
 
