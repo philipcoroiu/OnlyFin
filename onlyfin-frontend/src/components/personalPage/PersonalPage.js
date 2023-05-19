@@ -281,7 +281,11 @@ export default function PersonalPage() {
                     <h3>{review.author}</h3>
                 </div>
                 <div className="personalPage-review-card-post-area">
-                    <p>{review.reviewText}</p>
+                    <p
+                        className="personalPage-review-card-post-area-text"
+                    >
+                        {review.reviewText}
+                    </p>
                 </div>
             </div>
         )
@@ -321,9 +325,9 @@ export default function PersonalPage() {
                                             {background: "#adb5bd", fontWeight: "bold", color: "white"}
                                     }
                                 >{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>}
-                                <button onClick={revertIsPosted} className="personalPage-review-card-edit">
+                                {isPosted && <button onClick={revertIsPosted} className="personalPage-review-card-edit">
                                     Edit review
-                                </button>
+                                </button>}
                             </div>
                         </div>
                     </div>
