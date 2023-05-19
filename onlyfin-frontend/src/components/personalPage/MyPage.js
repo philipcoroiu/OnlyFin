@@ -178,13 +178,13 @@ export default function PersonalPage() {
                 />
             </div>
             <div className="mypage--text--container">
-                <div className="name-and-subs">
-                    <h2>{username}</h2>
-                    <p className="mypage-subscribed"><span className="subscribed-count">{subscribed}</span> Subs</p>
-                </div>
+                <h2>{username}</h2>
+                <p className="mypage-subscribed"><span className="subscribed-count">{subscribed}</span> Subscriptions
+                </p>
                 <div className="mypage--bio--container">
                     {isEditable ? (
                         <textarea
+                            placeholder={"Write something about yourself!"}
                             value={userData}
                             onChange={handleTextAreaChange}
                             rows={5}
@@ -195,9 +195,8 @@ export default function PersonalPage() {
                     ) : (
                         <p>{userData}</p>
                     )}
-                    <div className="mypage-buttons">
-                        <button className="personalPage-review-card-edit" onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
-                    </div>
+                    <button className="personalPage-review-card-edit"
+                            onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
                 </div>
             </div>
             <div className="personalPage-review-section"

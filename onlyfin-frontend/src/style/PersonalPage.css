@@ -28,7 +28,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 8%;
+    margin-top: 7%;
+    height: 12rem;
+}
+
+.mypage--text--container > h2 {
+    margin: 0;
 }
 
 .mypage--text--container > h2:hover{
@@ -36,13 +41,16 @@
 }
 
 .mypage-subscribed {
-    font-size: 20px;
-    margin: 0 10px;
+    margin: 0;
+    font-size: 15px;
+    color: #b4b4b4;
 }
 
 .subscribed-count {
     border-bottom: 1px solid #b4b4b4;
     font-weight: bold;
+    font-size: 15px;
+    color: #8d8d8d;
 }
 
 .mypage--bio--container {
@@ -50,43 +58,39 @@
     height: 80px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-
+    margin-top: 20px;
 }
 
 .mypage-buttons {
     width: 100%;
     display: flex;
     justify-content: space-around;
+    background-color: red;
 }
 
 .mypage--bio--container > p {
     max-height: 75px;
-    margin: 0 0 5px 0;
+    font-size: 20px;
+    margin: 2px;
 }
 
 .mypage--bio {
-    appearance: none;
-    border: none;
-    border-bottom: 1px solid #b4b4b4;
     outline: none;
-    padding: 0;
     height: 80px;
     width: 100%;
-    font-size: 15px;
+    font-size: 20px;
+    border: none;
+    border-bottom: #8d8d8d 1px dashed;
+    text-align: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
     resize: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
-.name-and-subs {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 10%;
-}
+
 
 /*
     Personal Page
