@@ -82,6 +82,14 @@ public class ModuleEntity {
         this.updatedDate = updatedDate;
     }
 
+    public void setCategoryId(Category categoryId) {
+        this.category_id = categoryId;
+    }
+
+    public void setModuleType(String moduleType) {
+        this.module_type = module_type;
+    }
+
     @Override
     public String toString() {
         return "ModuleEntity{" +

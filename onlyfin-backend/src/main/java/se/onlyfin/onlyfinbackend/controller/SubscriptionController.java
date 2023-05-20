@@ -1,5 +1,6 @@
 package se.onlyfin.onlyfinbackend.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -267,6 +268,7 @@ public class SubscriptionController {
      *
      * @param targetUser the target user
      */
+    @Transactional
     public void removeAllSubscriptionsRelatedToUser(User targetUser) {
         subscriptionRepository.deleteAllBySubscriber(targetUser);
         subscriptionRepository.deleteAllBySubscribedTo(targetUser);
