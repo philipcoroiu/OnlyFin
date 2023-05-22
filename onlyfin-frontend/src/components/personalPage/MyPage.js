@@ -199,6 +199,11 @@ export default function PersonalPage() {
                             onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}
                     </button>
                 </div>
+                <div className="monetize-button">
+                    <button className="personalPage-monetize">
+                        Monetize <span className="coming-soon">(coming soon)</span>
+                    </button>
+                </div>
             </div>
             <div className="personalPage-review-section"
                  ref={autoscrollRef}

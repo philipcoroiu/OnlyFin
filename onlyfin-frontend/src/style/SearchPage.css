@@ -77,9 +77,26 @@
     align-items: center;
 }
 
-.profile-name{
+.profile-name {
     overflow: auto;
     width: 155px;
+}
+
+.monetize-button{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.personalPage-monetize {
+    width: 13%;
+}
+
+.coming-soon {
+    color: #919090;
+    font-size: 10px;
 }
 
 .profile-name > a {
