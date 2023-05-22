@@ -196,7 +196,8 @@ export default function PersonalPage() {
                         <p>{userData}</p>
                     )}
                     <button className="personalPage-review-card-edit"
-                            onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                            onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}
+                    </button>
                 </div>
             </div>
             <div className="personalPage-review-section"

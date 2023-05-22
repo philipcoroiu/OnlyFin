@@ -36,7 +36,7 @@
     margin: 0;
 }
 
-.mypage--text--container > h2:hover{
+.mypage--text--container > h2:hover {
     cursor: default;
 }
 
@@ -90,12 +90,11 @@
 }
 
 
-
 /*
     Personal Page
  */
 
-.personalPage-review-card-edit{
+.personalPage-review-card-edit {
     width: 20%;
     margin-top: 5px;
     border: none;
@@ -107,10 +106,30 @@
     transition: all 0.1s ease-in-out;
 }
 
-.personalPage-review-card-edit:hover{
+.personalPage-review-card-edit:hover {
     background-color: rgba(138, 138, 138, 0.34);
     transition: all 0.1s ease-in-out;
     cursor: pointer;
+}
+
+.edit-review-button {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+}
+
+.edit-review-button > box-icon {
+    border-radius: 7px;
+    background-color: #e0e0e0;
+    width: 33px;
+    margin-left: 150px;
+    transition: ease-in-out 0.2s;
+}
+
+.edit-review-button > box-icon:hover {
+    background-color: #c2c2c2;
+    cursor: pointer;
+    transition: ease-in-out 0.2s;
 }
 
 .personalPage-review-section {
@@ -197,7 +216,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
-.personalPage-review-card-post-area-text{
+.personalPage-review-card-post-area-text {
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-word;

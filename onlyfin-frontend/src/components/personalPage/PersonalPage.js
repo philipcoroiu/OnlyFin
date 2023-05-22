@@ -325,11 +325,20 @@ export default function PersonalPage() {
                                             {background: "#adb5bd", fontWeight: "bold", color: "white"}
                                     }
                                 >{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>}
-                                {isPosted && <button onClick={revertIsPosted} className="personalPage-review-card-edit">
-                                    Edit review
-                                </button>}
                             </div>
                         </div>
+                    </div>
+                    <div className="edit-review-button">
+
+                        {isPosted &&
+
+                            <box-icon
+                                name='edit-alt'
+                                onClick={revertIsPosted}
+                                className="personalPage-review-card-edit"
+                            >
+                            </box-icon>
+                        }
                     </div>
                     {isPosted ?
                         (
