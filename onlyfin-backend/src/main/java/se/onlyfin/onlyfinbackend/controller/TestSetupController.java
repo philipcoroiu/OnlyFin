@@ -153,7 +153,18 @@ public class TestSetupController {
     }
 
     /**
-     * Deletes the consumer account and it's related properties
+     * Sets up the test Dashboard.2
+     */
+    @GetMapping("/dashboard2")
+    public void setUpDashboard2() {
+        User testProducer = userService.getUserOrException(TEST_PRODUCER_USERNAME);
+        int dashboardId = testProducer.getId();
+
+        createStockAndCategory(dashboardId, TEST_STOCK_REF_ID);
+    }
+
+    /**
+     * Deletes the consumer account and its related properties
      */
     public void nukeConsumer() {
         User testConsumer = userService.getUserOrNull(TEST_CONSUMER_USERNAME);
@@ -165,7 +176,7 @@ public class TestSetupController {
     }
 
     /**
-     * Deletes the producer account and it's related properties
+     * Deletes the producer account and its related properties
      */
     public void nukeProducer() {
         User testProducer = userService.getUserOrNull(TEST_PRODUCER_USERNAME);
@@ -177,7 +188,7 @@ public class TestSetupController {
     }
 
     /**
-     * Deletes the suggested user account and it's related properties
+     * Deletes the suggested user account and its related properties
      */
     public void nukeSuggestedUser() {
         User suggestedUser = userService.getUserOrNull(TEST_SUGGESTED_USERNAME);
@@ -210,10 +221,10 @@ public class TestSetupController {
     }
 
     /**
-     * Posts a chart under a test stock & category
+     * Posts a chart under a test stock & category for a target dashboard
      *
      * @param dashboardId the target dashboard's id
-     * @param testStockRefId the id of the stock ref to use
+     * @param testStockRefId the id of the stock reference to use
      * @throws JsonProcessingException if JSON parsing fails
      */
     @Transactional
@@ -245,6 +256,29 @@ public class TestSetupController {
         ModuleEntity savedModule = moduleRepository.save(module);
         DashboardLayout dashboardLayout = new DashboardLayout(savedModule.getId(), savedModule.getCategory_id());
         dashboardLayoutRepository.save(dashboardLayout);
+    }
+
+    /**
+     * Creates a Stock and a Category under the specified dashboard ID.
+     *
+     * @param dashboardId the target dashboard's id
+     * @param testStockRefId the id of the stock reference to use
+     */
+    @Transactional
+    public void createStockAndCategory(int dashboardId, int testStockRefId) {
+        //create stock
+        StockRefDTO stockRefDTO = new StockRefDTO(testStockRefId, dashboardId);
+        StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElseThrow();
+        Stock stock = new Stock();
+        stock.setStock_ref_id(stockRef);
+        stock.setDashboard_id(new Dashboard(stockRefDTO.dashboardId()));
+        Stock savedStock = stockRepository.save(stock);
+
+        //create category
+        Category category = new Category();
+        category.setName("TESTING_CATEGORY");
+        category.setStock_id(stock);
+        Category savedCategory = categoryRepository.save(category);
     }
 
 }
