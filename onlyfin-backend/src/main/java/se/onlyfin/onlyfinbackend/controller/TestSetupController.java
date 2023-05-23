@@ -244,8 +244,85 @@ public class TestSetupController {
         Category savedCategory = categoryRepository.save(category);
 
         //create module
+        String rawJSONChart =
+                "{\"chart\": {" +
+                        "\"type\": \"column\", " +
+                        "\"style\": {" +
+                            "\"fontFamily\": \"Tahoma\"}, " +
+                            "\"renderTo\": \"container\", " +
+                            "\"animation\": {" +
+                                "\"easing\": \"linear\", " +
+                                "\"duration\": 0}" +
+                        "}, " +
+                        "\"style\": {" +
+                            "\"borderColor\": \"#1A1616\"" +
+                        "}, " +
+                        "\"title\": {" +
+                            "\"text\": \"ONLYTEST\", " +
+                            "\"style\": {" +
+                                "\"color\": \"#1A1616\", " +
+                                "\"fontWeight\": \"lighter\"" +
+                            "}" +
+                        "}, " +
+                        "\"xAxis\": {" +
+                            "\"title\": {" +
+                                "\"text\": \"\", " +
+                                "\"style\": {" +
+                                    "\"color\": \"#1A1616\"" +
+                                "}" +
+                            "}, " +
+                            "\"labels\": {" +
+                                "\"style\": {" +
+                                    "\"color\": \"#1A1616\"" +
+                                "}" +
+                            "}, " +
+                        "\"categories\": [\"Category 1\"], " +
+                        "\"gridLineColor\": \"#1A1616\"}, " +
+                        "\"yAxis\": {" +
+                            "\"title\": {" +
+                                "\"text\": \"\", " +
+                                "\"style\": {" +
+                                    "\"color\": \"#1A1616\"" +
+                                "}" +
+                            "}, " +
+                            "\"labels\": {" +
+                                "\"style\": {" +
+                                    "\"color\": \"#1A1616\"" +
+                                "}" +
+                            "}, " +
+                        "\"gridLineColor\": \"#1A1616\"" +
+                        "}, " +
+                        "\"labels\": {" +
+                            "\"style\": {" +
+                                "\"color\": \"#1A1616\"" +
+                            "}" +
+                        "}, " +
+                        "\"series\": [" +
+                            "{\"data\": [100], \"name\": \"name\", \"color\": \"#39a22a\", \"borderWidth\": 0}, " +
+                            "{\"data\": [200], \"name\": \"name\", \"color\": \"#da6868\", \"borderWidth\": 0}, " +
+                            "{\"data\": [300], \"name\": \"name\", \"color\": \"#a2a852\", \"borderWidth\": 0}" +
+                        "], " +
+                        "\"exporting\": {" +
+                            "\"chartOptions\": {" +
+                                "\"subtitle\": {" +
+                                    "\"text\": \"Created by TEST_PROD on OnlyFin\", " +
+                                    "\"style\": {" +
+                                        "\"color\": \"#000\", " +
+                                        "\"fontSize\": \"8px\"" +
+                                    "}" +
+                                "}" +
+                            "}" +
+                        "}, " +
+                        "\"plotOptions\": {" +
+                            "\"series\": {" +
+                                "\"animation\": {" +
+                                    "\"duration\": 0" +
+                                "}" +
+                            "}" +
+                        "}" +
+                "}";
+
         ObjectMapper objectMapper = new ObjectMapper();
-        String rawJSONChart = "{\"chart\": {\"type\": \"column\", \"style\": {\"fontFamily\": \"Tahoma\"}, \"renderTo\": \"container\", \"animation\": {\"easing\": \"linear\", \"duration\": 0}}, \"style\": {\"borderColor\": \"#1A1616\"}, \"title\": {\"text\": \"ONLYTEST\", \"style\": {\"color\": \"#1A1616\", \"fontWeight\": \"lighter\"}}, \"xAxis\": {\"title\": {\"text\": \"\", \"style\": {\"color\": \"#1A1616\"}}, \"labels\": {\"style\": {\"color\": \"#1A1616\"}}, \"categories\": [\"Category 1\"], \"gridLineColor\": \"#1A1616\"}, \"yAxis\": {\"title\": {\"text\": \"\", \"style\": {\"color\": \"#1A1616\"}}, \"labels\": {\"style\": {\"color\": \"#1A1616\"}}, \"gridLineColor\": \"#1A1616\"}, \"labels\": {\"style\": {\"color\": \"#1A1616\"}}, \"series\": [{\"data\": [100], \"name\": \"name\", \"color\": \"#39a22a\", \"borderWidth\": 0}, {\"data\": [200], \"name\": \"name\", \"color\": \"#da6868\", \"borderWidth\": 0}, {\"data\": [300], \"name\": \"name\", \"color\": \"#a2a852\", \"borderWidth\": 0}], \"exporting\": {\"chartOptions\": {\"subtitle\": {\"text\": \"Created by TEST_PROD on OnlyFin\", \"style\": {\"color\": \"#000\", \"fontSize\": \"8px\"}}}}, \"plotOptions\": {\"series\": {\"animation\": {\"duration\": 0}}}}";
         JsonNode encodedJSONChart = objectMapper.readTree(rawJSONChart);
 
         ModuleEntity module = new ModuleEntity();
