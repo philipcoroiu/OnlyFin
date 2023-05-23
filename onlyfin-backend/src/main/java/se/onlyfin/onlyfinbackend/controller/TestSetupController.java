@@ -28,17 +28,17 @@ public class TestSetupController {
     private static final String TEST_PRODUCER_USERNAME = "TEST_PROD";
     private static final String TEST_PRODUCER_PASSWORD = "TEST_PROD";
     private static final String TEST_PRODUCER_EMAIL = "TEST_PROD@example.org";
-    private final UserDTO TEST_PRODUCER_DTO;
+    private final UserDTO TEST_PRODUCER_DTO = new UserDTO(TEST_PRODUCER_EMAIL, TEST_PRODUCER_USERNAME, TEST_PRODUCER_PASSWORD);
 
     private static final String TEST_CONSUMER_USERNAME = "TEST_CON";
     private static final String TEST_CONSUMER_PASSWORD = "TEST_CON";
     private static final String TEST_CONSUMER_EMAIL = "TEST_CON@example.org";
-    private final UserDTO TEST_CONSUMER_DTO;
+    private final UserDTO TEST_CONSUMER_DTO = new UserDTO(TEST_CONSUMER_EMAIL, TEST_CONSUMER_USERNAME, TEST_CONSUMER_PASSWORD);
 
     private static final String TEST_SUGGESTED_USERNAME = "TEST_SUGGESTED";
     private static final String TEST_SUGGESTED_PASSWORD = "TEST_SUGGESTED";
     private static final String TEST_SUGGESTED_EMAIL = "TEST_SUGGESTED@example.org";
-    private final UserDTO TEST_SUGGESTED_DTO;
+    private final UserDTO TEST_SUGGESTED_DTO = new UserDTO(TEST_SUGGESTED_EMAIL, TEST_SUGGESTED_USERNAME, TEST_SUGGESTED_PASSWORD);
 
     private final int TEST_STOCK_REF_ID = 0;
 
@@ -54,7 +54,8 @@ public class TestSetupController {
     private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    public TestSetupController(UserService userService, SubscriptionController subscriptionController,
+    public TestSetupController(UserService userService,
+                               SubscriptionController subscriptionController,
                                AnalystReviewController analystReviewController,
                                AnalystReviewRepository analystReviewRepository,
                                StockRepository stockRepository,
@@ -73,10 +74,6 @@ public class TestSetupController {
         this.moduleRepository = moduleRepository;
         this.dashboardLayoutRepository = dashboardLayoutRepository;
         this.subscriptionRepository = subscriptionRepository;
-
-        TEST_PRODUCER_DTO = new UserDTO(TEST_PRODUCER_EMAIL, TEST_PRODUCER_USERNAME, TEST_PRODUCER_PASSWORD);
-        TEST_CONSUMER_DTO = new UserDTO(TEST_CONSUMER_EMAIL, TEST_CONSUMER_USERNAME, TEST_CONSUMER_PASSWORD);
-        TEST_SUGGESTED_DTO = new UserDTO(TEST_SUGGESTED_EMAIL, TEST_SUGGESTED_USERNAME, TEST_SUGGESTED_PASSWORD);
     }
 
     /**
