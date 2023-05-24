@@ -80,7 +80,7 @@ public class TestSetupController {
      * Resets the accounts used for blackbox system testing
      */
     @GetMapping("/reset")
-    private void resetAllTheThings() {
+    public void resetAllTheThings() {
         nukeConsumer();
         nukeProducer();
         nukeSuggestedUser();
@@ -91,7 +91,7 @@ public class TestSetupController {
      * Sets up the test Registration.1
      */
     @GetMapping("/registration1")
-    private void setUpRegistration1() {
+    public void setUpRegistration1() {
         User targetUser = userService.getUserOrNull("TEST_REG");
         if (targetUser != null) {
             userService.deleteUser(targetUser);
@@ -102,7 +102,7 @@ public class TestSetupController {
      * Sets up the test Profile.2
      */
     @GetMapping("/profile2")
-    private void setUpProfile2() {
+    public void setUpProfile2() {
         User targetUser = userService.getUserOrException("TEST_PROD");
 
         AnalystReview analystReview = new AnalystReview();
