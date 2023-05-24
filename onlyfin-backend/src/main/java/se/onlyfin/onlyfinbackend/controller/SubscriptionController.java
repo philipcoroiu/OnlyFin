@@ -274,6 +274,11 @@ public class SubscriptionController {
         subscriptionRepository.deleteAllBySubscribedTo(targetUser);
     }
 
+    /**
+     * Fetches the usernames of the top 7 most subscribed to analysts
+     *
+     * @return the usernames of the top 7 most subscribed-to analysts
+     */
     public List<String> getMostSubscribedUsernames() {
         return subscriptionRepository.find7MostSubscribedUsernames();
     }

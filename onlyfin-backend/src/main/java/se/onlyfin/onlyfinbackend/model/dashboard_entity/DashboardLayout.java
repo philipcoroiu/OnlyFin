@@ -4,6 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+/**
+ * This class represents the dashboard layout table in the database.
+ */
 @Entity
 public class DashboardLayout {
 

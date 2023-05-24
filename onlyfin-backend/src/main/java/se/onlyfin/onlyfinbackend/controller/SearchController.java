@@ -204,6 +204,12 @@ public class SearchController {
         return ResponseEntity.ok().body(analystsCoveringTargetStock.stream().toList());
     }
 
+    /**
+     * Creates a list of profiles from a list of users.
+     *
+     * @param users users to be converted to profiles.
+     * @return profile representation of users
+     */
     private List<ProfileDTO> createProfileList(List<User> users) {
         List<ProfileDTO> profiles = new ArrayList<>();
         users.forEach((currentUser) ->
@@ -211,19 +217,32 @@ public class SearchController {
         return profiles;
     }
 
-    private List<ProfileWithSubInfoForLoggedInUserDTO> getProfilesWithSubscribingFalse(List<ProfileDTO> searchResults) {
+    /**
+     * Creates a list of profiles with subscription info, but with the "subscribed" flag always set to false
+     *
+     * @param profiles profiles to convert to profile with sub info
+     * @return profiles with subscription info set to false
+     */
+    private List<ProfileWithSubInfoForLoggedInUserDTO> getProfilesWithSubscribingFalse(List<ProfileDTO> profiles) {
         List<ProfileWithSubInfoForLoggedInUserDTO> profileListWithSubscribingFalseInfo = new ArrayList<>();
 
-        searchResults.forEach((currentResult) ->
+        profiles.forEach((currentResult) ->
                 profileListWithSubscribingFalseInfo.add(
                         new ProfileWithSubInfoForLoggedInUserDTO(currentResult, false)));
 
         return profileListWithSubscribingFalseInfo;
     }
 
-    private List<ProfileWithSubInfoForLoggedInUserDTO> getProfilesWithSubInfo(List<ProfileDTO> searchResults, List<ProfileDTO> subscriptions) {
+    /**
+     * Creates a list of profiles with subscription info.
+     *
+     * @param profiles      profiles to use
+     * @param subscriptions user's subscription list
+     * @return profiles with subscription information
+     */
+    private List<ProfileWithSubInfoForLoggedInUserDTO> getProfilesWithSubInfo(List<ProfileDTO> profiles, List<ProfileDTO> subscriptions) {
         List<ProfileWithSubInfoForLoggedInUserDTO> profilesWithSubInfo = new ArrayList<>();
-        searchResults.forEach((currentResult) -> profilesWithSubInfo.add(new ProfileWithSubInfoForLoggedInUserDTO(
+        profiles.forEach((currentResult) -> profilesWithSubInfo.add(new ProfileWithSubInfoForLoggedInUserDTO(
                 currentResult, subscriptions.contains(currentResult))));
         return profilesWithSubInfo;
     }

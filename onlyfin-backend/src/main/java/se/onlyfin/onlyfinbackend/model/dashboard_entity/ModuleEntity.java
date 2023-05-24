@@ -7,6 +7,9 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 
+/**
+ * This class represents the module table in the database.
+ */
 @Entity
 @Table(name = "module")
 public class ModuleEntity {

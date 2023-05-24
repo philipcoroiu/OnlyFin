@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the dashboard table in the database.
+ */
 @Entity
 @Table(name = "dashboard")
 public class Dashboard {

@@ -13,8 +13,16 @@ import java.io.IOException;
  * This is to disable the redirect to the default error page.
  */
 public class LoginFailureHandlerDoNothingImpl implements AuthenticationFailureHandler {
+    /**
+     * Executed when authentication fails
+     *
+     * @param request   the request during which the authentication attempt occurred.
+     * @param response  the response.
+     * @param exception the exception which was thrown to reject the authentication request.
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        //this implementation only returns HTTP 401 on unsuccessful logins instead of issuing a redirect
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
