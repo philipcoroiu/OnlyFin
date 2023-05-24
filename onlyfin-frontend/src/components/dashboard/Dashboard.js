@@ -351,7 +351,7 @@ export default function Dashboard() {
                                                     <img width="100px" src={emptyCat}/>
                                                 <Link to={`/Studio?stockIndex=${currentStockId}&categoryIndex=${currentCategoryId}`}>
                                                     <button className="dashboard-empty-module-button">
-                                                        Create your first chart 
+                                                        Create your first chart&nbsp;
                                                         <span className="dashboard-empty-module-button-here">here</span>
                                                         !
                                                     </button>
