@@ -12,6 +12,9 @@ import se.onlyfin.onlyfinbackend.repository.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for handling requests related to the graph creation studio.
+ */
 @CrossOrigin(origins = "localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/studio")
@@ -37,6 +40,12 @@ public class StudioController {
         this.dashboardLayoutRepository = dashboardLayoutRepository;
     }
 
+    /**
+     * Adds a stock to a specific dashboard
+     *
+     * @param stockRefDTO DTO containing stock reference id and target dashboard's id
+     * @return HTTP 200 if successful
+     */
     @PostMapping("/createStock")
     public ResponseEntity<String> createStock(@RequestBody StockRefDTO stockRefDTO) {
         StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElse(null);
@@ -52,8 +61,15 @@ public class StudioController {
         return ResponseEntity.ok().body("stock added successfully");
     }
 
+    /**
+     * Deletes a specified stock by id.
+     * Will also delete categories and modules under the stock.
+     *
+     * @param id target stock id
+     * @return HTTP 200 if successful
+     */
     @DeleteMapping("/deleteStock/{id}")
-    public ResponseEntity<?> deleteStock(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteStock(@PathVariable Integer id) {
 
         if (!stockRepository.existsById(id)) {
             return ResponseEntity.badRequest().body("There is no stock with that id");
@@ -63,6 +79,12 @@ public class StudioController {
         return ResponseEntity.ok().body("Removed stock successfully");
     }
 
+    /**
+     * Creates a category under a target stock
+     *
+     * @param category (target stock id and name of category)
+     * @return HTTP 200 if successful
+     */
     @PostMapping("/createCategory")
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         int targetStockId = category.getStock_id();
@@ -75,8 +97,15 @@ public class StudioController {
         return ResponseEntity.ok(savedCategory);
     }
 
+    /**
+     * Deletes a specified category by id.
+     * Will also delete modules under the category.
+     *
+     * @param id target category id
+     * @return HTTP 200 if successful
+     */
     @DeleteMapping("/deleteCategory/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Integer id) {
         if (!categoryRepository.existsById(id)) {
             return ResponseEntity.badRequest().body("There is no category with that id");
         }
@@ -85,8 +114,14 @@ public class StudioController {
         return ResponseEntity.ok().body("Removed category successfully");
     }
 
+    /**
+     * Updates an existing category.
+     *
+     * @param nameChangeRequest DTO containing new name and the target category id
+     * @return the updated category if successful
+     */
     @PutMapping("/updateCategoryName")
-    public ResponseEntity<?> updateCategoryName(@RequestBody NameChangeDT nameChangeRequest) {
+    public ResponseEntity<Category> updateCategoryName(@RequestBody NameChangeDT nameChangeRequest) {
         int targetCategoryId = nameChangeRequest.id();
 
         Category targetCategory = categoryRepository.findById(targetCategoryId).orElse(null);
@@ -100,6 +135,12 @@ public class StudioController {
         return ResponseEntity.ok().body(savedCategory);
     }
 
+    /**
+     * Creates a new module under a target category (which is under a stock)
+     *
+     * @param moduleToSave (target category id, module type, raw JSON content)
+     * @return the saved module if successful
+     */
     @PostMapping("/createModule")
     public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave) {
         int targetCategoryId = moduleToSave.getCategory_id();
@@ -115,8 +156,14 @@ public class StudioController {
         return ResponseEntity.ok(savedModule);
     }
 
+    /**
+     * Deletes a specified module by its id.
+     *
+     * @param id the target module id
+     * @return HTTP 200 if successful
+     */
     @DeleteMapping("/deleteModule/{id}")
-    public ResponseEntity<?> deleteModule(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteModule(@PathVariable Integer id) {
         if (!moduleRepository.existsById(id)) {
             return ResponseEntity.badRequest().body("There is no module with that id");
         }
@@ -125,6 +172,47 @@ public class StudioController {
         return ResponseEntity.ok().body("Removed module successfully");
     }
 
+    /**
+     * Fetches a module by its id
+     *
+     * @param id id of target module
+     * @return module object if it exists
+     */
+    @GetMapping("/getModuleFromId/{id}")
+    public ResponseEntity<ModuleEntity> getModuleById(@PathVariable Integer id) {
+        ModuleEntity targetModuleEntity = moduleRepository.findById(id).orElse(null);
+        if (targetModuleEntity == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(targetModuleEntity);
+    }
+
+    /**
+     * Updates an existing module by its id.
+     *
+     * @param module update module (target category id, module type, raw JSON content)
+     * @return Updated module if successful
+     */
+    @PutMapping("/updateModuleContent")
+    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module) {
+        ModuleEntity moduleToUpdate = moduleRepository.findById(module.getId()).orElse(null);
+        if (moduleToUpdate == null) {
+            return ResponseEntity.badRequest().body("module id does not exist");
+        }
+
+        moduleToUpdate.setContent(module.getContent());
+
+        ModuleEntity savedModule = moduleRepository.save(moduleToUpdate);
+        return ResponseEntity.ok(savedModule);
+    }
+
+    /**
+     * Fetches all stocks and categories under a target dashboard, excluding the content.
+     *
+     * @param id the target dashboard's id
+     * @return dashboard with stocks and categories
+     */
     @GetMapping("/getStocksAndCategories/{id}")
     public ResponseEntity<?> getStocksAndCategories(@PathVariable Integer id) {
         Dashboard targetDashboard = dashboardRepository.findById(id).orElse(null);
@@ -141,32 +229,15 @@ public class StudioController {
         return ResponseEntity.ok(targetDashboard);
     }
 
-    @GetMapping("/getModuleFromId/{id}")
-    public ResponseEntity<ModuleEntity> getModuleFromEntity(@PathVariable Integer id) {
-        ModuleEntity targetModuleEntity = moduleRepository.findById(id).orElse(null);
-        if (targetModuleEntity == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(targetModuleEntity);
-    }
-
-    @PutMapping("/updateModuleContent")
-    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module) {
-        ModuleEntity moduleToUpdate = moduleRepository.findById(module.getId()).orElse(null);
-        if (moduleToUpdate == null) {
-            return ResponseEntity.badRequest().body("module id does not exist");
-        }
-
-        moduleToUpdate.setContent(module.getContent());
-
-        ModuleEntity savedModule = moduleRepository.save(moduleToUpdate);
-        return ResponseEntity.ok(savedModule);
-    }
-
+    /**
+     * Adds one or more dashboard layouts to the database
+     *
+     * @param layoutDTOList dashboard layout(s) to add to the database
+     * @return added dashboard layouts
+     */
     @PutMapping("/updateDashboardLayout")
     @Transactional
-    public ResponseEntity<?> updateDashboardLayout(@RequestBody List<LayoutDTO> layoutDTOList) {
+    public ResponseEntity<List<DashboardLayout>> addDashboardLayouts(@RequestBody List<LayoutDTO> layoutDTOList) {
         List<DashboardLayout> responseLayout = new ArrayList<>();
 
         for (LayoutDTO tempLayout : layoutDTOList) {
