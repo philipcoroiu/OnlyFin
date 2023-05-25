@@ -5,6 +5,8 @@ import Profile from "../../assets/icons/profile-user-svgrepo-com.svg"
 import Avatar from "../../assets/images/avatar.png";
 import axios from "axios";
 import 'boxicons'
+import SubscriptionBar from "../feed/SubscriptionBar";
+import SubscriptionsNavbar from "./SubscriptionsNavbar";
 
 
 /*
@@ -34,6 +36,8 @@ export default function NavBar() {
 
     const [loggedIn, setLoggedIn] = useState(false)
     const [userId, setUserId] = useState(null)
+    const [userName, setUserName] = useState(null)
+    const [subs, setSubs] = useState([])
     const [slideDivUp, setSlideDivUp] = useState(false)
     const [divHeight, setDivHeight] = useState('8%')
     const viewportWidth = window.innerWidth;
@@ -51,6 +55,11 @@ export default function NavBar() {
                 setLoggedIn(true)
                 setUserId(response.data)
             })
+            axios.get("http://localhost:8080/principal-username", {withCredentials: true}).then((response) => {
+                setUserName(response.data)
+            })
+
+
         } catch (e) {
 
         }
@@ -60,7 +69,7 @@ export default function NavBar() {
 
         return (
             <div>
-                {viewportWidth > 800 ? (
+                {viewportWidth >= 800 ? (
                     <div className="navbar-container">
                         <Link to="/mypage">
                     <span className="navbar--img--line">
@@ -100,7 +109,7 @@ export default function NavBar() {
                             className="navbar-container"
                             style={{
                                 height: divHeight,
-                                transition: 'height 0.5s ease'
+                                transition: 'height 0.3s ease'
                             }}
                         >
                             {slideDivUp ? (
@@ -110,12 +119,13 @@ export default function NavBar() {
                                             <Link to="/mypage">
                                                 <box-icon name='user'/>
                                             </Link>
-                                            <h4>Name</h4>
+                                            <h3>{userName}</h3>
                                         </div>
-                                        <div onClick={slideDiv}>
+                                        <div onClick={slideDiv} className="slide-out">
                                             <box-icon type='solid' name='chevrons-down'></box-icon>
                                         </div>
                                     </div>
+                                    <SubscriptionsNavbar/>
 
                                 </div>
                             ) : (
