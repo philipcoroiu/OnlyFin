@@ -11,5 +11,5 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.Dashboard;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query("SELECT d.id FROM Category c JOIN c.stock_id s JOIN s.dashboard_id d WHERE c.id = :categoryID")
-    Integer findDashboardFromCategoryId(Integer categoryID);
+    Dashboard findDashboardFromCategoryId(Integer categoryID);
 }

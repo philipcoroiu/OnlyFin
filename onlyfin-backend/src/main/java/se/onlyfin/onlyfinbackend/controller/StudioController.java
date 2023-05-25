@@ -11,6 +11,7 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
+import java.awt.print.Printable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,18 +54,23 @@ public class StudioController {
      * @return HTTP 200 if successful
      */
     @PostMapping("/createStock")
-    public ResponseEntity<String> createStock(@RequestBody StockRefDTO stockRefDTO) {
+    public ResponseEntity<String> createStock(@RequestBody StockRefDTO stockRefDTO, Principal principal) {
+        User targetUser = userService.getUserOrException(principal.getName());
+
         StockRef stockRef = stockRefRepository.findById(stockRefDTO.stockRefId()).orElse(null);
-        if (stockRef == null) {
-            return ResponseEntity.badRequest().build();
-        }
 
         Stock stockToSave = new Stock();
         stockToSave.setStock_ref_id(stockRef);
         stockToSave.setDashboard_id(new Dashboard(stockRefDTO.dashboardId()));
 
-        stockRepository.save(stockToSave);
-        return ResponseEntity.ok().body("stock added successfully");
+        if(stockToSave.getDashboard_id() == targetUser.getId()){
+            stockRepository.save(stockToSave);
+            return ResponseEntity.ok().body("stock added successfully");
+        }
+        else {
+            return ResponseEntity.badRequest().body("user not allowed to change");
+        }
+
     }
 
     /**
@@ -75,14 +81,17 @@ public class StudioController {
      * @return HTTP 200 if successful
      */
     @DeleteMapping("/deleteStock/{id}")
-    public ResponseEntity<String> deleteStock(@PathVariable Integer id) {
+
+    public ResponseEntity<String> deleteStock(@PathVariable Integer id, Principal principal) {
+        User targetUser = userService.getUserOrException(principal.getName());
 
         if (!stockRepository.existsById(id)) {
             return ResponseEntity.badRequest().body("There is no stock with that id");
         }
 
-        stockRepository.deleteById(id);
-        return ResponseEntity.ok().body("Removed stock successfully");
+
+            stockRepository.deleteById(id);
+            return ResponseEntity.ok().body("Removed stock successfully");
     }
 
     /**
