@@ -160,15 +160,13 @@ public class StudioController {
         }
 
         //checks to see if its your own category youre trying to save it to
-        if(categoryRepository.findDashboardFromCategoryId(targetCategoryId).getId() == targetUser.getId()){
+        if (categoryRepository.findDashboardFromCategoryId(targetCategoryId) == targetUser.getId()) {
             ModuleEntity savedModule = moduleRepository.save(moduleToSave);
             DashboardLayout moduleDashboardLayout = new DashboardLayout(savedModule.getId(), savedModule.getCategory_id());
             dashboardLayoutRepository.save(moduleDashboardLayout);
 
             return ResponseEntity.ok(savedModule);
-        }
-
-        else{
+        } else {
 
             return ResponseEntity.badRequest().body("youre not owner of categoryID");
         }
@@ -188,15 +186,14 @@ public class StudioController {
             return ResponseEntity.badRequest().body("There is no module with that id");
         }
 
-        if(moduleRepository.findDashboardByModuleId(id).getId() == targetUser.getId()){
+        if (moduleRepository.findDashboardByModuleId(id).getId() == targetUser.getId()) {
             moduleRepository.deleteById(id);
             return ResponseEntity.ok().body("Removed module successfully");
-        }
-        else{
+        } else {
             return ResponseEntity.badRequest().body("not your module");
         }
 
-        }
+    }
 
     /**
      * Fetches a module by its id
@@ -231,7 +228,7 @@ public class StudioController {
         }
 
         // checks to see if you own the module youre trying to update.
-        if(moduleRepository.findDashboardByModuleId(module.getId()).getId() == targetUser.getId()){
+        if (moduleRepository.findDashboardByModuleId(module.getId()).getId() == targetUser.getId()) {
             moduleToUpdate.setContent(module.getContent());
 
             ModuleEntity savedModule = moduleRepository.save(moduleToUpdate);
@@ -239,7 +236,7 @@ public class StudioController {
         }
 
         // if youre not the owner of the module
-        else{
+        else {
             return ResponseEntity.badRequest().body("not your module");
         }
 
