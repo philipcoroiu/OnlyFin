@@ -34,6 +34,16 @@ export default function NavBar() {
 
     const [loggedIn, setLoggedIn] = useState(false)
     const [userId, setUserId] = useState(null)
+    const [slideDivUp, setSlideDivUp] = useState(false)
+    const [divHeight, setDivHeight] = useState('8%')
+    const viewportWidth = window.innerWidth;
+
+
+    function slideDiv() {
+        setSlideDivUp(prevState => !prevState)
+        setDivHeight(slideDivUp ? '8%' : '90%')
+    }
+
 
     useEffect(() => {
         try {
@@ -47,71 +57,173 @@ export default function NavBar() {
     }, []);
 
     if (loggedIn) {
+
         return (
-            <div className="navbar-container">
-                <Link to="/mypage">
+            <div>
+                {viewportWidth > 800 ? (
+                    <div className="navbar-container">
+                        <Link to="/mypage">
                     <span className="navbar--img--line">
                         <box-icon name='user'/>
                     </span>
-                </Link>
+                        </Link>
 
-                <div className="navbar-icon-container">
-                    <Link to="/feed">
-                        <div className="navbar--icon">
-                            <box-icon name='home'></box-icon>
+                        <div className="navbar-icon-container">
+                            <Link to="/feed">
+                                <div className="navbar--icon">
+                                    <box-icon name='home'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="/searchpage">
+                                <div className="navbar--icon">
+                                    <box-icon name='search'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to={`../Dashboard?User=${userId}`}>
+                                <div className="navbar--icon">
+                                    <box-icon name='news'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="/Studio">
+                                <div className="navbar--icon">
+                                    <box-icon name='add-to-queue'></box-icon>
+                                </div>
+                            </Link>
+                            <div className="navbar--icon">
+                                <box-icon name='exit' onClick={logout}></box-icon>
+                            </div>
                         </div>
-                    </Link>
-                    <Link to="/searchpage">
-                        <div className="navbar--icon">
-                            <box-icon name='search'></box-icon>
-                        </div>
-                    </Link>
-                    <Link to={`../Dashboard?User=${userId}`}>
-                        <div className="navbar--icon">
-                            <box-icon name='news'></box-icon>
-                        </div>
-                    </Link>
-                    <Link to="/Studio">
-                        <div className="navbar--icon">
-                            <box-icon name='add-to-queue'></box-icon>
-                        </div>
-                    </Link>
-                    <div className="navbar--icon">
-                        <box-icon name='exit' onClick={logout}></box-icon>
                     </div>
-                </div>
+                ) : (
+                    <div>
+                        <div
+                            className="navbar-container"
+                            style={{
+                                height: divHeight,
+                                transition: 'height 0.5s ease'
+                            }}
+                        >
+                            {slideDivUp ? (
+                                <div className="navbar-slide-container">
+                                    <div className="navbar-header">
+                                        <div className="profile-data">
+                                            <Link to="/mypage">
+                                                <box-icon name='user'/>
+                                            </Link>
+                                            <h4>Name</h4>
+                                        </div>
+                                        <div onClick={slideDiv}>
+                                            <box-icon type='solid' name='chevrons-down'></box-icon>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            ) : (
+                                <div className="navbar-icon-container">
+
+                                    <Link to="/feed">
+                                        <div className="navbar--icon">
+                                            <box-icon name='home'></box-icon>
+                                        </div>
+                                    </Link>
+                                    <Link to="/searchpage">
+                                        <div className="navbar--icon">
+                                            <box-icon name='search'></box-icon>
+                                        </div>
+                                    </Link>
+                                    <Link to={`../Dashboard?User=${userId}`}>
+                                        <div className="navbar--icon">
+                                            <box-icon name='news'></box-icon>
+                                        </div>
+                                    </Link>
+                                    <Link to="/Studio">
+                                        <div className="navbar--icon">
+                                            <box-icon
+                                                name='add-to-queue'
+                                            ></box-icon>
+                                        </div>
+                                    </Link>
+                                    <div
+                                        className="navbar-change"
+                                        onClick={slideDiv}
+                                    >
+                                        <box-icon type='solid' name='chevrons-up'></box-icon>
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+                    </div>
+
+                )}
+
             </div>
         )
     } else {
         return (
-            <div className="navbar-container">
-                <Link to="../Login?Redirect=mypage">
+            <div>
+                {viewportWidth > 800 ? (
+                    <div className="navbar-container">
+                        <Link to="../Login?Redirect=mypage">
                 <span className="navbar--img--line">
                         <box-icon name='user'/>
                 </span>
-                </Link>
-                <div className="navbar-icon-container">
-                    <Link to="/Login?Redirect=Feed">
-                        <div className="navbar--icon">
-                            <box-icon name='home'></box-icon>
+                        </Link>
+                        <div className="navbar-icon-container">
+                            <Link to="/Login?Redirect=Feed">
+                                <div className="navbar--icon">
+                                    <box-icon name='home'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="/searchpage">
+                                <div className="navbar--icon">
+                                    <box-icon name='search'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="../Login?Redirect=Dashboard">
+                                <div className="navbar--icon">
+                                    <box-icon name='news'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="/Studio">
+                                <div className="navbar--icon">
+                                    <box-icon name='add-to-queue'></box-icon>
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                    <Link to="/searchpage">
-                        <div className="navbar--icon">
-                            <box-icon name='search'></box-icon>
+                    </div>
+                ) : (
+                    <div className="navbar-container">
+                        <Link to="../Login?Redirect=mypage">
+                <span className="navbar--img--line">
+                        <box-icon name='user'/>
+                </span>
+                        </Link>
+                        <div className="navbar-icon-container">
+                            <Link to="/Login?Redirect=Feed">
+                                <div className="navbar--icon">
+                                    <box-icon name='home'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="/searchpage">
+                                <div className="navbar--icon">
+                                    <box-icon name='search'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="../Login?Redirect=Dashboard">
+                                <div className="navbar--icon">
+                                    <box-icon name='news'></box-icon>
+                                </div>
+                            </Link>
+                            <Link to="/Studio">
+                                <div className="navbar--icon">
+                                    <box-icon name='add-to-queue'></box-icon>
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                    <Link to="../Login?Redirect=Dashboard">
-                        <div className="navbar--icon">
-                            <box-icon name='news'></box-icon>
-                        </div>
-                    </Link>
-                    <Link to="/Studio">
-                        <div className="navbar--icon">
-                            <box-icon name='add-to-queue'></box-icon>
-                        </div>
-                    </Link>
-                </div>
+                    </div>
+                )}
+
             </div>
         )
     }
