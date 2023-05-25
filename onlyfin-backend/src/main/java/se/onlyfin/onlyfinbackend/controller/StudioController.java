@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import se.onlyfin.onlyfinbackend.DTO.CategoryNameChangeDTO;
 import se.onlyfin.onlyfinbackend.DTO.LayoutDTO;
 import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
+import se.onlyfin.onlyfinbackend.model.User;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
+import se.onlyfin.onlyfinbackend.service.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -26,19 +28,22 @@ public class StudioController {
     private final DashboardRepository dashboardRepository;
     private final StockRefRepository stockRefRepository;
     private final DashboardLayoutRepository dashboardLayoutRepository;
+    private final UserService userService;
 
     public StudioController(StockRepository stockRepository,
                             CategoryRepository categoryRepository,
                             ModuleRepository moduleRepository,
                             DashboardRepository dashboardRepository,
                             StockRefRepository stockRefRepository,
-                            DashboardLayoutRepository dashboardLayoutRepository) {
+                            DashboardLayoutRepository dashboardLayoutRepository,
+                            UserService userService) {
         this.stockRepository = stockRepository;
         this.categoryRepository = categoryRepository;
         this.moduleRepository = moduleRepository;
         this.dashboardRepository = dashboardRepository;
         this.stockRefRepository = stockRefRepository;
         this.dashboardLayoutRepository = dashboardLayoutRepository;
+        this.userService = userService;
     }
 
     /**
@@ -94,7 +99,7 @@ public class StudioController {
             return ResponseEntity.badRequest().body("there is no stock for that id");
         }
 
-        if(stockRepository.findById(targetStockId).orElse(null).getDashboard_id() == );
+        //if(stockRepository.findById(targetStockId).orElse(null).getDashboard_id() == );
 
         Category savedCategory = categoryRepository.save(category);
         return ResponseEntity.ok(savedCategory);
@@ -145,7 +150,8 @@ public class StudioController {
      * @return the saved module if successful
      */
     @PostMapping("/createModule")
-    public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave) {
+    public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave, Principal principal) {
+        User targetUser = userService.getUserOrException(principal.getName());
         int targetCategoryId = moduleToSave.getCategory_id();
 
         // checks to see if the categoryId exists
@@ -154,7 +160,7 @@ public class StudioController {
         }
 
         //checks to see if its your own category youre trying to save it to
-        if(categoryRepository.findDashboardFromCategoryId(targetCategoryId).getId() == Principal.id){
+        if(categoryRepository.findDashboardFromCategoryId(targetCategoryId).getId() == targetUser.getId()){
             ModuleEntity savedModule = moduleRepository.save(moduleToSave);
             DashboardLayout moduleDashboardLayout = new DashboardLayout(savedModule.getId(), savedModule.getCategory_id());
             dashboardLayoutRepository.save(moduleDashboardLayout);
@@ -175,12 +181,14 @@ public class StudioController {
      * @return HTTP 200 if successful
      */
     @DeleteMapping("/deleteModule/{id}")
-    public ResponseEntity<String> deleteModule(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteModule(@PathVariable Integer id, Principal principal) {
+        User targetUser = userService.getUserOrException(principal.getName());
+
         if (!moduleRepository.existsById(id)) {
             return ResponseEntity.badRequest().body("There is no module with that id");
         }
 
-        if(moduleRepository.findDashboardByModuleId(id).getId() == Principal.id){
+        if(moduleRepository.findDashboardByModuleId(id).getId() == targetUser.getId()){
             moduleRepository.deleteById(id);
             return ResponseEntity.ok().body("Removed module successfully");
         }
@@ -213,7 +221,8 @@ public class StudioController {
      * @return Updated module if successful
      */
     @PutMapping("/updateModuleContent")
-    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module) {
+    public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module, Principal principal) {
+        User targetUser = userService.getUserOrException(principal.getName());
         ModuleEntity moduleToUpdate = moduleRepository.findById(module.getId()).orElse(null);
 
         // checks to see if the module exists
@@ -222,7 +231,7 @@ public class StudioController {
         }
 
         // checks to see if you own the module youre trying to update.
-        if(moduleRepository.findDashboardByModuleId(module.getId()).getId() == Principal.id){
+        if(moduleRepository.findDashboardByModuleId(module.getId()).getId() == targetUser.getId()){
             moduleToUpdate.setContent(module.getContent());
 
             ModuleEntity savedModule = moduleRepository.save(moduleToUpdate);
