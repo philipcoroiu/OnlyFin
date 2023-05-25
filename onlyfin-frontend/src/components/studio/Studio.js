@@ -30,6 +30,7 @@ export default function Studio() {
     const navigate = useNavigate();
     const [username, setUsername] = useState()
     const [loading, setLoading] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     React.useEffect(() => {
 
@@ -44,6 +45,8 @@ export default function Studio() {
                         withCredentials: true,
                     }).then((response) => {
                     handleUserNameChange(response.data)
+                    setLoggedIn(true);
+
                 })
 
                 if (editModule && moduleIndex != null) {
@@ -334,6 +337,7 @@ export default function Studio() {
                         categoryId={categoryId}
                         createChart={createChart}
                         deleteChart={deleteChart}
+                        loggedIn={loggedIn}
                     />
                 </div>
             </div>

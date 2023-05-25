@@ -9,6 +9,7 @@ import se.onlyfin.onlyfinbackend.DTO.StockRefDTO;
 import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,12 +87,14 @@ public class StudioController {
      * @return HTTP 200 if successful
      */
     @PostMapping("/createCategory")
-    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+    public ResponseEntity<?> createCategory(@RequestBody Category category, Principal principal) {
         int targetStockId = category.getStock_id();
 
         if (!stockRepository.existsById(targetStockId)) {
             return ResponseEntity.badRequest().body("there is no stock for that id");
         }
+
+        if(stockRepository.findById(targetStockId).orElse(null).getDashboard_id() == );
 
         Category savedCategory = categoryRepository.save(category);
         return ResponseEntity.ok(savedCategory);
@@ -145,15 +148,24 @@ public class StudioController {
     public ResponseEntity<?> createModule(@RequestBody ModuleEntity moduleToSave) {
         int targetCategoryId = moduleToSave.getCategory_id();
 
+        // checks to see if the categoryId exists
         if (!categoryRepository.existsById(targetCategoryId)) {
             return ResponseEntity.badRequest().body("there is no category for that id");
         }
 
-        ModuleEntity savedModule = moduleRepository.save(moduleToSave);
-        DashboardLayout moduleDashboardLayout = new DashboardLayout(savedModule.getId(), savedModule.getCategory_id());
-        dashboardLayoutRepository.save(moduleDashboardLayout);
+        //checks to see if its your own category youre trying to save it to
+        if(categoryRepository.findDashboardFromCategoryId(targetCategoryId).getId() == Principal.id){
+            ModuleEntity savedModule = moduleRepository.save(moduleToSave);
+            DashboardLayout moduleDashboardLayout = new DashboardLayout(savedModule.getId(), savedModule.getCategory_id());
+            dashboardLayoutRepository.save(moduleDashboardLayout);
 
-        return ResponseEntity.ok(savedModule);
+            return ResponseEntity.ok(savedModule);
+        }
+
+        else{
+
+            return ResponseEntity.badRequest().body("youre not owner of categoryID");
+        }
     }
 
     /**
@@ -168,9 +180,15 @@ public class StudioController {
             return ResponseEntity.badRequest().body("There is no module with that id");
         }
 
-        moduleRepository.deleteById(id);
-        return ResponseEntity.ok().body("Removed module successfully");
-    }
+        if(moduleRepository.findDashboardByModuleId(id).getId() == Principal.id){
+            moduleRepository.deleteById(id);
+            return ResponseEntity.ok().body("Removed module successfully");
+        }
+        else{
+            return ResponseEntity.badRequest().body("not your module");
+        }
+
+        }
 
     /**
      * Fetches a module by its id
@@ -197,14 +215,26 @@ public class StudioController {
     @PutMapping("/updateModuleContent")
     public ResponseEntity<?> updateModuleContent(@RequestBody ModuleEntity module) {
         ModuleEntity moduleToUpdate = moduleRepository.findById(module.getId()).orElse(null);
+
+        // checks to see if the module exists
         if (moduleToUpdate == null) {
             return ResponseEntity.badRequest().body("module id does not exist");
         }
 
-        moduleToUpdate.setContent(module.getContent());
+        // checks to see if you own the module youre trying to update.
+        if(moduleRepository.findDashboardByModuleId(module.getId()).getId() == Principal.id){
+            moduleToUpdate.setContent(module.getContent());
 
-        ModuleEntity savedModule = moduleRepository.save(moduleToUpdate);
-        return ResponseEntity.ok(savedModule);
+            ModuleEntity savedModule = moduleRepository.save(moduleToUpdate);
+            return ResponseEntity.ok(savedModule);
+        }
+
+        // if youre not the owner of the module
+        else{
+            return ResponseEntity.badRequest().body("not your module");
+        }
+
+
     }
 
     /**
