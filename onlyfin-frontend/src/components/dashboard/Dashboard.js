@@ -53,7 +53,7 @@ export default function Dashboard() {
                 setUserId(otherUserID)
             }
             else{
-                navigate("/Dashboard")
+                navigate(`../Login?Redirect=Dashboard`)
             }
         })
     }, [otherUserID]);

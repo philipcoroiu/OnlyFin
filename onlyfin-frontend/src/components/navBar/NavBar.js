@@ -85,13 +85,13 @@ export default function NavBar() {
     } else {
         return (
             <div className="navbar-container">
-                <Link to="/Login">
+                <Link to="../Login?Redirect=mypage">
                 <span className="navbar--img--line">
                         <box-icon name='user'/>
                 </span>
                 </Link>
                 <div className="navbar-icon-container">
-                    <Link to="/Login">
+                    <Link to="/Login?Redirect=Feed">
                         <div className="navbar--icon">
                             <box-icon name='home'></box-icon>
                         </div>
@@ -101,7 +101,7 @@ export default function NavBar() {
                             <box-icon name='search'></box-icon>
                         </div>
                     </Link>
-                    <Link to="../Login">
+                    <Link to="../Login?Redirect=Dashboard">
                         <div className="navbar--icon">
                             <box-icon name='news'></box-icon>
                         </div>
