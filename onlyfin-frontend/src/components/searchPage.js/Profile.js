@@ -19,7 +19,7 @@ export default function Profile(props) {
 
     async function updateSearchData() {
         try {
-            const response = await axios.get(process.env.REACT_APP_BACKEND_URL + `/search-all-analysts-include-sub-info`,
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/search-all-analysts-include-sub-info`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -28,7 +28,7 @@ export default function Profile(props) {
                 });
             setSubscribed((prevValue) => !prevValue);
         } catch (error) {
-            console.log("Error when updating search data", error)
+            console.log("Error when updating search data",error)
         }
     }
 
@@ -38,7 +38,7 @@ export default function Profile(props) {
             console.log('Subscribing to:', username);
 
             await axios.post(
-                process.env.REACT_APP_BACKEND_URL + `/subscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL+`/subscribe?username=${username}`,
                 {},
                 {
                     headers: {
@@ -47,8 +47,8 @@ export default function Profile(props) {
                     withCredentials: true,
                 }
             )
-        } catch (error) {
-            console.log("onSubscribe", error)
+        } catch(error) {
+            console.log("onSubscribe",error)
         }
 
     };
@@ -58,7 +58,7 @@ export default function Profile(props) {
             console.log('Unsubscribing to:', username);
 
             await axios.delete(
-                process.env.REACT_APP_BACKEND_URL + `/unsubscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL+`/unsubscribe?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -66,8 +66,8 @@ export default function Profile(props) {
                     withCredentials: true
                 }
             )
-        } catch (error) {
-            console.log("onUnsubscribe", error)
+        } catch(error) {
+            console.log("onUnsubscribe",error)
         }
     };
 
@@ -76,11 +76,9 @@ export default function Profile(props) {
         <div className="searchpage--profile">
             <img src={Avatar} className="searchpage--profile--image"/>
             <div className="searchpage--profile--subscribtion">
-                <div className="profile-name">
-                    <Link to={`${props.name}`}>
-                        <h2>{props.name}</h2>
-                    </Link>
-                </div>
+                <Link to={`/Dashboard?User=${props.id}`}>
+                    <h2>{props.name}</h2>
+                </Link>
                 {<button
                     onClick={handleSubscription}
                     style={

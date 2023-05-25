@@ -9,7 +9,7 @@ import PersonalPage from "./components/personalPage/PersonalPage";
 import MyPage from "./components/personalPage/MyPage";
 import UserNotFound from "./components/personalPage/UserNotFound"
 import Register from "./components/registration/Register";
-import Feed from "./components/feed/Feed";
+import Feed from "./components/feed/FeedPage";
 import "./style/index.css";
 import "./style/Studio.css";
 import "./style/Navbar.css";
@@ -25,6 +25,8 @@ function App() {
         <Routes className="App">
             <Route path="/" element={<Home/>}></Route>
             <Route path="Dashboard" element={<Dashboard/>}></Route>
+            <Route path="/Dashboard/:id" element={<Dashboard/>}></Route>
+            <Route path=":id" element={<Dashboard/>}></Route>
             <Route path="Studio" element={<Studio/>}></Route>
             <Route path="Login">
                 <Route path="" element={<Login/>}></Route>

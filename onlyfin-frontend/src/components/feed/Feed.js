@@ -3,11 +3,10 @@ import axios from "axios";
 import FeedModule from "./FeedModule"
 import SubscriptionBar from "../feed/SubscriptionBar"
 import NavBar from "../navBar/NavBar";
-import SubscriptionProfile from "./SubscriptionProfile";
 import icon from "../../assets/images/web-design.gif"
 
 
-export default function Feed() {
+export default function Feed(props) {
 
     const [feedData, setFeedData] = React.useState(null)
 
@@ -28,11 +27,8 @@ export default function Feed() {
                 setFeedData(response.data)
 
             } catch (error) {
-                console.log("All-the-things error")
-                console.log(error.response)
                 if(error.response && error.response.status === 401) {
-                    console.log("User not logged in")
-                    console.log("error.response: ", error.response)
+                    props.redirectToLogin();
                 } else {
                     console.error('Error:', error.message);
                 }
@@ -66,7 +62,9 @@ export default function Feed() {
             <div className="feed--charts--container">
                 {feedData === null ?
                     (
-                        <div>Loading</div>
+                        <div className="loader-container">
+                            <div className="loader"></div>
+                        </div>
                     ) : (
                         <div className="feed--charts">
                             {feedData ? showFeed :
