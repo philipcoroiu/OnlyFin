@@ -74,7 +74,7 @@ export default function DashboardProfile(props){
     return (
         <>
             <div className="dashboard-profile-corner">
-                <Link to={`../searchpage/${props.userName}`}>
+                <Link to={`../${props.userName}`}>
                     <button className="dashboard-profile-button">
                     </button>
                 </Link>
