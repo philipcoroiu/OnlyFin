@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
+import avatar from "../../assets/images/avatar.png";
 export default function DashboardProfile(props){
 
     const [subscribed, setSubscribed] = useState(null);
@@ -75,8 +76,7 @@ export default function DashboardProfile(props){
         <>
             <div className="dashboard-profile-corner">
                 <Link to={`../${props.userName}`}>
-                    <button className="dashboard-profile-button">
-                    </button>
+                    <img width="80px" src={avatar}/>
                 </Link>
                 <div className ="dashboard-profile-name-and-subscribe-container">
                     <p className="dashboard-profile-name">
