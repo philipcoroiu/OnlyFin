@@ -230,7 +230,9 @@ export default function PersonalPage() {
 
     if (!userData) {
         return (
-            <div>Loading</div>
+            <div className="loader-container">
+                <div className="loader"></div>
+            </div>
 
         )
     }
@@ -360,9 +362,10 @@ export default function PersonalPage() {
                                 )
                                 :
                                 (
-                                    <div className="loader-container" style={{marginTop: "400px"}}>
-                                        <div className="loader"></div>
-                                    </div>)
+                                    <div className="loading-list">
+                                        <div className="loading-list-item"></div>
+                                    </div>
+                                    )
 
 
                         )
