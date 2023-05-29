@@ -11,7 +11,6 @@ import se.onlyfin.onlyfinbackend.model.dashboard_entity.*;
 import se.onlyfin.onlyfinbackend.repository.*;
 import se.onlyfin.onlyfinbackend.service.UserService;
 
-import java.awt.print.Printable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;

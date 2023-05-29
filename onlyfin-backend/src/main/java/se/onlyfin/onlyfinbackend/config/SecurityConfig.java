@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/search-all-analysts-include-sub-info",
                                 "/reviews/fetch-all",
                                 "/fetch-about-me",
-                                "/fetch-about-me-with-sub-info"
+                                "/fetch-about-me-with-sub-info",
+                                "/feed/target-analyst/"
                         )
                         .permitAll()
                         .requestMatchers(
@@ -92,7 +93,7 @@ public class SecurityConfig {
                         .hasRole("USER")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         //uncomment the row below to enable user debug:
-                        .requestMatchers("/user-debug").permitAll()
+                        //.requestMatchers("/user-debug").permitAll()
                 )
                 .formLogin()
                 .loginProcessingUrl("/plz")
