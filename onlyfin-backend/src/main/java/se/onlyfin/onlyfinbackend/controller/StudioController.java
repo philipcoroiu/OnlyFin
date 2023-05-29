@@ -168,14 +168,13 @@ public class StudioController {
         }
 
         //checks to see if its your own category youre trying to save it to
-        if (categoryRepository.findDashboardFromCategoryId(targetCategoryId) == targetUser.getId()) {
+        if (categoryRepository.findDashboardFromCategoryId(targetCategoryId).equals(targetUser.getId())) {
             ModuleEntity savedModule = moduleRepository.save(moduleToSave);
             DashboardLayout moduleDashboardLayout = new DashboardLayout(savedModule.getId(), savedModule.getCategory_id());
             dashboardLayoutRepository.save(moduleDashboardLayout);
 
             return ResponseEntity.ok(savedModule);
         } else {
-
             return ResponseEntity.badRequest().body("youre not owner of categoryID");
         }
     }
