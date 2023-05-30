@@ -132,7 +132,7 @@
 }
 
 .search-bar-dropdown-menu {
-    margin: 0 auto;
+    margin: -12px auto;
     padding: 0;
     list-style: none;
     background-color: #fff;
