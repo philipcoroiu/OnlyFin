@@ -422,3 +422,52 @@ dashboard-stock-dropdown-top-container{
     transform: translate(-50%, -50%);
 
 }
+
+.switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider.round {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    border-radius: 34px;
+    background-color: #ccc;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.slider.round:before {
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+.switch input:checked + .slider.round {
+    background-color: #2196F3;
+}
+
+.switch input:checked + .slider.round:before {
+    transform: translateX(28px) translateY(-50%);
+}
+
+.switch-text {
+    font-size: 14px;
+}
