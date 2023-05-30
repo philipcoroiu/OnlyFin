@@ -156,8 +156,7 @@ public class FeedController {
     public ResponseEntity<Page<FeedCardDTO>> fetchForSpecificAnalyst(@RequestParam String targetUsername,
                                                                      @RequestParam(defaultValue = "0") Integer page,
                                                                      @RequestParam(defaultValue = "10") Integer size,
-                                                                     @Nullable ZoneId zoneId
-    ) {
+                                                                     @Nullable ZoneId zoneId) {
         User targetAnalyst = userService.getUserOrNull(targetUsername);
         if (targetAnalyst == null) {
             return ResponseEntity.notFound().build();
@@ -172,6 +171,84 @@ public class FeedController {
         }
 
         return ResponseEntity.ok().body(new PageImpl<>(feedCards, pageable, feedCardPage.getTotalElements()));
+    }
+
+    /**
+     * This method creates a list of feed card DTOs using inputted feed cards and analyst username to an id map
+     *
+     * @param analystUsernameToIdMap map of analyst usernames to their ids
+     * @param feedCards              list of feed cards
+     * @param zoneId                 timezone id
+     * @return a list of feed card DTOs
+     */
+    private static List<FeedCardDTO> createFeedCardDTOList(HashMap<String, Integer> analystUsernameToIdMap, ArrayList<FeedCard> feedCards, @Nullable ZoneId zoneId) {
+        return feedCards.stream()
+                .map(feedCard -> new FeedCardDTO(
+                        new ProfileDTO(feedCard.getAnalystUsername(), analystUsernameToIdMap.get(feedCard.getAnalystUsername())),
+                        new StockDTO(feedCard.getStockName(), -1),
+                        new CategoryDTO(feedCard.getCategoryName(), feedCard.getCategoryId()),
+                        feedCard.getContent(),
+                        LocalDateTime.ofInstant(feedCard.getPostDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
+                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
+                        LocalDateTime.ofInstant(feedCard.getUpdatedDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
+                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))))
+                .sorted(Comparator.comparing(FeedCardDTO::postDate).reversed())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * This method creates a list of feed card DTOs using inputted feed cards, a target user, and a timezone
+     *
+     * @param targetUser the target user
+     * @param feedCards  list of feed cards
+     * @param zoneId     the timezone
+     * @return a list of feed card DTOs
+     */
+    private static List<FeedCardDTO> createFeedCardDTOList(User targetUser, List<FeedCard> feedCards, @Nullable ZoneId zoneId) {
+        return feedCards.stream()
+                .map(feedCard -> new FeedCardDTO(
+                        new ProfileDTO(feedCard.getAnalystUsername(), targetUser.getId()),
+                        new StockDTO(feedCard.getStockName(), -1),
+                        new CategoryDTO(feedCard.getCategoryName(), feedCard.getCategoryId()),
+                        feedCard.getContent(),
+                        LocalDateTime.ofInstant(feedCard.getPostDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
+                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
+                        LocalDateTime.ofInstant(feedCard.getUpdatedDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
+                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))))
+                .sorted(Comparator.comparing(FeedCardDTO::postDate).reversed())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Fetches an analysts latest post-time.
+     * If no posts exist Instant.Min is returned instead.
+     *
+     * @param targetAnalyst the target analyst
+     * @return Instant object of the latest post time
+     */
+    public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findFirstByAnalystUsernameOrderByPostDateDesc(targetAnalyst.getUsername());
+        if (latestInstantOptional.isPresent()) {
+            return latestInstantOptional.get().getPostDate();
+        } else {
+            return Instant.MIN;
+        }
+    }
+
+    /**
+     * Fetches an analysts latest post update-time.
+     * If no posts have been updated Instant.Min is returned instead.
+     *
+     * @param targetAnalyst the target analyst
+     * @return Instant object of the latest update time
+     */
+    public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
+        Optional<FeedCard> latestInstantOptional = feedCardRepository.findFirstByAnalystUsernameOrderByUpdatedDateDesc(targetAnalyst.getUsername());
+        if (latestInstantOptional.isPresent()) {
+            return latestInstantOptional.get().getPostDate();
+        } else {
+            return Instant.MIN;
+        }
     }
 
     /**
@@ -342,6 +419,7 @@ public class FeedController {
      * @param content                                               content
      * @return a feed card with the inputted content
      */
+    @Deprecated
     private FeedCardDTO craftFeedCard(ProfileDTO currentAnalystProfileDTO,
                                       Stock currentStockThatCurrentAnalystCovers,
                                       Category categoryUnderCurrentStockThatCurrentAnalystCovers,
@@ -385,84 +463,6 @@ public class FeedController {
             dashboardOwnershipMap.put(ownerOfDashboard, ownersDashboard);
         }
         return dashboardOwnershipMap;
-    }
-
-    /**
-     * This method creates a list of feed card DTOs using inputted feed cards and analyst username to an id map
-     *
-     * @param analystUsernameToIdMap map of analyst usernames to their ids
-     * @param feedCards              list of feed cards
-     * @param zoneId                 timezone id
-     * @return a list of feed card DTOs
-     */
-    private static List<FeedCardDTO> createFeedCardDTOList(HashMap<String, Integer> analystUsernameToIdMap, ArrayList<FeedCard> feedCards, @Nullable ZoneId zoneId) {
-        return feedCards.stream()
-                .map(feedCard -> new FeedCardDTO(
-                        new ProfileDTO(feedCard.getAnalystUsername(), analystUsernameToIdMap.get(feedCard.getAnalystUsername())),
-                        new StockDTO(feedCard.getStockName(), -1),
-                        new CategoryDTO(feedCard.getCategoryName(), feedCard.getCategoryId()),
-                        feedCard.getContent(),
-                        LocalDateTime.ofInstant(feedCard.getPostDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
-                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
-                        LocalDateTime.ofInstant(feedCard.getUpdatedDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
-                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))))
-                .sorted(Comparator.comparing(FeedCardDTO::postDate).reversed())
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * This method creates a list of feed card DTOs using inputted feed cards, a target user, and a timezone
-     *
-     * @param targetUser the target user
-     * @param feedCards  list of feed cards
-     * @param zoneId     the timezone
-     * @return a list of feed card DTOs
-     */
-    private static List<FeedCardDTO> createFeedCardDTOList(User targetUser, List<FeedCard> feedCards, @Nullable ZoneId zoneId) {
-        return feedCards.stream()
-                .map(feedCard -> new FeedCardDTO(
-                        new ProfileDTO(feedCard.getAnalystUsername(), targetUser.getId()),
-                        new StockDTO(feedCard.getStockName(), -1),
-                        new CategoryDTO(feedCard.getCategoryName(), feedCard.getCategoryId()),
-                        feedCard.getContent(),
-                        LocalDateTime.ofInstant(feedCard.getPostDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
-                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH)),
-                        LocalDateTime.ofInstant(feedCard.getUpdatedDate(), Objects.requireNonNullElse(zoneId, ZoneId.systemDefault()))
-                                .format(DateTimeFormatter.ofPattern("dd MMMM HH:mm yyyy", Locale.ENGLISH))))
-                .sorted(Comparator.comparing(FeedCardDTO::postDate).reversed())
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Fetches an analysts latest post-time.
-     * If no posts exist Instant.Min is returned instead.
-     *
-     * @param targetAnalyst the target analyst
-     * @return Instant object of the latest post time
-     */
-    public Instant fetchAnalystsLastPostTime(@NonNull User targetAnalyst) {
-        Optional<FeedCard> latestInstantOptional = feedCardRepository.findFirstByAnalystUsernameOrderByPostDateDesc(targetAnalyst.getUsername());
-        if (latestInstantOptional.isPresent()) {
-            return latestInstantOptional.get().getPostDate();
-        } else {
-            return Instant.MIN;
-        }
-    }
-
-    /**
-     * Fetches an analysts latest post update-time.
-     * If no posts have been updated Instant.Min is returned instead.
-     *
-     * @param targetAnalyst the target analyst
-     * @return Instant object of the latest update time
-     */
-    public Instant fetchAnalystsLastUpdateTime(@NonNull User targetAnalyst) {
-        Optional<FeedCard> latestInstantOptional = feedCardRepository.findFirstByAnalystUsernameOrderByUpdatedDateDesc(targetAnalyst.getUsername());
-        if (latestInstantOptional.isPresent()) {
-            return latestInstantOptional.get().getPostDate();
-        } else {
-            return Instant.MIN;
-        }
     }
 
 }
