@@ -54,7 +54,7 @@ export default function PersonalPage() {
         const fetchData = async () => {
             try {
 
-                //await axios.get("http://localhost:8080/test-login")
+                //await axios.get(process.env.REACT_APP_BACKEND_URL+"/test-login")
 
                 const response1 = await axios.get(process.env.REACT_APP_BACKEND_URL + `/principal-username`,
                     {

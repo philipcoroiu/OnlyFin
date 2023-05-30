@@ -55,7 +55,7 @@ export default function NavBar() {
                 setLoggedIn(true)
                 setUserId(response.data)
             })
-            axios.get("http://localhost:8080/principal-username", {withCredentials: true}).then((response) => {
+            axios.get(process.env.REACT_APP_BACKEND_URL+"/principal-username", {withCredentials: true}).then((response) => {
                 setUserName(response.data)
             })
 
