@@ -9,13 +9,14 @@ import icon from "../../assets/images/web-design.gif"
 export default function Feed(props) {
 
     const [feedData, setFeedData] = React.useState(null)
+    const viewportWidth = window.innerWidth;
 
     useEffect(() => {
 
         const getData = async () => {
             try {
 
-                const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/feed/all-the-things`,
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL + `/feed/all-the-things`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -27,7 +28,7 @@ export default function Feed(props) {
                 setFeedData(response.data)
 
             } catch (error) {
-                if(error.response && error.response.status === 401) {
+                if (error.response && error.response.status === 401) {
                     props.redirectToLogin();
                 } else {
                     console.error('Error:', error.message);
@@ -57,25 +58,51 @@ export default function Feed(props) {
     }
 
     return (
-        <div className="feed">
-            <NavBar/>
-            <div className="feed--charts--container">
-                {feedData === null ?
-                    (
-                        <div className="loader-container">
-                            <div className="loader"></div>
-                        </div>
-                    ) : (
-                        <div className="feed--charts">
-                            {feedData ? showFeed :
-                                <div className="feed-no-content">
-                                    <img width="100px" src={icon}/>
-                                    <h1>Nothing here yet...</h1>
+        <div>
+
+            {viewportWidth >= 800 ? (
+                <div className="feed">
+                    <NavBar/>
+                    <div className="feed--charts--container">
+                        {feedData === null ?
+                            (
+                                <div className="loader-container">
+                                    <div className="loader"></div>
                                 </div>
-                            }
-                        </div>)}
-                <SubscriptionBar/>
-            </div>
+                            ) : (
+                                <div className="feed--charts">
+                                    {feedData ? showFeed :
+                                        <div className="feed-no-content">
+                                            <img width="100px" src={icon}/>
+                                            <h1>Nothing here yet...</h1>
+                                        </div>
+                                    }
+                                </div>)}
+                        <SubscriptionBar/>
+                    </div>
+                </div>
+            ) : (
+                <div className="feed">
+                    <NavBar/>
+                    <div className="feed--charts--container">
+                        {feedData === null ?
+                            (
+                                <div className="loader-container">
+                                    <div className="loader"></div>
+                                </div>
+                            ) : (
+                                <div className="feed--charts">
+                                    {feedData ? showFeed :
+                                        <div className="feed-no-content">
+                                            <img width="100px" src={icon}/>
+                                            <h1>Nothing here yet...</h1>
+                                        </div>
+                                    }
+                                </div>
+                            )}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

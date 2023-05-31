@@ -183,6 +183,10 @@
         height: 100%;
     }
 
+    .navbar-slide-container::-webkit-scrollbar {
+        display: none;
+    }
+
     .navbar-header {
         display: flex;
         align-items: center;
@@ -208,11 +212,15 @@
     }
 
     .navbar-subs {
-        height: 44.5rem;
+        height: 90%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        overflow: auto;
+        overflow-x: auto;
+    }
+
+    .navbar-subs::-webkit-scrollbar {
+        display: none;
     }
 
     .profile-card {
